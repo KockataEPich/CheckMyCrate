@@ -1,0 +1,4 @@
+{MUST:/package.json}
+{CAN:/ro-crate-preview.html}
+{MUST:/package-lock.json}
+{MUST:/tobeornottobe}

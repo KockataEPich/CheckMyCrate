@@ -11,6 +11,9 @@
     <OutputPath>.</OutputPath>
     <Name>CheckMyCrate</Name>
     <RootNamespace>CheckMyCrate</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>check-my-crate ./test ./profile_library/ro_crate_1.1_basic.txt</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
