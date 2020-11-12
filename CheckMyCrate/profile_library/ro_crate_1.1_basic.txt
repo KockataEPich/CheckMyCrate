@@ -1,4 +1,5 @@
-{MUST:/package.json}
-{CAN:/ro-crate-preview.html}
-{MUST:/package-lock.json}
-{MUST:/tobeornottobe}
+{FMUST:/ro-crate-metadata.jsonld} {FCAN:/ro-crate-preview.html} {FMUST:/package-lock.json}
+{DMUST:/wow/roc}
+{DCAN:/wow/sol}
+{SMUST:/wow/file.txt:ekwa}
+{SCAN:/wow/anotherfile.txt:room}
