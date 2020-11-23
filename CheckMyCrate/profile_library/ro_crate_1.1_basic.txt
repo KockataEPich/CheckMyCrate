@@ -1,5 +1,3 @@
-{FMUST:/ro-crate-metadata.jsonld} {FCAN:/ro-crate-preview.html} {FMUST:/package-lock.json}
-{DMUST:/wow/roc}
-{DCAN:/wow/sol}
-{SMUST:/wow/file.txt:ekwa}
-{SCAN:/wow/anotherfile.txt:room}
+{CRATE -> MUST_REFER -> Main Workflow -> mainEntity -> @id}
+{Main Workflow -> MUST_CONTAIN -> @type -> ["File", "SoftwareSourceCode", "ComputationalWorkflow"]}
+{Main Workflow -> MUST_REFER -> Programming Language -> programmingLanguage -> @id}

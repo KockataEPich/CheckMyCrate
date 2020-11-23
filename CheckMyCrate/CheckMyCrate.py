@@ -103,139 +103,248 @@ def check_my_crate(crate_path, profile_path):
        click.echo("Use --help for more information")
        isItViable = False
 
+   if os.path.isfile(crate_path + "/ro-crate-metadata.json") == False and os.path.isfile(crate_path + "/ro-crate-metadata.jsonld") == False:
+       click.echo("The directory does not contain the essential \"ro-crate-metadata.jsonld\" which means it is not a valid RO-Crate directory")
+       click.echo("Use --help for more information")
+       isItViable = False
+
    # Stop the program if the paths are no specified properly
    if isItViable:
-   
-       # Constraint lists for feedback purposes
-       must_constraint_list = []
-       can_constraint_list = []
+       
+       if os.path.isfile(crate_path + "/ro-crate-metadata.json") == True:
+           json_path = crate_path + "/ro-crate-metadata.json"
+       else:
+           json_path = crate_path + "/ro-crate-metadata.jsonld"
 
-       dir_must_missing_list = []
-       dir_can_missing_list = []
+       with open(json_path) as json_file:
+           data = json.load(json_file)
 
-       must_strings_missing_list = {}
-       can_strings_missing_list = {}
+      # for thing in data["@graph"]:
+        #   print(thing)
 
-       files_for_must_strings_missing_list = {}
-       files_for_can_strings_missing_list = {}
+      # item = data["@graph"][1]
+      # for something in item.values():
+      #     print(something)
+      
+       #less
+      # commands
+       maps = {}
+       refer_list = []
 
+       #must_constraint_list = []
 
-       keyword = ""
-       path_file = ""
-
-       startOfConstraint = False
-       startOfPath = False
-       isStringConstraint = False
-
-       # Read constraints and check for them
        with open(profile_path) as f:
            for line in f:
-               for c in line:
+               
+               without_left_bracket = line.split("}")
+               without_right_bracket = without_left_bracket[0].split("{")
 
-                   if c == "}":
-                       if check_dir(path_file,crate_path) == False:
+               keywords_and_commands = without_right_bracket[1].split(" -> ")
+               #print(keywords_and_commands)
 
-                           if keyword == "DMUST":
-                               dir_must_missing_list.append(path_file)
+               is_found = False
+            
+               if keywords_and_commands[0] == "CRATE":
+                   if keywords_and_commands[1] == "MUST_REFER":
+                       
+                       for item in data["@graph"]:
+                           for key in item.keys():
+                               #print(key)
+                               if key == keywords_and_commands[3]:
+                                   maps[keywords_and_commands[2]] = item[key][keywords_and_commands[4]]
+                                   refer_list.append(item[key][keywords_and_commands[4]])
+                                   is_found = True
+                                   break
+                       if is_found == False:
+                           print("Crate MUST refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
 
-                           if keyword == "DCAN":
-                               dir_can_missing_list.append(path_file)
+                   #if keywords_and_commands[1] == "COULD_CONTAIN&&":
+                        
+                    #   for item in data["@graph"]:
+                #           for key in item.keys():
+                               #print(key)
+                   #            if key == keywords_and_commands[3]:
+                 #                  if json.dumps(keywords_and_commands[3]) == keywords_and_commands[4]:
+                 #                     refer_list.append(item[key][keywords_and_commands[4]])
+                 #                     is_found = True
 
-                       if check_file(path_file,crate_path) == False:
-                           if keyword == "FMUST":
-                               must_constraint_list.append(path_file)
+                        
+                  #     if is_found == False:
+                   #        print("Crate Could refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
 
-                           if keyword == "FCAN":
-                               can_constraint_list.append(path_file)
 
-                       if keyword == "SCAN" or keyword == "SMUST":
-                           file_and_string = path_file.split(":")
+               elif keywords_and_commands[0] in maps:
+                   if keywords_and_commands[1] == "MUST_CONTAIN":
+                       for item in data["@graph"]:
+                               for key in item.keys():
+                                   #print(key)
+                                   if key == "@id":
+                                       if item[key] == maps[keywords_and_commands[0]]:
+
+                                           if keywords_and_commands[2] in item.keys():
+                                               if json.dumps(item[keywords_and_commands[2]]) != keywords_and_commands[3]:
+                                                   print(json.dumps(item[keywords_and_commands[2]]), " is not the same as " , keywords_and_commands[3])
+                                           else:
+                                               print(keywords_and_commands[0], " does not contain ", keywords_and_commands[2])
+                                               break
+
+                                                    
+
+                   if keywords_and_commands[1] == "MUST_REFER":                        
+                       for item in data["@graph"]:
+                           for key in item.keys():
+                               #print(key)
+                               if key == "@id":
+                                   if item[key] == maps[keywords_and_commands[0]]:
+
+                                       if key == keywords_and_commands[3]:
+                                           maps[keywords_and_commands[2]] = item[key][keywords_and_commands[4]]
+                                           refer_list.append(item[key][keywords_and_commands[4]])
+                                           is_found = True
+                                           break
+                                       if is_found == False:
+                                           print(keywords_and_commands[0], " MUST refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
+               
+
+                  # else:
+                       #
+
+                           
+
+
+
+
+
+       # Constraint lists for feedback purposes
+    #   must_constraint_list = []
+    #   can_constraint_list = []
+
+     #  dir_must_missing_list = []
+      # dir_can_missing_list = []
+
+     #  must_strings_missing_list = {}
+      # can_strings_missing_list = {}
+
+     #  files_for_must_strings_missing_list = {}
+      # files_for_can_strings_missing_list = {}
+
+
+     #  keyword = ""
+     #  path_file = ""
+
+     #  startOfConstraint = False
+     #  startOfPath = False
+     #  isStringConstraint = False
+
+       # Read constraints and check for them
+     #  with open(profile_path) as f:
+      #     for line in f:
+       #        for c in line:
+
+         #          if c == "}":
+             #          if check_dir(path_file,crate_path) == False:
+
+                       #    if keyword == "DMUST":
+                         #      dir_must_missing_list.append(path_file)
+
+                         #  if keyword == "DCAN":
+                         #      dir_can_missing_list.append(path_file)
+
+                      # if check_file(path_file,crate_path) == False:
+                        #   if keyword == "FMUST":
+                         #      must_constraint_list.append(path_file)
+
+                         #  if keyword == "FCAN":
+                      #         can_constraint_list.append(path_file)
+
+                      # if keyword == "SCAN" or keyword == "SMUST":
+                      #     file_and_string = path_file.split(":")
                                               
-                           if check_file(file_and_string[0], crate_path) == False:
-                               if keyword == "SMUST":
-                                   files_for_must_strings_missing_list[file_and_string[1]] = file_and_string[0] 
+                       #    if check_file(file_and_string[0], crate_path) == False:
+                        #       if keyword == "SMUST":
+                           #        files_for_must_strings_missing_list[file_and_string[1]] = file_and_string[0] 
                          
-                               if keyword == "SCAN":
-                                   files_for_can_strings_missing_list[file_and_string[1]] = file_and_string[0] 
-                           else:
-                               if check_string(file_and_string[0],crate_path, file_and_string[1]) == False:
-                                   if keyword == "SMUST":
-                                       must_strings_missing_list[file_and_string[1]] = file_and_string[0] 
+                        #       if keyword == "SCAN":
+                         #          files_for_can_strings_missing_list[file_and_string[1]] = file_and_string[0] 
+                       #    else:
+                         #     if check_string(file_and_string[0],crate_path, file_and_string[1]) == False:
+                           #        if keyword == "SMUST":
+                               #        must_strings_missing_list[file_and_string[1]] = file_and_string[0] 
                          
-                                   if keyword == "SCAN":
-                                       can_strings_missing_list[file_and_string[1]] = file_and_string[0]
+                              #     if keyword == "SCAN":
+                               #        can_strings_missing_list[file_and_string[1]] = file_and_string[0]
               
-                       startOfConstraint = False;
-                       startOfPath = False;
-                       keyword = ""
-                       path_file = ""
+                    #   startOfConstraint = False;
+                    #   startOfPath = False;
+                    #   keyword = ""
+                     #  path_file = ""
 
-                   if startOfPath:
-                       path_file += c
+                 #  if startOfPath:
+                 #      path_file += c
 
-                   if c == ":":
-                       startOfPath = True
-                       startOfConstraint = False
+                 #  if c == ":":
+                 #      startOfPath = True
+                 #      startOfConstraint = False
 
-                   if startOfConstraint:
-                       keyword += c
+                 #  if startOfConstraint:
+                 #      keyword += c
      
-                   if c == "{":
-                       startOfConstraint = True
+                  # if c == "{":
+                 #      startOfConstraint = True
 
-       total_constraint_number_errors = len(must_constraint_list) + len(can_constraint_list)
+      # total_constraint_number_errors = len(must_constraint_list) + len(can_constraint_list)
 
-       click.echo("Total of number of file constraints are not satisfied by this crate for this profile " +
-              str(total_constraint_number_errors))
+    #   click.echo("Total of number of file constraints are not satisfied by this crate for this profile " +
+    #          str(total_constraint_number_errors))
 
-       click.echo("\n   Must have files missing:")
+    #   click.echo("\n   Must have files missing:")
 
-       for element in must_constraint_list:
-           click.echo("      " + element)
+    #   for element in must_constraint_list:
+    #       click.echo("      " + element)
 
-       click.echo("\n   Can have files missing:")
-       for element in can_constraint_list:
-           click.echo("      " + element + "\n")
+    #   click.echo("\n   Can have files missing:")
+    #   for element in can_constraint_list:
+     #      click.echo("      " + element + "\n")
            
        #############################################################
-       click.echo("\nTotal of number of directory constraints are not satisfied by this crate for this profile " +
-              str(len(dir_must_missing_list) + len(dir_can_missing_list)))
+     #  click.echo("\nTotal of number of directory constraints are not satisfied by this crate for this profile " +
+     #         str(len(dir_must_missing_list) + len(dir_can_missing_list)))
 
-       click.echo("\n   Must have directories missing:")
+    #   click.echo("\n   Must have directories missing:")
 
-       for element in dir_must_missing_list:
-           click.echo("      " + element)
+    #   for element in dir_must_missing_list:
+     #      click.echo("      " + element)
 
-       click.echo("\n   Can have directories missing:")
-       for element in dir_can_missing_list:
-           click.echo("      " + element + "\n")
+    #   click.echo("\n   Can have directories missing:")
+    #   for element in dir_can_missing_list:
+     #      click.echo("      " + element + "\n")
 
        ############################################################
-       click.echo("\nTotal of number of string constraints are not satisfied by this crate because their file is missing:" +
-              str(len(files_for_must_strings_missing_list) + len(files_for_can_strings_missing_list)))
+      # click.echo("\nTotal of number of string constraints are not satisfied by this crate because their file is missing:" +
+         #     str(len(files_for_must_strings_missing_list) + len(files_for_can_strings_missing_list)))
 
-       click.echo("\n")
+      # click.echo("\n")
 
-       for key,value in files_for_must_strings_missing_list.items():
-           click.echo("The MUST string:" + key + " is missing because the file:" + value + " could not be found" )
+     #  for key,value in files_for_must_strings_missing_list.items():
+     #      click.echo("The MUST string:" + key + " is missing because the file:" + value + " could not be found" )
 
           
-       click.echo("\n")
-       for key,value in files_for_can_strings_missing_list.items():
-           click.echo("The CAN string:" + key + " is missing because the file:" + value + " could not be found" )
+     #  click.echo("\n")
+     #  for key,value in files_for_can_strings_missing_list.items():
+     #      click.echo("The CAN string:" + key + " is missing because the file:" + value + " could not be found" )
 
        ###################################################################################
-       click.echo("\nTotal of number of string constraints are not satisfied by this crate because they are missing from the specified files:" +
-           str(len(must_strings_missing_list) + len(can_strings_missing_list)))
+    #   click.echo("\nTotal of number of string constraints are not satisfied by this crate because they are missing from the specified files:" +
+       #    str(len(must_strings_missing_list) + len(can_strings_missing_list)))
 
-       click.echo("\n")
+      # click.echo("\n")
 
-       for key,value in must_strings_missing_list.items():
-           click.echo("The MUST string:" + key + " is missing int file:" + value)
+     #  for key,value in must_strings_missing_list.items():
+       #    click.echo("The MUST string:" + key + " is missing int file:" + value)
 
-       click.echo("\n")
-       for key,value in can_strings_missing_list.items():
-           click.echo("The CAN string:" + key + " is missing in the file:" + value)
+     #  click.echo("\n")
+     #  for key,value in can_strings_missing_list.items():
+       #    click.echo("The CAN string:" + key + " is missing in the file:" + value)
 
 
 @program.command()
