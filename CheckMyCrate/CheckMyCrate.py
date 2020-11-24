@@ -119,6 +119,90 @@ def check_my_crate(crate_path, profile_path):
        with open(json_path) as json_file:
            data = json.load(json_file)
 
+       if "@graph" in data.keys():
+
+           # Takes @id and gives the vertice
+           graph = {}
+
+           # Takes the vertice and gives the dictionary with information about it
+           vertices = {}
+           vertice_number = 0
+
+           
+
+           for item in data["@graph"]:
+                graph[item["@id"]] = vertice_number
+                vertices[vertice_number] = item
+
+                vertice_number += 1
+
+           #print(graph)
+           #print()
+           #print(vertices)
+
+           constraintBegins = False
+
+           constraint_list = []
+           current_constraint = ""
+           
+
+           with open(profile_path) as f:
+               for line in f:
+
+                   if line.strip() == "}":
+                       constraintBegins = False
+                       current_constraint = current_constraint.replace("\n", "")
+                       constraint_list.append(current_constraint)
+                       current_constraint = ""
+
+                   
+                   if constraintBegins:
+                        current_constraint += line
+
+
+
+                   if line.strip() == "{":
+                       constraintBegins = True
+                      
+
+
+           #print(constraint_list)
+
+           maps = {}
+           is_if = False
+           is_it_okay = True
+
+           for item in constraint_list:
+               commands = item.split("~")
+
+               #print(commands)
+              
+               if is_if and is_it_okay == False:
+                   print()
+                   is_if = False
+               else:
+                   if commands[0] == "MUST_REFER":
+                     
+                       is_it_okay = does_it_refer(commands[1], commands[2], commands[3], graph, vertices, maps, False)
+                   elif commands[0] == "MUST_CONTAIN":
+                       
+                       is_it_okay = does_it_contain(commands[1], commands[2], commands[3], commands[4], graph, vertices, maps, False)
+                   elif commands[0] == "IF_COULD_CONTAIN":
+          
+                       is_if = True
+                       is_it_okay = does_it_contain(commands[1], commands[2], commands[3], commands[4], graph, vertices, maps, True)
+          
+               
+
+
+
+
+
+
+
+
+
+
       # for thing in data["@graph"]:
         #   print(thing)
 
@@ -128,35 +212,35 @@ def check_my_crate(crate_path, profile_path):
       
        #less
       # commands
-       maps = {}
-       refer_list = []
+     #  maps = {}
+      # refer_list = []
 
        #must_constraint_list = []
 
-       with open(profile_path) as f:
-           for line in f:
+       #with open(profile_path) as f:
+         #  for line in f:
                
-               without_left_bracket = line.split("}")
-               without_right_bracket = without_left_bracket[0].split("{")
+          #     without_left_bracket = line.split("}")
+            #   without_right_bracket = without_left_bracket[0].split("{")
 
-               keywords_and_commands = without_right_bracket[1].split(" -> ")
+             #  keywords_and_commands = without_right_bracket[1].split(" -> ")
                #print(keywords_and_commands)
 
-               is_found = False
+           #    is_found = False
             
-               if keywords_and_commands[0] == "CRATE":
-                   if keywords_and_commands[1] == "MUST_REFER":
+           #    if keywords_and_commands[0] == "CRATE":
+            #       if keywords_and_commands[1] == "MUST_REFER":
                        
-                       for item in data["@graph"]:
-                           for key in item.keys():
+                    #   for item in data["@graph"]:
+                       #    for key in item.keys():
                                #print(key)
-                               if key == keywords_and_commands[3]:
-                                   maps[keywords_and_commands[2]] = item[key][keywords_and_commands[4]]
-                                   refer_list.append(item[key][keywords_and_commands[4]])
-                                   is_found = True
-                                   break
-                       if is_found == False:
-                           print("Crate MUST refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
+                       #        if key == keywords_and_commands[3]:
+                        #           maps[keywords_and_commands[2]] = item[key][keywords_and_commands[4]]
+                        #           refer_list.append(item[key][keywords_and_commands[4]])
+                        #           is_found = True
+                      #             break
+                      # if is_found == False:
+                        #   print("Crate MUST refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
 
                    #if keywords_and_commands[1] == "COULD_CONTAIN&&":
                         
@@ -173,44 +257,43 @@ def check_my_crate(crate_path, profile_path):
                    #        print("Crate Could refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
 
 
-               elif keywords_and_commands[0] in maps:
-                   if keywords_and_commands[1] == "MUST_CONTAIN":
-                       for item in data["@graph"]:
-                               for key in item.keys():
+              # elif keywords_and_commands[0] in maps:
+                  # if keywords_and_commands[1] == "MUST_CONTAIN":
+                    #   for item in data["@graph"]:
+                       #        for key in item.keys():
                                    #print(key)
-                                   if key == "@id":
-                                       if item[key] == maps[keywords_and_commands[0]]:
+                        #           if key == "@id":
+                          #             if item[key] == maps[keywords_and_commands[0]]:
 
-                                           if keywords_and_commands[2] in item.keys():
-                                               if json.dumps(item[keywords_and_commands[2]]) != keywords_and_commands[3]:
-                                                   print(json.dumps(item[keywords_and_commands[2]]), " is not the same as " , keywords_and_commands[3])
-                                           else:
-                                               print(keywords_and_commands[0], " does not contain ", keywords_and_commands[2])
-                                               break
+                              #             if keywords_and_commands[2] in item.keys():
+                                          #     if json.dumps(item[keywords_and_commands[2]]) != keywords_and_commands[3]:
+                                          #         print(json.dumps(item[keywords_and_commands[2]]), " is not the same as " , keywords_and_commands[3])
+                                         #  else:
+                                        #       print(keywords_and_commands[0], " does not contain ", keywords_and_commands[2])
+                                         #      break
 
                                                     
 
-                   if keywords_and_commands[1] == "MUST_REFER":                        
-                       for item in data["@graph"]:
-                           for key in item.keys():
+                #   if keywords_and_commands[1] == "MUST_REFER":                        
+                    #   for item in data["@graph"]:
+                      #     for key in item.keys():
                                #print(key)
-                               if key == "@id":
-                                   if item[key] == maps[keywords_and_commands[0]]:
+                            #   if key == "@id":
+                             #      if item[key] == maps[keywords_and_commands[0]]:
 
-                                       if key == keywords_and_commands[3]:
-                                           maps[keywords_and_commands[2]] = item[key][keywords_and_commands[4]]
-                                           refer_list.append(item[key][keywords_and_commands[4]])
-                                           is_found = True
-                                           break
-                                       if is_found == False:
-                                           print(keywords_and_commands[0], " MUST refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
+                                #       if key == keywords_and_commands[3]:
+                                 #          maps[keywords_and_commands[2]] = item[key][keywords_and_commands[4]]
+                                  #         refer_list.append(item[key][keywords_and_commands[4]])
+                                  #         is_found = True
+                                   #        break
+                                    #   if is_found == False:
+                                     #      print(keywords_and_commands[0], " MUST refer to ", keywords_and_commands[2] ," via ", keywords_and_commands[3])
                
 
                   # else:
                        #
 
-                           
-
+                          
 
 
 
@@ -346,6 +429,100 @@ def check_my_crate(crate_path, profile_path):
      #  for key,value in can_strings_missing_list.items():
        #    click.echo("The CAN string:" + key + " is missing in the file:" + value)
 
+# This function checks something is contained in the graph using the correct entity
+def does_it_contain(thing_that_refers, thing_that_is_referred_to, the_entity_it_refers_with, what_the_entity_must_have, 
+                                                                                             graph, vertices, maps, is_it_COULD) -> bool:
+   entity_is_found = False
+   is_found = False
+
+   if thing_that_refers != "$Crate":
+       if thing_that_refers in maps.keys():
+           if the_entity_it_refers_with in vertices[graph[maps[thing_that_refers]]].keys():
+               entity_is_found = True
+               
+              
+               if json.dumps(vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]) == what_the_entity_must_have:
+                   is_found = True
+               else:
+                   if is_it_COULD:
+                       print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
+                         ", however it COULD have ", what_the_entity_must_have, " value.")
+
+                   else:
+                       print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
+                         ", however it MUST have ", what_the_entity_must_have, " value.")
+   else:
+       print("I am here")
+       thing_that_refers = "Crate"
+       for item in vertices.values():
+           if the_entity_it_refers_with in item.keys() and json.dumps(item[the_entity_it_refers_with]) == what_the_entity_must_have:
+               entity_is_found = True
+                
+               maps[thing_that_is_referred_to] = item["@id"]
+
+               if json.dumps(item[the_entity_it_refers_with]) == what_the_entity_must_have:
+                   is_found = True
+               else:
+                   if is_it_COULD:
+                       print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
+                         ", however it COULD have ", what_the_entity_must_have, " value.")
+
+                   else:
+                       print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
+                         ", however it MUST have ", what_the_entity_must_have, " value.")
+                  
+   if entity_is_found == False:
+       if is_it_COULD:
+           print(thing_that_is_referred_to, " COULD exist in ", thing_that_refers, "via", the_entity_it_refers_with, what_the_entity_must_have)
+       else:
+           print("Entity ", the_entity_it_refers_with, " MUST exist in ", thing_that_refers)
+
+   if entity_is_found and is_found:
+       return True
+   else:
+       return False
+               
+
+# This function checks something is being refered in the graph using the correct entity
+def does_it_refer(thing_that_refers, thing_that_is_referred_to, the_entity_it_refers_with, graph, vertices, maps, is_it_COULD) -> bool:
+   entity_is_found = False
+   is_found = False
+   if thing_that_refers == "$Crate":
+       thing_that_refers = "Crate"
+       for item in vertices.values():
+           if the_entity_it_refers_with in item.keys():
+               entity_is_found = True
+              
+
+               maps[thing_that_is_referred_to] = item[the_entity_it_refers_with]["@id"]
+               if item[the_entity_it_refers_with]["@id"] in graph.keys():
+                   is_found = True
+               else:
+                   print("The ", thing_that_is_referred_to, " is refered to with ", the_entity_it_refers_with,
+                           " properly in", thing_that_refers,"however it is MUST be present in the graph itself as well.")
+   else:
+        if thing_that_refers in maps.keys():
+           if the_entity_it_refers_with in vertices[graph[maps[thing_that_refers]]].keys():
+               entity_is_found = True
+               maps[thing_that_is_referred_to] = vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"]
+               if vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"] in graph.keys():
+                   is_found = True
+               else:
+                   print("The", thing_that_is_referred_to, "is refered to with", the_entity_it_refers_with,
+                           "properly, however it is MUST be present in the graph itself as well.")
+                   
+  
+   if entity_is_found == False:
+       print("Entity ", the_entity_it_refers_with, " MUST exist in ",thing_that_refers)
+                     
+   if entity_is_found and is_found:
+       return True
+   else:
+       return False
+
+
+              
+ 
 
 @program.command()
 @click.argument('profile_path', required=True)

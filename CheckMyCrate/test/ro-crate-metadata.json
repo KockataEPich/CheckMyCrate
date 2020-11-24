@@ -55,7 +55,7 @@
       "@type": [
         "File",
         "SoftwareSourceCode",
-        "ComputationalWofsrkflow"
+        "ComputationalWorkflow"
       ],
       "programmingLanguage": {
         "@id": "#galaxy"
