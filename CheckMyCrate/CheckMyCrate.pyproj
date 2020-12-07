@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>08122cdb-d2d1-4dd2-a7bb-e37298794981</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>CheckMyCrate.py</StartupFile>
+    <StartupFile>src\CheckMyCrate.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -14,6 +14,10 @@
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <CommandLineArguments>check-my-crate ./sample ./profile_library/ro_crate_1.1_basic.txt</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <TestFramework>unittest</TestFramework>
+    <UnitTestPattern>Test*.py</UnitTestPattern>
+    <UnitTestRootDirectory>.</UnitTestRootDirectory>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +28,42 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CheckMyCrate.py" />
+    <Compile Include="src\CheckMyCrate.py" />
+    <Compile Include="src\Keyword_Management\Contain.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\Keyword_Management\Refer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Keyword_Management\__init__.py" />
+    <Compile Include="test\src\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Keyword_Management\Test_Refer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Keyword_Management\Test_Contain.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Test_CheckMyCrate.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="src\Keyword_Management\" />
+    <Folder Include="test\" />
+    <Folder Include="test\src\Keyword_Management\" />
+    <Folder Include="test\src\" />
+    <Folder Include="test\profile_library\" />
+    <Folder Include="test\sample\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="test\profile_library\test_ro_crate_1.1_basic.txt" />
+    <Content Include="test\sample\crate_test.txt" />
+    <Content Include="test\sample\ro-crate-metadata.json" />
+    <Content Include="test\sample\ro-crate-preview.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
