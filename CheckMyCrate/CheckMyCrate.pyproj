@@ -29,12 +29,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\CheckMyCrate.py" />
+    <Compile Include="src\Crate\Crate.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\Keyword_Management\Contain.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Keyword_Management\Refer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="test\src\Crate\Test_Crate.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Crate\__init__.py" />
     <Compile Include="test\src\Keyword_Management\__init__.py" />
     <Compile Include="test\src\__init__.py">
       <SubType>Code</SubType>
@@ -51,15 +58,23 @@
     <Compile Include="test\__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="profile_library\" />
+    <Folder Include="sample\" />
     <Folder Include="src\" />
     <Folder Include="src\Keyword_Management\" />
+    <Folder Include="src\Crate\" />
     <Folder Include="test\" />
     <Folder Include="test\src\Keyword_Management\" />
     <Folder Include="test\src\" />
     <Folder Include="test\profile_library\" />
     <Folder Include="test\sample\" />
+    <Folder Include="test\src\Crate\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="profile_library\ro_crate_1.1_basic.txt" />
+    <Content Include="sample\crate_test.txt" />
+    <Content Include="sample\ro-crate-metadata.json" />
+    <Content Include="sample\ro-crate-preview.html" />
     <Content Include="test\profile_library\test_ro_crate_1.1_basic.txt" />
     <Content Include="test\sample\crate_test.txt" />
     <Content Include="test\sample\ro-crate-metadata.json" />
