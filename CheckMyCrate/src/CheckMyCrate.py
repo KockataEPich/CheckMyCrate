@@ -1,5 +1,7 @@
 import src.Keyword_Management.Refer as Refer
 import src.Keyword_Management.Contain as Contain
+import src.Keyword_Management.Specify as Specify
+
 from src.Crate.Crate import Crate
 
 import click
@@ -47,25 +49,44 @@ def check_my_crate(crate_path, profile_path):
 
        is_if = False
        is_it_okay = True
+       counter = 0
 
        for item in constraint_list:
            commands = item.split("~")
 
                #print(commands)
-              
+           if is_if:
+               counter += 1
+               if counter > 1:
+                  is_if = False
+                  counter = 0
+
            if is_if and is_it_okay == False:
-               print()
                is_if = False
+               counter = 0
            else:
                if commands[0] == "MUST_REFER":   
                    is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
-              
+
+               elif commands[0] == "COULD_REFER":   
+                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
+
+               elif commands[0] == "IF_COULD_REFER":  
+                   is_if = True
+                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
+
                elif commands[0] == "MUST_CONTAIN":
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], commands[4], crate.graph, crate.vertices, crate.maps, False)
+                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
               
                elif commands[0] == "IF_COULD_CONTAIN":
                    is_if = True
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], commands[4], crate.graph, crate.vertices, crate.maps, True)       
+                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
+               
+               elif commands[0] == "COULD_CONTAIN":
+                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
+                   
+               elif commands[0] == "MUST_SPECIFY":
+                   is_it_okay = Specify.does_it_specify(commands[1], commands[2], commands[3], crate, False)
 
                    
 # Is used to get the constraint list of the commands

@@ -2,53 +2,31 @@ import json
 
 
 # This function checks something is contained in the graph using the correct entity
-def does_it_contain(thing_that_refers, thing_that_is_referred_to, the_entity_it_refers_with, what_the_entity_must_have, 
+def does_it_contain(thing_that_is_referred_to, the_entity_it_refers_with, what_the_entity_must_have, 
                                                                                              graph, vertices, maps, is_it_COULD) -> bool:
-   entity_is_found = False
-   is_found = False
+    option = "MUST"
 
-   if thing_that_refers == "$Crate":
-       thing_that_refers = "Crate"
-       for item in vertices.values():
-           if the_entity_it_refers_with in item.keys() and json.dumps(item[the_entity_it_refers_with]) == what_the_entity_must_have:
-               entity_is_found = True
-                
-               maps[thing_that_is_referred_to] = item["@id"]
+    if is_it_COULD:
+        option = "COULD"
 
-               if json.dumps(item[the_entity_it_refers_with]) == what_the_entity_must_have:
-                   is_found = True
-               else:
-                   if is_it_COULD:
-                       print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
-                         ", however it COULD have ", what_the_entity_must_have, " value.")
+    for item in vertices.values():
+        if the_entity_it_refers_with in item.keys() and json.dumps(item[the_entity_it_refers_with]) == what_the_entity_must_have:
+            if item["@id"] not in maps.values():
+                maps[thing_that_is_referred_to] = item["@id"]
+                return True
+            else:
+                if verifyIfTheyAreTheSame(thing_that_is_referred_to, maps, item["@id"]):
+                    return True
+           
+    print(thing_that_is_referred_to, option, "exist in", thing_that_is_referred_to, "via", the_entity_it_refers_with, what_the_entity_must_have)
 
-                   else:
-                       print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
-                         ", however it MUST have ", what_the_entity_must_have, " value.")
+    return False
 
-   elif thing_that_refers in maps.keys():
-       if the_entity_it_refers_with in vertices[graph[maps[thing_that_refers]]].keys():
-           entity_is_found = True
-               
-              
-       if json.dumps(vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]) == what_the_entity_must_have:
-           is_found = True
-       else:
-           if is_it_COULD:
-               print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
-                                                     ", however it COULD have ", what_the_entity_must_have, " value.")
 
-           else:
-               print("Entity ", the_entity_it_refers_with, " exists in ", thing_that_refers , 
-                         ", however it MUST have ", what_the_entity_must_have, " value.")       
-                  
-   if entity_is_found == False:
-       if is_it_COULD:
-           print(thing_that_is_referred_to, " COULD exist in ", thing_that_refers, "via", the_entity_it_refers_with, what_the_entity_must_have)
-       else:
-           print(thing_that_is_referred_to, " MUST exist in ", thing_that_refers, "via", the_entity_it_refers_with, what_the_entity_must_have)
 
-   if entity_is_found and is_found:
-       return True
-   else:
-       return False
+def verifyIfTheyAreTheSame(thing_that_is_referred_to, maps, id):
+    for string, identity in maps.items():
+        if identity == id and string == thing_that_is_referred_to:
+            return True
+    
+    return False

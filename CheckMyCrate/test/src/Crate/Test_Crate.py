@@ -7,6 +7,7 @@ class Test_Crate(unittest.TestCase):
 
         assert(crate.path, "test/sample/")
         assert(crate.json_path, "test/sample/ro-crate-metadata.json")
+        assert(crate.maps["$Crate"], "./")
 
 if __name__ == '__main__':
     unittest.main()

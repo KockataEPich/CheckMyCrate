@@ -12,8 +12,9 @@ class Test_Contain(unittest.TestCase):
         crate = Crate("test/sample/","test/sample/ro-crate-metadata.json")
 
 
-        is_it_okay = Contain.does_it_contain("$Crate", "Main Workflow Diagram", "@type", "[\"File\", \"ImageObject\", \"WorkflowSketch\"]", 
-                                                                                                           crate.graph, crate.vertices, crate.maps, False)
+        is_it_okay = Contain.does_it_contain("Main Workflow Diagram", "@type",
+                                            "[\"File\", \"ImageObject\", \"WorkflowSketch\"]", crate.graph, 
+                                            crate.vertices, crate.maps, False)
         assert(is_it_okay)
 
         

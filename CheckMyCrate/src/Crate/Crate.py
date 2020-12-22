@@ -1,6 +1,5 @@
 # Object file for the crate
 import json
-
 class Crate(object):
 
 
@@ -15,7 +14,7 @@ class Crate(object):
         # Takes the vertice and gives the dictionary with information about it
              vertices = {}
              vertice_number = 0
-
+             maps = {}
            
 
              for item in data["@graph"]:
@@ -23,9 +22,11 @@ class Crate(object):
                   vertices[vertice_number] = item
                   vertice_number += 1
 
+             maps["$Crate"] = vertices[graph["ro-crate-metadata.json"]]["about"]["@id"]
              self.path = crate_path
              self.json_path = json_path
+             self.data = data
              self.graph = graph
              self.vertices = vertices
-             self.maps = {}
+             self.maps = maps
 
