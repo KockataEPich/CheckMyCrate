@@ -41,7 +41,7 @@ def check_my_crate(crate_path, profile_path):
            json_path = crate_path + "/ro-crate-metadata.jsonld"
 
 
-       crate = Crate(crate_path,json_path)
+       crate = Crate(crate_path)
 
        constraint_list = getConstraintList(profile_path)
    

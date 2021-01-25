@@ -29,9 +29,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\CheckMyCrate.py" />
+    <Compile Include="src\Constraint\Constraint.py" />
+    <Compile Include="src\Constraint\ContainConstraint.py" />
+    <Compile Include="src\Constraint\ReferConstraint.py" />
+    <Compile Include="src\Constraint\SpecifyConstraint.py" />
     <Compile Include="src\Crate\Crate.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Keyword_Management\ConstraintAndVariableManagement.py" />
     <Compile Include="src\Keyword_Management\Contain.py">
       <SubType>Code</SubType>
     </Compile>
@@ -41,6 +46,7 @@
     <Compile Include="src\Keyword_Management\Refer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Variable\Variable.py" />
     <Compile Include="test\src\Crate\Test_Crate.py">
       <SubType>Code</SubType>
     </Compile>
@@ -67,8 +73,10 @@
     <Folder Include="profile_library\" />
     <Folder Include="sample\" />
     <Folder Include="src\" />
+    <Folder Include="src\Constraint\" />
     <Folder Include="src\Keyword_Management\" />
     <Folder Include="src\Crate\" />
+    <Folder Include="src\Variable\" />
     <Folder Include="test\" />
     <Folder Include="test\src\Keyword_Management\" />
     <Folder Include="test\src\" />

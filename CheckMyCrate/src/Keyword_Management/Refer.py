@@ -8,28 +8,28 @@ def does_it_refer(thing_that_refers, thing_that_is_referred_to, the_entity_it_re
     if is_it_COULD:
        option = "COULD"
 
-    if the_entity_it_refers_with in vertices[graph[maps[thing_that_refers]]].keys():
+    if the_entity_it_refers_with in graph[maps[thing_that_refers]].keys():
         entity_is_found = True
 
-        if "@id" in vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]:
+        if "@id" in graph[maps[thing_that_refers]][the_entity_it_refers_with]:
 
-            if not vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"] in maps.values():
-                maps[thing_that_is_referred_to] = vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"]
+            if not graph[maps[thing_that_refers]][the_entity_it_refers_with]["@id"] in maps.values():
+                maps[thing_that_is_referred_to] = graph[maps[thing_that_refers]][the_entity_it_refers_with]["@id"]
 
-                if vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"] in graph.keys():
+                if graph[maps[thing_that_refers]][the_entity_it_refers_with]["@id"] in graph.keys():
                      return True
                 else:
                      print("The", thing_that_is_referred_to, "is refered to with", the_entity_it_refers_with,
                                             "properly, however it is MUST be present in the graph itself as well.")
             else:
                 if verifyIfTheyAreTheSame(thing_that_is_referred_to, maps, id):
-                    if vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"] in graph.keys():
+                    if graph[maps[thing_that_refers]][the_entity_it_refers_with]["@id"] in graph.keys():
                         return True
                     else:
                         print("The", thing_that_is_referred_to, "is refered to with", the_entity_it_refers_with,
                                             "properly, however it is MUST be present in the graph itself as well.")
                 else:
-                    maps[thing_that_is_referred_to] = maps[thing_that_is_referred_to] = vertices[graph[maps[thing_that_refers]]][the_entity_it_refers_with]["@id"]
+                    maps[thing_that_is_referred_to] = maps[thing_that_is_referred_to] = graph[maps[thing_that_refers]][the_entity_it_refers_with]["@id"]
                    
         else:
             print("The", thing_that_is_referred_to, "is refered to with", the_entity_it_refers_with,
