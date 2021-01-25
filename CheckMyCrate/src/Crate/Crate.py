@@ -1,6 +1,7 @@
 # Object file for the crate
 import json
 from src.Variable.Variable import Variable
+
 import os.path
 from os import path
 
@@ -28,6 +29,8 @@ class Crate(object):
                   graph[item["@id"]] = item
 
              maps = {}
+
+             # Intialises the first variable which is the crate itself
              crateVariable = Variable("$Crate")
              crateVariable.id = graph["ro-crate-metadata.json"]["about"]["@id"]
              maps["$Crate"] = crateVariable

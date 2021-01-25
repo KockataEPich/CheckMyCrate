@@ -46,7 +46,14 @@
     <Compile Include="src\Keyword_Management\Refer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\Variable\VerifyVariable.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\Variable\Variable.py" />
+    <Compile Include="test\src\Constraint\Test_Constraint.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Constraint\__init__.py" />
     <Compile Include="test\src\Crate\Test_Crate.py">
       <SubType>Code</SubType>
     </Compile>
@@ -55,6 +62,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test\src\Keyword_Management\__init__.py" />
+    <Compile Include="test\src\Variable\Test_Variable.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Variable\__init__.py" />
     <Compile Include="test\src\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -83,6 +94,8 @@
     <Folder Include="test\profile_library\" />
     <Folder Include="test\sample\" />
     <Folder Include="test\src\Crate\" />
+    <Folder Include="test\src\Constraint\" />
+    <Folder Include="test\src\Variable\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="profile_library\ro_crate_1.1_basic.txt" />

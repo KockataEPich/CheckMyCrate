@@ -1,6 +1,7 @@
 import src.Keyword_Management.Refer as Refer
 import src.Keyword_Management.Contain as Contain
 import src.Keyword_Management.Specify as Specify
+import src.Keyword_Management.ConstraintAndVariableManagement as ConVarMng
 
 from src.Crate.Crate import Crate
 
@@ -54,39 +55,48 @@ def check_my_crate(crate_path, profile_path):
        for item in constraint_list:
            commands = item.split("~")
 
+           ConVarMng.attachConstraintsToVariables(crate, commands)
+
                #print(commands)
-           if is_if:
-               counter += 1
-               if counter > 1:
-                  is_if = False
-                  counter = 0
+          # if is_if:
+          #     counter += 1
+         #      if counter > 1:
+         #         is_if = False
+         #         counter = 0
 
-           if is_if and is_it_okay == False:
-               is_if = False
-               counter = 0
-           else:
-               if commands[0] == "MUST_REFER":   
-                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
+        #   if is_if and is_it_okay == False:
+         #      is_if = False
+         #      counter = 0
+        #   else:
+        #       if commands[0] == "MUST_REFER":   
+         #          is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
 
-               elif commands[0] == "COULD_REFER":   
-                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
+           #    elif commands[0] == "COULD_REFER":   
+           #        is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
 
-               elif commands[0] == "IF_COULD_REFER":  
-                   is_if = True
-                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
+              # elif commands[0] == "IF_COULD_REFER":  
+              #     is_if = True
+              #     is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
 
-               elif commands[0] == "MUST_CONTAIN":
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
+               #elif commands[0] == "MUST_CONTAIN":
+               #    is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
               
-               elif commands[0] == "IF_COULD_CONTAIN":
-                   is_if = True
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
+              # elif commands[0] == "IF_COULD_CONTAIN":
+              #     is_if = True
+               #    is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
                
-               elif commands[0] == "COULD_CONTAIN":
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
+              # elif commands[0] == "COULD_CONTAIN":
+               #    is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
                    
-               elif commands[0] == "MUST_SPECIFY":
-                   is_it_okay = Specify.does_it_specify(commands[1], commands[2], commands[3], crate, False)
+            #   elif commands[0] == "MUST_SPECIFY":
+              #     is_it_okay = Specify.does_it_specify(commands[1], commands[2], commands[3], crate, False)
+
+
+       # Print every constraint's error message where appropriate
+       for key in crate.maps.keys():
+           for item in range(len(crate.maps[key].constraintList)):
+               if not crate.maps[key].constraintList[item].satisfied:
+                  print(crate.maps[key].constraintList[item].errorMessage)
 
                    
 # Is used to get the constraint list of the commands
