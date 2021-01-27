@@ -1,4 +1,5 @@
 from src.Variable.Variable import Variable
+import src.Variable.VerifyVariable as VerVar
 
 # This function checks something is being refered in the graph using the correct entity
 def does_it_refer(thing_that_refers, thing_that_is_referred_to, the_entity_it_refers_with, graph, vertices, maps, is_it_COULD) -> bool:
@@ -68,7 +69,7 @@ def verifyIfTheyAreTheSame(thing_that_is_referred_to, maps, id):
 
 # Method used to find an appropriate item in the graph to bind to the variable with the appropriate constraint
 
-def checkForRefer(variable, constraint, crate):
+def searchForRefer(variable, constraint, crate):
 
     # Checks if we have exited the loop and didn't find the desired entity
     entityIsFound = False
@@ -94,15 +95,17 @@ def checkForRefer(variable, constraint, crate):
 
                      # If this variable has already been assigned an ID which is different than this one it means that there is something wrong
                         if crate.maps[constraint.commands[2]].referedToCheck(variable) == 1:
-                            crate.maps[constraint.commands[2]].referedToBy = variable.id
                             crate.maps[constraint.commands[2]].referedToBy = variable.name
                             crate.maps[constraint.commands[2]].id = crate.graph[variable.id][constraint.commands[3]]["@id"]
                             constraint.satisfied = True
-                            return
+                            return True
                         elif crate.maps[constraint.commands[2]].referedToCheck(variable) == -1:
                             crate.maps[constraint.commands[2]].id = crate.graph[variable.id][constraint.commands[3]]["@id"]
-                            verifyIdOnVariable(crate.maps[constraint.commands[2]])
-                            return
+                            crate.maps[constraint.commands[2]].referedToBy = variable.name
+                            VerVar.updateVariableConstraints(crate.maps[constraint.commands[2]], crate)
+                            constraint.satisfied = True
+                            return True
+                            
                         else:
                             constraint.errorMessage = constraint.commands[2] + " is reffered to by " + crate.maps[constraint.commands[2]].referedToBy + " and " \
                                                       + variable.name + " with different id's "
@@ -118,6 +121,8 @@ def checkForRefer(variable, constraint, crate):
     if not entityIsFound:
             constraint.errorMessage = "Entity " + constraint.commands[3] + " " + constraint.option + " exist in " \
                                         + " " + constraint.commands[1]   + " and refer to " + constraint.commands[2]
+    constraint.satisfied = False
+    return False
 
  # If the variable has already been added to maps and we have a new constraint for it check if the constraint holds 
  # for the current variable
@@ -149,17 +154,17 @@ def verifyRefer(variable, constraint, crate, insideTheLoop):
                       crate.maps[constraint.commands[2]].referedToBy = variable.name
                       crate.maps[constraint.commands[2]].id = crate.graph[variable.id][constraint.commands[3]]["@id"]
                       constraint.satisfied = True
-                      return
+                      return True
                  elif crate.maps[constraint.commands[2]].referedToCheck(variable) == -1:
-                      crate.maps[constraint.commands[2]].id = crate.graph[variable.id][constraint.commands[3]]["@id"]
-                      verifyIdOnVariable(crate.maps[constraint.commands[2]])
-                      return
+                            crate.maps[constraint.commands[2]].id = crate.graph[variable.id][constraint.commands[3]]["@id"]
+                            VerVar.updateVariableConstraints(crate.maps[constraint.commands[2]], crate)
+                            constraint.satisfied = True
+                            return True
+                
                  else:
                       constraint.errorMessage = constraint.commands[2] + " is reffered to by " + crate.maps[constraint.commands[2]].referedToBy + " and " \
                                                 + variable.name + " with different id's "
-                      
-                      
-                      
+
              else: 
                   constraint.errorMessage = "The " + constraint.commands[2] + " is refered to with " + constraint.commands[3] \
                        +  " properly, however it is MUST be present in the graph itself as well."
@@ -172,6 +177,7 @@ def verifyRefer(variable, constraint, crate, insideTheLoop):
         # to not create infinite loops
 
          elif not insideTheLoop:
+              #TODO
               verifyVariable(variable, constraint, crate)
          else:
              constraint.errorMessage = "The " + constraint.commands[2] + " is refered to with " + constraint.commands[3] \
@@ -183,3 +189,6 @@ def verifyRefer(variable, constraint, crate, insideTheLoop):
             constraint.errorMessage = "Entity " + constraint.commands[3] + " " + constraint.option + " exist in " \
                                         + " " + constraint.commands[1]   + " and refer to " + constraint.commands[2]
 
+ 
+    constraint.satisfied = False
+    return False

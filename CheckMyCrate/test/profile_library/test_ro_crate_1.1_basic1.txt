@@ -9,7 +9,6 @@ mainEntity
 {
 MUST_CONTAIN~
 Main Workflow~
-Main Workflow Type~
 @type~
 ["File", "SoftwareSourceCode", "ComputationalWorkflow"]
 }
@@ -23,7 +22,6 @@ programmingLanguage
 
 {
 IF_COULD_CONTAIN~
-$Crate~
 Main Workflow Diagram~
 @type~
 ["File", "ImageObject", "WorkflowSketch"]
@@ -36,3 +34,32 @@ Main Workflow Diagram~
 image
 }
 
+
+{
+COULD_CONTAIN~
+Dataset~
+@type~ 
+["Dataset"]
+}
+
+
+{
+IF_COULD_CONTAIN~
+Main Workflow CWL Description~
+@type~
+["File", "SoftwareSourceCode", "ComputationalWorkflow"]
+}
+
+{
+MUST_REFER~
+Main Workflow~
+Main Workflow CWL Description~
+subjectOf
+}
+
+{
+MUST_SPECIFY~
+$Crate~
+License~
+license
+}

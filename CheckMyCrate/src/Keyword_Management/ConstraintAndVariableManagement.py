@@ -20,7 +20,7 @@ def attachConstraintsToVariables(crate, commands):
         # Else if we have seen it we verify it and add it to the variable
         else:
             constraint = Constraint(commands)
-            VerifyConstraint(crate.maps[commands[1]], constraint, crate)
+            VerifyConstraint(crate.maps[commands[1]], constraint, crate, False)
             crate.maps[commands[1]].addConstraint(constraint)
         
 
@@ -29,30 +29,30 @@ def VerifyConstraintAndAttachVariableToId(variable, constraint, crate):
 
     if constraint.commands[0] == "MUST_REFER":
         constraint.option = "MUST"
-        Refer.checkForRefer(variable, constraint, crate)
+        Refer.searchForRefer(variable, constraint, crate)
 
     if constraint.commands[0] == "COULD_REFER":
         constraint.option = "COULD"
-        Refer.checkForRefer(variable, constraint, crate)
+        Refer.searchForRefer(variable, constraint, crate)
 
     if constraint.commands[0] == "SHOULD_REFER":
         constraint.option = "SHOULD"
-        Refer.checkForRefer(variable, constraint, crate)
+        Refer.searchForRefer(variable, constraint, crate)
 
 
 # When the variable has already been attached to an ID and we are checking if that is the correct variable - id combination, give the appropriate messages
-def VerifyConstraint(variable, constraint, crate):
+def VerifyConstraint(variable, constraint, crate, inTheLoop):
     if constraint.commands[0] == "MUST_REFER":
         constraint.option = "MUST"
-        Refer.verifyRefer(variable, constraint, crate, False)
+        Refer.verifyRefer(variable, constraint, crate, inTheLoop)
 
     if constraint.commands[0] == "COULD_REFER":
         constraint.option = "COULD"
-        Refer.verifyRefer(variable, constraint, crate, False)
+        Refer.verifyRefer(variable, constraint, crate, inTheLoop)
 
     if constraint.commands[0] == "SHOULD_REFER":
         constraint.option = "SHOULD"
-        Refer.verifyRefer(variable, constraint, crate, False)
+        Refer.verifyRefer(variable, constraint, crate, inTheLoop)
 
 
 

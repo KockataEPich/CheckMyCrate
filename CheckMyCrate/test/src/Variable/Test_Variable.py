@@ -18,5 +18,6 @@ class Test_Variable(unittest.TestCase):
         self.assertTrue(constraint in variable.constraintList)
 
 
+
 if __name__ == '__main__':
     unittest.main()

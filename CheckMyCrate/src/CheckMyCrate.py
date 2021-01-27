@@ -30,8 +30,14 @@ def program(verbose):
 @click.argument('crate_path', required=True)
 @click.argument('profile_path', required=True)
 def check_my_crate(crate_path, profile_path):
-   """ This command compares the RO-Crate directory against a given profile"""
+   # For testing convenience this method is the one that is called when the option for this is givne
+   if checkTheCrate(crate_path, profile_path):
+       print("This crate abides to the profile")
+   else:
+       print("This crate does NOT abide to the profile")
 
+# The check_my_crate functionality
+def checkTheCrate(crate_path, profile_path):
 
    # Stop the program if the paths are no specified properly
    if isItViable(crate_path, profile_path):
@@ -44,17 +50,17 @@ def check_my_crate(crate_path, profile_path):
 
        crate = Crate(crate_path)
 
-       constraint_list = getConstraintList(profile_path)
+       commandsList = getConstraintList(profile_path)
    
            #print(constraint_list)
 
+       #TODO
        is_if = False
        is_it_okay = True
        counter = 0
 
-       for item in constraint_list:
-           commands = item.split("~")
-
+       
+       for commands in commandsList:
            ConVarMng.attachConstraintsToVariables(crate, commands)
 
                #print(commands)
@@ -91,12 +97,20 @@ def check_my_crate(crate_path, profile_path):
             #   elif commands[0] == "MUST_SPECIFY":
               #     is_it_okay = Specify.does_it_specify(commands[1], commands[2], commands[3], crate, False)
 
+       
 
+       crate_is_valid_to_profile = True
        # Print every constraint's error message where appropriate
        for key in crate.maps.keys():
            for item in range(len(crate.maps[key].constraintList)):
                if not crate.maps[key].constraintList[item].satisfied:
                   print(crate.maps[key].constraintList[item].errorMessage)
+
+                  if "MUST_" in crate.maps[key].constraintList[item].commands[0]:
+                      crate_is_valid_to_profile = False
+                    
+
+       return crate_is_valid_to_profile
 
                    
 # Is used to get the constraint list of the commands
@@ -123,7 +137,12 @@ def getConstraintList (profile_path):
                   if line.strip() == "{":
                       constraintBegins = True
 
-   return constraint_list
+   commandsList = []
+   for item in constraint_list:
+           commands = item.split("~")
+           commandsList.append(commands)
+
+   return commandsList
 
 def isItViable(crate_path, profile_path):
 

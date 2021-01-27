@@ -1,0 +1,64 @@
+
+{
+MUST_CONTAIN~
+Main Workflow~
+@type~
+["File", "SoftwareSourceCode", "ComputationalWorkflow"]
+}
+
+{
+MUST_REFER~
+$Crate~
+Main Workflow~
+mainEntity
+}
+
+{
+MUST_REFER~
+Main Workflow~
+Type of Programming Language~
+programmingLanguage
+}
+
+{
+COULD_CONTAIN~
+Dataset~
+@type~ 
+["Dataset"]
+}
+
+
+{
+IF_COULD_CONTAIN~
+Main Workflow CWL Description~
+@type~
+["File", "SoftwareSourceCode", "ComputationalWorkflow"]
+}
+
+{
+MUST_REFER~
+Main Workflow~
+Main Workflow CWL Description~
+subjectOf
+}
+
+{
+IF_COULD_CONTAIN~
+Main Workflow Diagram~
+@type~
+["File", "ImageObject", "WorkflowSketch"]
+}
+
+{
+MUST_REFER~
+Main Workflow~
+Main Workflow Diagram~
+image
+}
+
+{
+MUST_SPECIFY~
+$Crate~
+License~
+license
+}

@@ -1,0 +1,14 @@
+{
+MUST_CONTAIN~
+Main Worklfow~
+@type~
+["File", "SoftwareSourceCode", "ComputationalWorkflow"]
+}
+
+
+{
+COULD_CONTAIN~
+Dataset~
+@type~ 
+["Dataset"]
+}
