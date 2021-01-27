@@ -2,3 +2,5 @@
 
 #TODO
 def verifyVariable(variable, constraint, crate)
+
+def resolveDispute()

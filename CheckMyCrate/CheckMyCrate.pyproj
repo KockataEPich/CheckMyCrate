@@ -30,9 +30,6 @@
   <ItemGroup>
     <Compile Include="src\CheckMyCrate.py" />
     <Compile Include="src\Constraint\Constraint.py" />
-    <Compile Include="src\Constraint\ContainConstraint.py" />
-    <Compile Include="src\Constraint\ReferConstraint.py" />
-    <Compile Include="src\Constraint\SpecifyConstraint.py" />
     <Compile Include="src\Crate\Crate.py">
       <SubType>Code</SubType>
     </Compile>

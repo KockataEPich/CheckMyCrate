@@ -22,3 +22,11 @@ class Variable(object):
     def addConstraint(self, constraint):
         self.constraintList.append(constraint)
             
+    def referedToCheck(self, givenId):
+      if self.id != givenId and self.id != None and self.referedToBy != None:
+          return -2
+      elif self.id != givenId and self.id != None and self.referedToBy == None:
+          return -1
+      else:
+          return 1
+        

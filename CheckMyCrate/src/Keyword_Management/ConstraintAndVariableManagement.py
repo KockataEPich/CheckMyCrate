@@ -20,7 +20,7 @@ def attachConstraintsToVariables(crate, commands):
         # Else if we have seen it we verify it and add it to the variable
         else:
             constraint = Constraint(commands)
-            verifyConstraint(crate.maps[commands[1]],crate, constraint)
+            VerifyConstraint(crate.maps[commands[1]], constraint, crate)
             crate.maps[commands[1]].addConstraint(constraint)
         
 
