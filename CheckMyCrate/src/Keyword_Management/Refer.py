@@ -176,19 +176,20 @@ def verifyRefer(variable, constraint, crate, insideTheLoop):
         # This method is also used when looping through the graph to verify so we need to know if we are inside it or outside it in order
         # to not create infinite loops
 
-         elif not insideTheLoop:
-              #TODO
-              verifyVariable(variable, constraint, crate)
+         elif not insideTheLoop and variable.referedToBy == None:
+             verifyVariable(variable, constraint, crate)
+             return constraint.satisfied
          else:
              constraint.errorMessage = "The " + constraint.commands[2] + " is refered to with " + constraint.commands[3] \
                     + " inproperly in " + constraint.commands[1]," as it does not have \"@id\" key. "
-    elif not insideTheLoop:
+    elif not insideTheLoop and variable.referedToBy == None:
          verifyVariable(variable, constraint, crate)
+         return constraint.satisfied
     else:
          if not entityIsFound:
             constraint.errorMessage = "Entity " + constraint.commands[3] + " " + constraint.option + " exist in " \
                                         + " " + constraint.commands[1]   + " and refer to " + constraint.commands[2]
 
- 
+
     constraint.satisfied = False
     return False

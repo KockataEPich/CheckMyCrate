@@ -31,7 +31,27 @@ class Test_VerifyVariable(unittest.TestCase):
         self.assertFalse(variable.constraintList[2].satisfied)
 
        
+    def test_verifyVariable(self):
+        crate = Crate("test/sample/")
 
+        variable = Variable("Main Workflow")
+        variable.id = "MC_WF.png"
+
+        constraint = Constraint(["MUST_REFER" , "Main Workflow", "Type of Programming Language", "programmingLanguage"])
+        variable.addConstraint(constraint)
+
+        constraint = Constraint(["MUST_REFER" , "Main Workflow", "Main Workflow Diagram", "image"])
+        variable.addConstraint(constraint)
+
+        constraint = Constraint(["MUST_REFER" , "Main Workflow", "qkwofkqwfq", "image121ewwwsswqq"])
+        constraint.satisfied = True
+
+        self.assertFalse(VerVar.verifyVariable(variable, constraint, crate), "It does attach it properly to the id with the most constraints satisfied")
+
+        self.assertEquals(variable.id, "Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "it does not find the id with the most constraints properly")
+        self.assertFalse(constraint.satisfied)
+ 
+        #TODO need to add contains
 
 
 
