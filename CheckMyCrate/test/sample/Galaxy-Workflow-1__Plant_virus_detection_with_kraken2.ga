@@ -1,0 +1,331 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "Annotation: Fast efficient prediction of taxonomic composition of a dataset",
+    "format-version": "0.1",
+    "name": "1: Plant virus detection with kraken2",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Data_R1.fastq"
+                }
+            ],
+            "label": "Data_R1.fastq",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 372.515625,
+                "height": 81,
+                "left": 8,
+                "right": 208,
+                "top": 291.515625,
+                "width": 200,
+                "x": 8,
+                "y": 291.515625
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "8a462c3a-6143-4563-9916-110d0c0e7f5b",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "e38512fc-67bc-4c03-b3f9-5d0f457f75ef"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Data_R2.fastq"
+                }
+            ],
+            "label": "Data_R2.fastq",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 470.546875,
+                "height": 81,
+                "left": 10.96875,
+                "right": 210.96875,
+                "top": 389.546875,
+                "width": 200,
+                "x": 10.96875,
+                "y": 389.546875
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "5d084e0c-8b52-400d-863a-d5c023310999",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output",
+                    "uuid": "d35a255c-95a7-43f6-8a2e-a317cdd33a31"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "provide different taxonomic prediction with several false positive. WARNING: consider changing the database",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/kraken2/kraken2/2.1.1+galaxy0",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "single_paired|forward_input": {
+                    "id": 0,
+                    "output_name": "output"
+                },
+                "single_paired|reverse_input": {
+                    "id": 1,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Kraken2",
+                    "name": "single_paired"
+                },
+                {
+                    "description": "runtime parameter for tool Kraken2",
+                    "name": "single_paired"
+                }
+            ],
+            "label": "Kraken2: taxonomic prediction",
+            "name": "Kraken2",
+            "outputs": [
+                {
+                    "name": "report_output",
+                    "type": "tabular"
+                },
+                {
+                    "name": "output",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 500.515625,
+                "height": 192,
+                "left": 276,
+                "right": 476,
+                "top": 308.515625,
+                "width": 200,
+                "x": 276,
+                "y": 308.515625
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "#{forward_input | basename }_Kraken_taxonomy_table"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                },
+                "RenameDatasetActionreport_output": {
+                    "action_arguments": {
+                        "newname": "#{forward_input | basename }_Kraken_report_result"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "report_output"
+                },
+                "TagDatasetActionoutput": {
+                    "action_arguments": {
+                        "tags": "Tabular_tax_prediction"
+                    },
+                    "action_type": "TagDatasetAction",
+                    "output_name": "output"
+                },
+                "TagDatasetActionreport_output": {
+                    "action_arguments": {
+                        "tags": "Report"
+                    },
+                    "action_type": "TagDatasetAction",
+                    "output_name": "report_output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/kraken2/kraken2/2.1.1+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "4a9da2b6c2e3",
+                "name": "kraken2",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"confidence\": \"0.0\", \"kraken2_database\": \"2020-06-24T164454Z_standard_kmer-len_35_minimizer-len_31_minimizer-spaces_6\", \"min_base_quality\": \"0\", \"minimum_hit_groups\": \"2\", \"quick\": \"true\", \"report\": {\"create_report\": \"true\", \"use_mpa_style\": \"false\", \"report_zero_counts\": \"false\", \"report_minimizer_data\": \"false\"}, \"single_paired\": {\"single_paired_selector\": \"yes\", \"__current_case__\": 1, \"forward_input\": {\"__class__\": \"RuntimeValue\"}, \"reverse_input\": {\"__class__\": \"RuntimeValue\"}}, \"split_reads\": \"false\", \"use_names\": \"false\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.1.1+galaxy0",
+            "type": "tool",
+            "uuid": "d681cc5f-3e65-418b-89ad-73ac355fde65",
+            "workflow_outputs": [
+                {
+                    "label": "Kraken_report",
+                    "output_name": "report_output",
+                    "uuid": "0cf92dba-b9e4-442d-b0fd-f3d7b87d5361"
+                },
+                {
+                    "label": "Kraken_taxonomy_table",
+                    "output_name": "output",
+                    "uuid": "50ac3344-aa75-42b7-ad8f-65fd16de8cf2"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "just re-arrange the column of the tabular file so it can be ready for krona representation",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/kraken2tax/Kraken2Tax/1.2",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "input": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Convert Kraken",
+                    "name": "input"
+                }
+            ],
+            "label": "Convert kraken file",
+            "name": "Convert Kraken",
+            "outputs": [
+                {
+                    "name": "out_file",
+                    "type": "taxonomy"
+                }
+            ],
+            "position": {
+                "bottom": 470.46875,
+                "height": 132,
+                "left": 553.984375,
+                "right": 753.984375,
+                "top": 338.46875,
+                "width": 200,
+                "x": 553.984375,
+                "y": 338.46875
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file": {
+                    "action_arguments": {
+                        "newname": "#{input | basename }_modified"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file"
+                },
+                "TagDatasetActionout_file": {
+                    "action_arguments": {
+                        "tags": "Tabular_tax_prediction"
+                    },
+                    "action_type": "TagDatasetAction",
+                    "output_name": "out_file"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/kraken2tax/Kraken2Tax/1.2",
+            "tool_shed_repository": {
+                "changeset_revision": "f03c7ba8d8bc",
+                "name": "kraken2tax",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"input\": {\"__class__\": \"RuntimeValue\"}, \"ncbi_taxonomy\": \"2020-12-03\", \"read_name\": \"2\", \"tax_id\": \"3\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.2",
+            "type": "tool",
+            "uuid": "7fe79eac-b443-42d2-a82a-c259f39bd294",
+            "workflow_outputs": [
+                {
+                    "label": "Kraken_taxonomy_table_modified",
+                    "output_name": "out_file",
+                    "uuid": "b4e5c135-dd99-4277-a827-79dc7d41d4b4"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "Improve kraken2 taxonomic result representation in a HTLM report",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/crs4/taxonomy_krona_chart/taxonomy_krona_chart/2.7.1+galaxy0",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "type_of_data|input": {
+                    "id": 3,
+                    "output_name": "out_file"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Krona pie chart",
+                    "name": "type_of_data"
+                }
+            ],
+            "label": "Krona pie chart",
+            "name": "Krona pie chart",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "html"
+                }
+            ],
+            "position": {
+                "bottom": 495.515625,
+                "height": 132,
+                "left": 832.03125,
+                "right": 1032.03125,
+                "top": 363.515625,
+                "width": 200,
+                "x": 832.03125,
+                "y": 363.515625
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "#{input | basename }.html"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                },
+                "TagDatasetActionoutput": {
+                    "action_arguments": {
+                        "tags": "taxonomic_prediction"
+                    },
+                    "action_type": "TagDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/crs4/taxonomy_krona_chart/taxonomy_krona_chart/2.7.1+galaxy0",
+            "tool_shed_repository": {
+                "changeset_revision": "e9005d1f3cfd",
+                "name": "taxonomy_krona_chart",
+                "owner": "crs4",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"combine_inputs\": \"false\", \"root_name\": \"Root\", \"type_of_data\": {\"type_of_data_selector\": \"taxonomy\", \"__current_case__\": 0, \"input\": {\"__class__\": \"RuntimeValue\"}, \"max_rank\": \"0\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.7.1+galaxy0",
+            "type": "tool",
+            "uuid": "d86fe141-0870-41ba-9b05-5bb4eadec506",
+            "workflow_outputs": [
+                {
+                    "label": "Taxonomic_prediction_report",
+                    "output_name": "output",
+                    "uuid": "5c2a7570-9c0e-43c3-91a8-99dd47ffdc2e"
+                }
+            ]
+        }
+    },
+    "tags": [
+        "virology",
+        "kraken"
+    ],
+    "uuid": "05c0a18a-fdec-474e-9b44-7e63e03d26e3",
+    "version": 3
+}

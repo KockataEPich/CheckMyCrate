@@ -105,8 +105,11 @@
     <Content Include="sample\crate_test.txt" />
     <Content Include="sample\ro-crate-metadata.json" />
     <Content Include="sample\ro-crate-preview.html" />
+    <Content Include="test\profile_library\test_contain_basic.txt" />
     <Content Include="test\profile_library\test_refer_basic.txt" />
     <Content Include="test\profile_library\test_ro_crate_1.1_basic.txt" />
+    <Content Include="test\profile_library\test_ro_crate_1.1_basic1WithoutIFAndSpecify.txt" />
+    <Content Include="test\profile_library\test_ro_crate_1.1_basic2.txt" />
     <Content Include="test\sample\crate_test.txt" />
     <Content Include="test\sample\ro-crate-metadata.json" />
     <Content Include="test\sample\ro-crate-preview.html" />

@@ -23,8 +23,7 @@ class Test_Contain(unittest.TestCase):
 
             constraint =  Constraint(["COULD_CONTAIN" , "Main Workflow Diagram", "@type", "[\"File\", \"ImageObject\", \"WorkflowSketch\"]"])
 
-            self.assertTrue(Refer.searchForRefer(crate.maps["$Crate"], constraint, crate))
-            assert(is_it_okay)
+            self.assertTrue(Contain.searchForContain(crate.maps["$Crate"], constraint, crate))
 
     def test_checkContain(self):
             crate = Crate("test/sample/")
@@ -38,7 +37,7 @@ class Test_Contain(unittest.TestCase):
 
             constraint = Constraint(["MUST_CONTAIN" , "Main Workflow", "@type", "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"])
 
-            self.assertTrue(Contain.verifyContain(variable, constraint, crate))
+            self.assertTrue(Contain.verifyContain(variable, constraint, crate, False))
 
 if __name__ == '__main__':
     unittest.main()

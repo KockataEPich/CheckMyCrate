@@ -177,13 +177,17 @@ def verifyRefer(variable, constraint, crate, insideTheLoop):
         # to not create infinite loops
 
          elif not insideTheLoop and variable.referedToBy == None:
-             verifyVariable(variable, constraint, crate)
+             variable.addConstraint(constraint)
+             VerVar.verifyVariable(variable, crate)
+             variable.constraintList.remove(constraint)
              return constraint.satisfied
          else:
              constraint.errorMessage = "The " + constraint.commands[2] + " is refered to with " + constraint.commands[3] \
                     + " inproperly in " + constraint.commands[1]," as it does not have \"@id\" key. "
     elif not insideTheLoop and variable.referedToBy == None:
-         verifyVariable(variable, constraint, crate)
+         variable.addConstraint(constraint)
+         VerVar.verifyVariable(variable, crate)
+         variable.constraintList.remove(constraint)
          return constraint.satisfied
     else:
          if not entityIsFound:

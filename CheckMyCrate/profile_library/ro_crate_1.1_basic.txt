@@ -5,6 +5,23 @@ Main Workflow~
 mainEntity
 }
 
+
+{
+COULD_CONTAIN~
+Main Workflow CWL Description~
+@type~
+["File", "SoftwareSourceCode", "ComputationalWorkflow"]
+}
+
+{
+MUST_CONTAIN~
+Main Workflow~
+@type~
+["File", "SoftwareSourceCode", "ComputationalWorkflow"]
+}
+
+
+
 {
 MUST_REFER~
 Main Workflow~

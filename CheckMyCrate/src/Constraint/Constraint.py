@@ -17,4 +17,5 @@ class Constraint(object):
 
         # The option argument indicating the MUST/COULD/SHOULD enumeration
         self.option = ""
+        
        

@@ -21,7 +21,7 @@ programmingLanguage
 }
 
 {
-IF_COULD_CONTAIN~
+COULD_CONTAIN~
 Main Workflow Diagram~
 @type~
 ["File", "ImageObject", "WorkflowSketch"]
@@ -43,23 +43,4 @@ Dataset~
 }
 
 
-{
-IF_COULD_CONTAIN~
-Main Workflow CWL Description~
-@type~
-["File", "SoftwareSourceCode", "ComputationalWorkflow"]
-}
 
-{
-MUST_REFER~
-Main Workflow~
-Main Workflow CWL Description~
-subjectOf
-}
-
-{
-MUST_SPECIFY~
-$Crate~
-License~
-license
-}

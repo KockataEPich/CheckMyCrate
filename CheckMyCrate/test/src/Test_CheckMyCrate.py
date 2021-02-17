@@ -45,8 +45,8 @@ class Test_CheckMyCrate(unittest.TestCase):
         self.assertTrue(CMC.checkTheCrate("test/sample/", "test/profile_library/test_contain_basic.txt"))
         
     def test_mixed(self):
-        self.assertTrue(CMC.checkTheCrate("test/sample/", "test/profile_library/test_ro_crate_1.1_basic1.txt"))
-        self.assertTrue(CMC.checkTheCrate("test/sample/", "test/profile_library/test_ro_crate_1.1_basic2.txt"))
+        self.assertTrue(CMC.checkTheCrate("test/sample/", "test/profile_library/test_ro_crate_1.1_basic1WithoutIFAndSpecify.txt"), "It doesn't work when everything is only contain and refer")
+        self.assertTrue(CMC.checkTheCrate("test/sample/", "test/profile_library/test_ro_crate_1.1_basic2.txt"), "It doesn't work when everything is combined")
         
 
 if __name__ == '__main__':
