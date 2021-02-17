@@ -75,12 +75,13 @@
       "contentSize": 369188
     },
     {
-      "@id": "#ro-crate-preview.html",
-      "@type": "CreativeWork",
-      "about": {
-        "@id": "./"
-      }
+        "@id": "#ro-crate-preview.html",
+        "@type": "CreativeWork",
+        "about": {
+            "@id": "./"
+        }
     },
+
     {
       "@id": "#galaxy",
       "@type": "ComputerLanguage",

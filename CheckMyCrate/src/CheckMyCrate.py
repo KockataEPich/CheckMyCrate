@@ -41,79 +41,105 @@ def check_my_crate(crate_path, profile_path):
            json_path = crate_path + "/ro-crate-metadata.jsonld"
 
 
-       crate = Crate(crate_path,json_path)
+       with open(json_path) as json_path:
+           crateData = json.load(json_path)
 
-       constraint_list = getConstraintList(profile_path)
-   
-           #print(constraint_list)
 
-       is_if = False
-       is_it_okay = True
-       counter = 0
+       with open(profile_path) as profile_path:
+           profileData = json.load(profile_path)
 
-       for item in constraint_list:
-           commands = item.split("~")
+       resolution = False
 
-               #print(commands)
-           if is_if:
-               counter += 1
-               if counter > 1:
-                  is_if = False
-                  counter = 0
+       if profileData["@type"] == "WorkflowCrate":
+         resolution = checkWorkflowCrates(crateData, profileData)
+       else:
+         resolution = checkDataCrates(crateData, profileData)
 
-           if is_if and is_it_okay == False:
-               is_if = False
-               counter = 0
-           else:
-               if commands[0] == "MUST_REFER":   
-                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
+       if not resolution:
+           print("This is not a valid workflow crate")
 
-               elif commands[0] == "COULD_REFER":   
-                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
 
-               elif commands[0] == "IF_COULD_REFER":  
-                   is_if = True
-                   is_it_okay = Refer.does_it_refer(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True)
 
-               elif commands[0] == "MUST_CONTAIN":
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, False)
-              
-               elif commands[0] == "IF_COULD_CONTAIN":
-                   is_if = True
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
-               
-               elif commands[0] == "COULD_CONTAIN":
-                   is_it_okay = Contain.does_it_contain(commands[1], commands[2], commands[3], crate.graph, crate.vertices, crate.maps, True) 
+
+def checkWorkflowCrates(crateData, profileData):
+    #print(profileData["properties"][0]["minimum"])
+
+    #print(crateData)
+    crateData = crateData.get("@graph")
+    
+    mapCrateAndWorklfow = checkIfIndeedWorkflowCrate(crateData)
+    if isinstance(mapCrateAndWorklfow, int):
+        return False
+
+    # JSON arrays with their respective cardinality
+    indexOfCrate = next(iter(mapCrateAndWorklfow))
+
+    indexOfWorkflow = mapCrateAndWorklfow[indexOfCrate]
+
+
+    minimumCardinalityArray = profileData["properties"][0]["minimum"]
+    recommendedCardinalityArray = profileData["properties"][1]["recommended"]
+    optionaCardinalityArray = profileData["properties"][2]["optional"]
+
+    print(indexOfCrate)
+    print(indexOfWorkflow)
+
+
+
+
+    
+    
+    
+
+    return True
+
+
+        
+    
+
+  #  print(crateData)
                    
-               elif commands[0] == "MUST_SPECIFY":
-                   is_it_okay = Specify.does_it_specify(commands[1], commands[2], commands[3], crate, False)
-
-                   
-# Is used to get the constraint list of the commands
-def getConstraintList (profile_path):
-   current_constraint = ""
-   constraint_list =[]
-   constraintBegins = False
-
-   with open(profile_path) as f:
-              for line in f:
-
-                  if line.strip() == "}":
-                      constraintBegins = False
-                      current_constraint = current_constraint.replace("\n", "")
-                      constraint_list.append(current_constraint)
-                      current_constraint = ""
-
-                   
-                  if constraintBegins:
-                       current_constraint += line
 
 
 
-                  if line.strip() == "{":
-                      constraintBegins = True
 
-   return constraint_list
+
+def checkIfIndeedWorkflowCrate(crateData):
+    for position, item  in enumerate(crateData):
+        if item["@id"] == "./":
+            if item.get("mainEntity") == None:
+                print("Main Workflow must be referenced in the crate via mainEntity")
+                return -1
+            elif item["mainEntity"].get("@id") == None:
+                print("The key \"mainEntity\" exists, however it is not refercing the Main Workflow properly")
+                return -1
+            else:
+                for position2, item2 in enumerate(crateData):
+                    if item2.get("@id") == item["mainEntity"].get("@id"):
+                        if item2.get("@type") != None:
+                            if json.dumps(item2.get("@type")) == "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]":
+                                 return {position : position2}
+                            else:
+                                 print("The main entity type does not have the appropriate value. For it to be a workflow crate it needs to have a type of [\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]")
+                                 return -1
+                        else:
+                            print("The main entity needs to have a @type keyword")
+                            return -1
+
+                print("The Main Workflow needs to be present in the graph as well")
+                return -1
+
+
+    print("Crate entity \"./\" inside the JSON file does not exist")
+    return -1
+  
+
+
+
+
+
+
+
 
 def isItViable(crate_path, profile_path):
 

@@ -12,7 +12,7 @@
     <Name>CheckMyCrate</Name>
     <RootNamespace>CheckMyCrate</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>check-my-crate ./sample ./profile_library/ro_crate_1.1_basic.txt</CommandLineArguments>
+    <CommandLineArguments>check-my-crate ./sample ./profile_library/ro_crate_1.1_basic.json</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <TestFramework>unittest</TestFramework>
     <UnitTestPattern>Test*.py</UnitTestPattern>
@@ -77,7 +77,7 @@
     <Folder Include="test\src\Crate\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="profile_library\ro_crate_1.1_basic.txt" />
+    <Content Include="profile_library\ro_crate_1.1_basic.json" />
     <Content Include="sample\crate_test.txt" />
     <Content Include="sample\ro-crate-metadata.json" />
     <Content Include="sample\ro-crate-preview.html" />
