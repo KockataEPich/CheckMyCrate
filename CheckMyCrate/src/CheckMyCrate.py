@@ -65,26 +65,40 @@ def checkWorkflowCrates(crateData, profileData):
     #print(profileData["properties"][0]["minimum"])
 
     #print(crateData)
-    crateData = crateData.get("@graph")
+    crateData = crateData.get("@graph") 
     
-    mapCrateAndWorklfow = checkIfIndeedWorkflowCrate(crateData)
-    if isinstance(mapCrateAndWorklfow, int):
+    # Return workflowID
+    workflowID = checkIfIndeedWorkflowCrate(crateData)
+
+    if isinstance(workflowID, int):
         return False
 
+
+    crateGraph = {}
+
+    for item in crateData:
+        crateGraph[item.get("@id")] = item
+
+
+    crateId = "./"
+
     # JSON arrays with their respective cardinality
-    indexOfCrate = next(iter(mapCrateAndWorklfow))
+    minimumMarginalityArray = profileData["properties"][0]["minimum"]
+    recommendedMarginalityArray = profileData["properties"][1]["recommended"]
+    optionaMarginalityArray = profileData["properties"][2]["optional"]
 
-    indexOfWorkflow = mapCrateAndWorklfow[indexOfCrate]
-
-
-    minimumCardinalityArray = profileData["properties"][0]["minimum"]
-    recommendedCardinalityArray = profileData["properties"][1]["recommended"]
-    optionaCardinalityArray = profileData["properties"][2]["optional"]
-
-    print(indexOfCrate)
-    print(indexOfWorkflow)
+    compareTheCrate(minimumMarginalityArray, crateGraph, crateId, workflowID, "MUST")
+    compareTheCrate(recommendedMarginalityArray, crateGraph, crateId, workflowID, "SHOULD")
+    compareTheCrate(optionaMarginalityArray, crateGraph, crateId, workflowID, "COULD")
+    
+    
 
 
+                        
+            
+           # if graph[crateId].get(item.get("@id")).get("@id") != None:
+                #prtin("wow")
+                
 
 
     
@@ -94,8 +108,40 @@ def checkWorkflowCrates(crateData, profileData):
     return True
 
 
-        
-    
+def compareTheCrate(array, crateGraph, crateId, workflowID, option):
+
+    for item in array:
+        if crateGraph[crateId].get(item.get("@id")) != None:
+            if isinstance(crateGraph[crateId].get(item.get("@id")), dict):
+                itemID = crateGraph[crateId].get(item.get("@id")).get("@id")
+                if crateGraph.get(itemID) != None:
+                    if crateGraph.get(itemID).get("@type") != None:
+                        if crateGraph.get(itemID).get("@type") == item.get("expected_type") or crateGraph.get(itemID).get("@type") in item.get("expected_type"):
+                            ...
+                        else:
+                            (item.get("@id") + " needs  to reference an item of type " + json.dumps(item.get("expected_type")))
+                    else:
+                        print("@type must exist in the item which is referenced by", item.get("@id"))
+                else:
+                    print("The entity which references the item ID is present, however the item itself does not exist in the graph", item.get("@id"))
+
+
+
+        elif crateGraph[workflowID].get(item.get("@id")) != None:
+            if isinstance(crateGraph[workflowID].get(item.get("@id")), dict):
+                itemID = crateGraph[workflowID].get(item.get("@id")).get("@id")
+                if crateGraph.get(itemID) != None:
+                    if crateGraph.get(itemID).get("@type") != None:
+                        if crateGraph.get(itemID).get("@type") == item.get("expected_type") or crateGraph.get(itemID).get("@type") in item.get("expected_type"):
+                            ...
+                        else:
+                            print(item.get("@id") + " needs  to reference an item of type " + json.dumps(item.get("expected_type")))
+                    else:
+                        print("@type must exist in the item which is referenced by", item.get("@id"))
+                else:
+                    print("The entity which references the item ID is present, however the item itself does not exist in the graph", item.get("@id"))
+        else:
+            print("Property: ", json.dumps(item.get("@id")), option, "exist in the crate with expected @type", json.dumps(item.get("expected_type")), "\n" + "Description:", item.get("description"), "\n")
 
   #  print(crateData)
                    
@@ -118,7 +164,7 @@ def checkIfIndeedWorkflowCrate(crateData):
                     if item2.get("@id") == item["mainEntity"].get("@id"):
                         if item2.get("@type") != None:
                             if json.dumps(item2.get("@type")) == "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]":
-                                 return {position : position2}
+                                 return item["mainEntity"].get("@id")
                             else:
                                  print("The main entity type does not have the appropriate value. For it to be a workflow crate it needs to have a type of [\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]")
                                  return -1
