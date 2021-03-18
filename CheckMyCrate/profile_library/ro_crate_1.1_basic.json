@@ -138,14 +138,14 @@
                     "@id": "funding",
                     "expected_type": "Grant",
                     "description": "A description of the item.",
-                    "cardinality": "Many"
+                    "cardinality": "MANY"
                 },
 
                 {
                     "@id": "hasPart",
                     "expected_type": "CreativeWork",
                     "description": "Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense). Inverse property: isPartOf.",
-                    "cardinality": "Many"
+                    "cardinality": "MANY"
                 },
 
                 {
