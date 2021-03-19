@@ -1,5 +1,6 @@
 import os.path
 import src.Classes.ProfileValidation as PV
+import click
 from os import path
 
 def isItViable(crate_path, profile_path):

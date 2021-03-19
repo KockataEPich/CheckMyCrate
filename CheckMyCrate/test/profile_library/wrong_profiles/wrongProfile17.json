@@ -1,10 +1,9 @@
 {
-    "main_entity_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
+    "main_entity_type": "value",
     "properties": [
         {
 
             "minimum": [
-
                 {
                     "@id": "creator",
                     "expected_type": [
@@ -13,7 +12,7 @@
                     ],
 
                     "description": "The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.",
-                    "cardinality": "MANY"
+                    "wrong_keyword": "MANY"
                 },
 
 
@@ -93,7 +92,6 @@
                 }
             ]
         },
-
 
         {
             "recommended": [

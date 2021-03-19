@@ -1,10 +1,9 @@
 {
-    "main_entity_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
+    "main_entity_type": "WorkflowCrate",
     "properties": [
         {
 
             "minimum": [
-
                 {
                     "@id": "creator",
                     "expected_type": [
@@ -226,7 +225,7 @@
 
 
         {
-            "optional": [
+            "wrong_keyword": [
                 {
                     "@id": "subjectOf",
                     "expected_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],

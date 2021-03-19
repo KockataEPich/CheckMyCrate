@@ -1,10 +1,8 @@
 {
-    "main_entity_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
+    "main_entity_type": "value",
     "properties": [
         {
-
             "minimum": [
-
                 {
                     "@id": "creator",
                     "expected_type": [
@@ -93,9 +91,8 @@
                 }
             ]
         },
-
-
         {
+
             "recommended": [
                 {
                     "@id": "citation",
@@ -288,6 +285,10 @@
                     "cardinality": "MANY"
                 }
             ]
+        },
+
+        {
+            "anotherItem": "value"
         }
 
     ]

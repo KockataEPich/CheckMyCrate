@@ -1,13 +1,12 @@
 {
-    "main_entity_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
+    "main_entity_type": "value",
     "properties": [
         {
 
             "minimum": [
-
                 {
                     "@id": "creator",
-                    "expected_type": [
+                    "wrong_keyword": [
                         "Organization",
                         "Person"
                     ],
@@ -93,7 +92,6 @@
                 }
             ]
         },
-
 
         {
             "recommended": [

@@ -32,7 +32,7 @@
     <Compile Include="src\Classes\CheckTheCrate.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Classes\CrateChecks.py">
+    <Compile Include="src\Classes\CheckCrateType.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Classes\CrateValidation.py">
@@ -44,24 +44,26 @@
     <Compile Include="src\Classes\Viability.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test\src\Crate\Test_Crate.py">
+    <Compile Include="test\src\Classes\TestCrateValidation.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test\src\Crate\__init__.py" />
-    <Compile Include="test\src\Keyword_Management\Test_Specify.py">
+    <Compile Include="test\src\Classes\TestCheckTheCrate.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test\src\Keyword_Management\__init__.py" />
+    <Compile Include="test\src\Classes\TestCheckCrateType.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Classes\TestProfileValidation.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Classes\TestViability.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test\src\Classes\__init__.py" />
+    <Compile Include="test\src\TestCheckMyCrate.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="test\src\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="test\src\Keyword_Management\Test_Refer.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="test\src\Keyword_Management\Test_Contain.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="test\src\Test_CheckMyCrate.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test\__init__.py" />
@@ -72,19 +74,38 @@
     <Folder Include="src\" />
     <Folder Include="src\Classes\" />
     <Folder Include="test\" />
-    <Folder Include="test\src\Keyword_Management\" />
+    <Folder Include="test\profile_library\wrong_profiles\" />
     <Folder Include="test\src\" />
     <Folder Include="test\profile_library\" />
     <Folder Include="test\sample\" />
-    <Folder Include="test\src\Crate\" />
+    <Folder Include="test\src\Classes\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="output.txt" />
     <Content Include="profile_library\ro_crate_1.1_basic.json" />
     <Content Include="sample\crate_test.txt" />
     <Content Include="sample\ro-crate-metadata.json" />
     <Content Include="sample\ro-crate-preview.html" />
-    <Content Include="test\profile_library\test_ro_crate_1.1_basic.txt" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile15.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile17.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile16.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile14.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile9.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile10.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile11.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile12.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile13.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile8.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile7.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile6.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile5.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile4.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile3.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile2.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile1.json" />
+    <Content Include="test\profile_library\ro_crate_1.1_basic.json" />
     <Content Include="test\sample\crate_test.txt" />
+    <Content Include="test\sample\ro-crate-metadata2.json" />
     <Content Include="test\sample\ro-crate-metadata.json" />
     <Content Include="test\sample\ro-crate-preview.html" />
   </ItemGroup>

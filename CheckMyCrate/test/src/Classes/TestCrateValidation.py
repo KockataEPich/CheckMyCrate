@@ -1,6 +1,6 @@
 import unittest
 
-class Test_CheckMyCrate(unittest.TestCase):
+class TestCrateValidation(unittest.TestCase):
     def test_A(self):
         self.fail("Not implemented")
 

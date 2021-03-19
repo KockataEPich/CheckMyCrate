@@ -1,6 +1,7 @@
 # Stop the program if the paths are no specified properly
 import src.Classes.Viability as Viability
-import src.Classes.CrateChecks as CC
+import src.Classes.CheckCrateType as CCT
+import src.Classes.CrateValidation as CV
 import json
 import os.path
 
@@ -17,15 +18,35 @@ def checkTheCrate(crate_path, profile_path):
     with open(json_path) as json_path:
         crateData = json.load(json_path)
 
+    crateData = crateData.get("@graph") 
 
-    with open(profile_path) as profile_path:
-        profileData = json.load(profile_path)
+    with open(profile_path, 'rb') as profile_path:
+        profileData = json.loads(profile_path.read().decode("utf-8","ignore"))
+    
+    mainEntityId = CCT.checkCrateType(crateData, json.dumps(profileData.get("main_entity_type")))
 
-    resolution = False
+    
+    if isinstance(mainEntityId, int):
+        return False
 
-    if profileData["@type"] == "WorkflowCrate":
-        resolution = CC.checkWorkflowCrates(crateData, profileData)
-    else:
-        resolution = CC.checkDataCrates(crateData, profileData)
+    crateGraph = {}
 
-    return resolution
+    for item in crateData:
+        crateGraph[item.get("@id")] = item
+
+
+    crateId = "./"
+
+    # JSON arrays with their respective cardinality
+    minimumMarginalityArray = profileData["properties"][0]["minimum"]
+    recommendedMarginalityArray = profileData["properties"][1]["recommended"]
+    optionaMarginalityArray = profileData["properties"][2]["optional"]
+
+    if os.path.isfile("output.txt") == True:
+        os.remove("output.txt")
+
+    isItOkay = CV.compareTheCrate(minimumMarginalityArray, crateGraph, crateId, mainEntityId, "MUST")
+    CV.compareTheCrate(recommendedMarginalityArray, crateGraph, crateId, mainEntityId, "SHOULD")
+    CV.compareTheCrate(optionaMarginalityArray, crateGraph, crateId, mainEntityId, "COULD")
+
+    return isItOkay

@@ -1,10 +1,9 @@
 {
-    "main_entity_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
-    "properties": [
+    "main_entity_type": "value",
+    "wrong_keyword": [
         {
 
             "minimum": [
-
                 {
                     "@id": "creator",
                     "expected_type": [

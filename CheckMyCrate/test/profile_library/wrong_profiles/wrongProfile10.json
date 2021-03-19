@@ -1,10 +1,9 @@
 {
-    "main_entity_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
+    "main_entity_type": "value",
     "properties": [
         {
 
             "minimum": [
-
                 {
                     "@id": "creator",
                     "expected_type": [
@@ -30,7 +29,6 @@
 
 
                 {
-                    "@id": "input",
                     "expected_type": "FormalParameter",
                     "description": "an input required to use the workflow (eg. xl spreadsheet, xml file, …)",
                     "cardinality": "MANY"
@@ -93,9 +91,8 @@
                 }
             ]
         },
-
-
         {
+
             "recommended": [
                 {
                     "@id": "citation",

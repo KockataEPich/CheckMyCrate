@@ -1,4 +1,4 @@
-Property: null MUST exist in the crate with expected @type ["Organization", "Person"] 
+Property: "creator" MUST exist in the crate with expected @type ["Organization", "Person"] 
 Description: The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.
 
 Property: "dateCreated" MUST exist in the crate with expected @type ["Date", "DateTime"] 
@@ -13,11 +13,11 @@ Description: The name of the item.
 Property: "output" MUST exist in the crate with expected @type ["CreativeWork", "URL"] 
 Description: Main workflow description
 
-Property: "citation" MUST exist in the crate with expected @type ["CreativeWork", "Text"] 
-Description: A citation or reference to another creative work, such as another publication, web page, scholarly article, etc.
-
 Property: "version" MUST exist in the crate with expected @type ["CreativeWork", "URL"] 
 Description: Main workflow description
+
+Property: "citation" SHOULD exist in the crate with expected @type ["CreativeWork", "Text"] 
+Description: A citation or reference to another creative work, such as another publication, web page, scholarly article, etc.
 
 Property: "contributor" SHOULD exist in the crate with expected @type ["Organization", "Person"] 
 Description: A secondary contributor to the CreativeWork or Event.
