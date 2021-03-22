@@ -40,7 +40,7 @@
           "@id": "#project-25"
         }
       ],
-      "license": "Apache-2.0",
+        "license": "Apache-2.0",
       "identifier": "https://workflowhub.eu/workflows/68?version=1",
       "url": "https://workflowhub.eu/workflows/68/ro_crate?version=1",
       "isBasedOn": "https://raw.githubusercontent.com/matteo14c/Galaxy_wfs/main/Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga",

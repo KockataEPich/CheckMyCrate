@@ -1,33 +1,33 @@
 # Stop the program if the paths are no specified properly
-import src.Classes.Viability as Viability
-import src.Classes.CheckCrateType as CCT
-import src.Classes.CrateValidation as CV
+from   Classes.Viability import isItViable
+from   Classes.CheckCrateType import checkCrateType
+from   Classes.CrateValidation import compareTheCrate
 import json
 import os.path
+import click
 
-def checkTheCrate(crate_path, profile_path):
-    if not Viability.isItViable(crate_path, profile_path):
+def checkTheCrate(crate_path, profile_path, writeToFile):
+    click.echo("Validating profile and crate file's integrity...")
+
+    crateData = isItViable(crate_path, profile_path)
+    if isinstance(crateData, bool):
        return False
        
-    if os.path.isfile(crate_path + "/ro-crate-metadata.json") == True:
-        json_path = crate_path + "/ro-crate-metadata.json"
-    else:
-        json_path = crate_path + "/ro-crate-metadata.jsonld"
-
-
-    with open(json_path) as json_path:
-        crateData = json.load(json_path)
+    click.echo("Profile and crate are viable files!\n")
 
     crateData = crateData.get("@graph") 
 
     with open(profile_path, 'rb') as profile_path:
         profileData = json.loads(profile_path.read().decode("utf-8","ignore"))
     
-    mainEntityId = CCT.checkCrateType(crateData, json.dumps(profileData.get("main_entity_type")))
+    click.echo("Validating the main entity of the crate...")
+    mainEntityId = checkCrateType(crateData, json.dumps(profileData.get("main_entity_type")))
 
     
     if isinstance(mainEntityId, int):
         return False
+
+    click.echo("Crate has valid main entity!\n")
 
     crateGraph = {}
 
@@ -37,16 +37,26 @@ def checkTheCrate(crate_path, profile_path):
 
     crateId = "./"
 
+    click.echo("Validating the profile specification against the crate...")
     # JSON arrays with their respective cardinality
     minimumMarginalityArray = profileData["properties"][0]["minimum"]
     recommendedMarginalityArray = profileData["properties"][1]["recommended"]
     optionaMarginalityArray = profileData["properties"][2]["optional"]
 
-    if os.path.isfile("output.txt") == True:
+
+
+    if os.path.isfile("output.txt") and writeToFile:
         os.remove("output.txt")
 
-    isItOkay = CV.compareTheCrate(minimumMarginalityArray, crateGraph, crateId, mainEntityId, "MUST")
-    CV.compareTheCrate(recommendedMarginalityArray, crateGraph, crateId, mainEntityId, "SHOULD")
-    CV.compareTheCrate(optionaMarginalityArray, crateGraph, crateId, mainEntityId, "COULD")
+    isItOkay = True
+
+    if compareTheCrate(minimumMarginalityArray, crateGraph, crateId, mainEntityId, "MUST", writeToFile) < 1:
+        isItOkay = False
+
+    if compareTheCrate(recommendedMarginalityArray, crateGraph, crateId, mainEntityId, "SHOULD", writeToFile) == -1:
+        isItOkay = False
+
+    if compareTheCrate(optionaMarginalityArray, crateGraph, crateId, mainEntityId, "COULD", writeToFile) == -1:
+        isItOkay = False
 
     return isItOkay

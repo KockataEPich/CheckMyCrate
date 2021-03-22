@@ -82,11 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="output.txt" />
+    <Content Include="profile_library\template_profile.json" />
     <Content Include="profile_library\ro_crate_1.1_basic.json" />
     <Content Include="sample\crate_test.txt" />
     <Content Include="sample\ro-crate-metadata.json" />
     <Content Include="sample\ro-crate-preview.html" />
     <Content Include="test\profile_library\wrong_profiles\wrongProfile15.json" />
+    <Content Include="test\profile_library\wrong_profiles\wrongProfile18.json" />
     <Content Include="test\profile_library\wrong_profiles\wrongProfile17.json" />
     <Content Include="test\profile_library\wrong_profiles\wrongProfile16.json" />
     <Content Include="test\profile_library\wrong_profiles\wrongProfile14.json" />

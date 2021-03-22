@@ -6,67 +6,75 @@ def checkProfile(profile_path):
         with open(profile_path, 'rb') as profile_path:
             profileData = json.loads(profile_path.read().decode("utf-8","ignore"))
     except:
-        click.echo("The profile given is not a valid JSON file")
+        click.echo("The profile given is not a valid JSON file\n")
         return False
 
+    unique_ids = {}
+
     if len(profileData) != 2:
-        click.echo("The profile must have two entities. They are \"main_entity_type\ and \"properties\"")
+        click.echo("The profile must have two entities. They are \"main_entity_type\ and \"properties\"\n")
         return False
 
     if profileData.get("main_entity_type") == None:
-        click.echo("The profile must contain a \"main_entity_type\" entity")
+        click.echo("The profile must contain a \"main_entity_type\" entity\n")
         return False
     
     if profileData.get("properties") == None:
-        click.echo("The profile must contain a \"properties\" entity")
+        click.echo("The profile must contain a \"properties\" entity\n")
         return False
 
     if len(profileData.get("properties")) != 3:
-        click.echo("The properties array needs to contain 3 separate dictionaries") 
+        click.echo("The properties array needs to contain 3 separate dictionaries\n") 
         return False
 
     if profileData.get("properties")[0].get("minimum") == None:
-        click.echo("The dictionary of the first element must contain a \"minimum\" entity")
+        click.echo("The dictionary of the first element must contain a \"minimum\" entity\n")
         return False
 
     if profileData.get("properties")[1].get("recommended") == None:
-        click.echo("The dictionary of the second element must contain a \"recommended\" entity")
+        click.echo("The dictionary of the second element must contain a \"recommended\" entity\n")
         return False
 
     if profileData.get("properties")[2].get("optional") == None:
-        click.echo("The dictionary of the third element must contain a \"optional\" entity")
+        click.echo("The dictionary of the third element must contain a \"optional\" entity\n")
         return False
 
-    return (checkItems(profileData["properties"][0]["minimum"], "minimum")          and
-           checkItems(profileData["properties"][1]["recommended"], "recommended")   and
-           checkItems(profileData["properties"][2]["optional"], "optional"))
+    return (checkItems(profileData["properties"][0]["minimum"], "minimum", unique_ids)          and
+           checkItems(profileData["properties"][1]["recommended"], "recommended", unique_ids)   and
+           checkItems(profileData["properties"][2]["optional"], "optional", unique_ids))
 
 
-def checkItems(array, where):
+def checkItems(array, where, unique_ids):
     for item in array:
 
         if len(item) != 4:
-            click.echo("All items must have exactly 4 attributes. They are \"@id\", \"expected_type\", \"description\" and \"cardinality\"")
+            click.echo("All items must have exactly 4 attributes. They are \"@id\", \"expected_type\", \"description\" and \"cardinality\"\n")
             return False
 
         if item.get("@id") == None:
-            click.echo("One of the items in the " + where + " property does not have necessary entity \"@id\"")
+            click.echo("One of the items in the " + where + " property does not have necessary entity \"@id\"\n")
             return False
 
+        if(unique_ids.get(item.get("@id"))) != None:
+            click.echo("Item with id:" + item.get("@id") + " in the \"" + where + "\" property has already been declared inside the \"" + unique_ids.get(item.get("@id")) + "\" property\n")
+            return False
+
+        unique_ids[item.get("@id")] = where
+
         if item.get("expected_type") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"expected_type\"")
+            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"expected_type\"\n")
             return False
 
         if item.get("description") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"description\"")
+            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"description\"\n")
             return False
 
         if item.get("cardinality") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"cardinality\"")
+            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"cardinality\"\n")
             return False
 
         if item.get("cardinality") != "ONE" and item.get("cardinality") != "MANY":
-            click.echo("Cardinality of item with @id:\"" + item.get("@id") + "\" can only be either \"ONE\" or \"MANY\"")
+            click.echo("Cardinality of item with @id:\"" + item.get("@id") + "\" can only be either \"ONE\" or \"MANY\"\n")
             return False
 
     return True
