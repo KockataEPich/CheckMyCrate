@@ -1,37 +1,64 @@
 import unittest
-import src.Classes.CheckCrateType as CCT
+from src.Classes.CheckCrateType import checkCrateType
 import json
 
 class TestCheckCrateType(unittest.TestCase):
-    def testWorkflowTypeCrate(self):
-        with open("test/sample/ro-crate-metadata.json") as json_path:
+    def testMissingCrateEntity(self):
+        with open("test/sample/different_metadata/crate_id_missing.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertTrue(isinstance(CCT.checkIfIndeedWorkflowCrate(crateData), str))
+        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
 
-        with open("test/sample/ro-crate-metadata2.json") as json_path:
+    def testMissingMainEntity(self):
+        with open("test/sample/different_metadata/missing_main_entity.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertFalse(isinstance(CCT.checkIfIndeedWorkflowCrate(crateData), str))
+        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
 
-    def testDataTypeCrate(self):
-        with open("test/sample/ro-crate-metadata2.json") as json_path:
+    def testMissingMainEntityId(self):
+        with open("test/sample/different_metadata/missing_main_entity_id.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertTrue(isinstance(CCT.checkIfIndeedDataCrate(crateData), str))
+        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
 
-        with open("test/sample/ro-crate-metadata.json") as json_path:
+    def testMissingMainEntityType(self):
+        with open("test/sample/different_metadata/main_entity_missing_type.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertFalse(isinstance(CCT.checkIfIndeedDataCrate(crateData), str))
+        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+
+    def testCorrect(self):
+        
+        with open("test/sample/different_metadata/ro-crate-metadata.json") as json_path:
+            crateData = json.load(json_path)
+
+        crateData = crateData.get("@graph") 
+        expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
+        
+        self.assertTrue(isinstance(checkCrateType(crateData, expectedType), str))
+
+    def test_Non_Matching_Data(self):
+        
+        with open("test/sample/different_metadata/ro-crate-metadata.json") as json_path:
+            crateData = json.load(json_path)
+
+        crateData = crateData.get("@graph") 
+        expectedType = "Dataset"
+
+        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+
 
 if __name__ == '__main__':
     unittest.main()

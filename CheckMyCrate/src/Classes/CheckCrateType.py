@@ -14,10 +14,11 @@ def checkCrateType(crateData, expected_type):
                 for position2, item2 in enumerate(crateData):
                     if item2.get("@id") == item["mainEntity"].get("@id"):
                         if item2.get("@type") != None:
+                            print(expected_type)
                             if json.dumps(item2.get("@type")) in expected_type:  
                                  return item["mainEntity"].get("@id")
                             else:
-                                 click.echo("The main entity @type does not have the appropriate value. For it to be a workflow crate it needs to have a type of [\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]")
+                                 click.echo("The main entity @type has value: " + json.dumps(item2.get("@type")) + " but it MUST have a value of: " + json.dumps(expected_type))
                                  return -1
                         else:
                             click.echo("The main entity needs to have a @type keyword")
@@ -31,6 +32,3 @@ def checkCrateType(crateData, expected_type):
     click.echo("Crate entity \"./\" inside the JSON file does not exist")
     return -1
   
-
-def checkIfIndeedDataCrate(crateData):
-    return -1

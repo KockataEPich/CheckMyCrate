@@ -1,5 +1,5 @@
 import os.path
-from Classes.ProfileValidation import checkProfile
+from src.Classes.ProfileValidation import checkProfile
 import click
 from os import path
 import json

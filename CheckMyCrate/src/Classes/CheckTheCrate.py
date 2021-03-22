@@ -1,7 +1,7 @@
 # Stop the program if the paths are no specified properly
-from   Classes.Viability import isItViable
-from   Classes.CheckCrateType import checkCrateType
-from   Classes.CrateValidation import compareTheCrate
+from   src.Classes.Viability import isItViable
+from   src.Classes.CheckCrateType import checkCrateType
+from   src.Classes.CrateValidation import compareTheCrate
 import json
 import os.path
 import click

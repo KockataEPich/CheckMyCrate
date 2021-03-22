@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-from Classes.CheckTheCrate import checkTheCrate
-from Classes.ProfileValidation import checkProfile
+import sys
+sys.path.append('../')
+from src.Classes.CheckTheCrate import checkTheCrate
+from src.Classes.ProfileValidation import checkProfile
 import click
 
 
