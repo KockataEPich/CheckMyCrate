@@ -43,8 +43,6 @@ def checkTheCrate(crate_path, profile_path, writeToFile):
     recommendedMarginalityArray = profileData["properties"][1]["recommended"]
     optionaMarginalityArray = profileData["properties"][2]["optional"]
 
-
-
     if os.path.isfile("output.txt") and writeToFile:
         os.remove("output.txt")
 

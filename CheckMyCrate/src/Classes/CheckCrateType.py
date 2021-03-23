@@ -14,7 +14,6 @@ def checkCrateType(crateData, expected_type):
                 for position2, item2 in enumerate(crateData):
                     if item2.get("@id") == item["mainEntity"].get("@id"):
                         if item2.get("@type") != None:
-                            print(expected_type)
                             if json.dumps(item2.get("@type")) in expected_type:  
                                  return item["mainEntity"].get("@id")
                             else:

@@ -11,7 +11,7 @@ Property: "name" MUST exist in the crate with expected @type "Text"
 Description: The name of the item.
 
 Property: "output" MUST exist in the crate with expected @type ["CreativeWork", "URL"] 
-Description: Main workflow description
+Description: The output of the workflow
 
 Property: "version" MUST exist in the crate with expected @type ["CreativeWork", "URL"] 
 Description: Main workflow description
@@ -52,6 +52,8 @@ Description: Target Operating System / Product to which the code applies. If app
 Property: "subjectOf" COULD exist in the crate with expected @type ["File", "SoftwareSourceCode", "ComputationalWorkflow"] 
 Description: Main workflow description
 
+Property: image MUST reference an item of type ["File", "ImageObject"]
+
 Property: "alternateName" COULD exist in the crate with expected @type "Text" 
 Description: An alias for the item
 
@@ -67,4 +69,3 @@ Description: Date of first broadcast/publication.
 Property: "encodingFormat" COULD exist in the crate with expected @type ["Text", "URL"] 
 Description: Media type typically expressed using a MIME format (see IANA siteand MDN reference) e.g. application/zip for a SoftwareApplication binary, audio/mpeg for .mp3 etc.).In cases where a CreativeWork has several media type representations, encoding can be used to indicate each MediaObject alongside particular encodingFormat information.Unregistered or niche encoding and file formats can be indicated instead via the most appropriate URL, e.g. defining Web page or a Wikipedia/Wikidata entry. Supersedes fileFormat.
 
-Property: image MUST reference an item of type ["File", "ImageObject"]

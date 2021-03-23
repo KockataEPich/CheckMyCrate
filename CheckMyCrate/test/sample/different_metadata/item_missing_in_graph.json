@@ -92,11 +92,6 @@
       "@type": "Organization",
       "name": "Italy-Covid-data-Portal",
       "identifier": "https://workflowhub.eu/projects/25"
-    },
-    {
-      "@id": "https://orcid.org/0000-0003-3983-4961",
-      "name": "Matteo Chiara",
-      "identifier": "https://orcid.org/0000-0003-3983-4961"
     }
   ]
 }

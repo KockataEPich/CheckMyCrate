@@ -39,7 +39,7 @@
                 {
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "Main workflow description",
+                    "description": "The license of the workflow",
                     "cardinality": "MANY"
                 },
 
@@ -53,7 +53,7 @@
                 {
                     "@id": "output",
                     "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "Main workflow description",
+                    "description": "The output of the workflow",
                     "cardinality": "MANY"
                 },
 
