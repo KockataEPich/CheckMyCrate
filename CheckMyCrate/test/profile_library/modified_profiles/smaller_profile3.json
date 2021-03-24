@@ -1,6 +1,55 @@
 {
-    "main_entity_type": "value",
+    "main_entity_type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
     "properties": [
+        {
+
+            "minimum": [            
+                {
+                    "@id": "license",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The license of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "programmingLanguage",
+                    "expected_type": "ComputerLanguage",
+                    "description": "The computer programming language",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "image",
+                    "expected_type": [ "File", "ImageObject" ],
+                    "description": "An image of the item. This can be a URL or a fully described ImageObject",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "sdPublisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "Main workflow description",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "url",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "cardinality": "MANY",
+                    "description": "Main workflow description",
+                    "value": "NA"
+                }
+            ]
+        },
+
+
         {
             "recommended": [
                 {
@@ -206,15 +255,8 @@
                     "description": "The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links.",
                     "cardinality": "MANY",
                     "value": "NA"
-                },
-
-                {
-                    "@id": "image",
-                    "expected_type": [ "File", "ImageObject" ],
-                    "description": "An image of the item. This can be a URL or a fully described ImageObject",
-                    "cardinality": "MANY",
-                    "value": "NA"
                 }
+
             ]
         }
 

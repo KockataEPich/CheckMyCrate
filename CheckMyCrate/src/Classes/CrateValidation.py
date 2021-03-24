@@ -34,6 +34,10 @@ def searchInId(item, crateGraph, id, option, whereToWrite, f):
 
     if isinstance(crateGraph[id].get(item.get("@id")), dict):
         itemID = crateGraph[id].get(item.get("@id")).get("@id")
+
+        if not checkIdForCorrectValue(itemID, item, whereToWrite, f):
+            return False
+
         if crateGraph.get(itemID) != None:
             if crateGraph.get(itemID).get("@type") != None:
                 if not json.dumps(crateGraph.get(itemID).get("@type")) in json.dumps(item.get("expected_type")):
@@ -64,5 +68,31 @@ def searchInId(item, crateGraph, id, option, whereToWrite, f):
                 click.echo("The cardinality of item with @id " + item.get("@id") + " is ONE and thus the value of the key MUST not be a list \n \n")
              return False
 
+    else:
+        itemID = crateGraph[id].get(item.get("@id"))
+        if not checkIdForCorrectValue(itemID, item, whereToWrite, f):
+            return False
+        
+
     return True
 
+
+def checkIdForCorrectValue(itemID, item, whereToWrite, f):
+    correctValue = False
+
+    if isinstance(item.get("value"), list):
+            for value in item.get("value"):
+                if json.dumps(itemID).find(value) != -1:
+                    print("not here")
+                    correctValue = True
+    else:
+        correctValue = True
+
+    if not correctValue:
+        if whereToWrite:
+            f.write("Property: " + item.get("@id") + " MUST reference a value which contains one of these: " + json.dumps(item.get("value")) + "\n\n")
+        else:
+            click.echo("Property: " + item.get("@id") + " MUST reference a value which contains one of these: " + json.dumps(item.get("value")) + "\n\n")
+        return False
+
+    return True

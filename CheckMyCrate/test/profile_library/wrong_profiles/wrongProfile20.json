@@ -2,6 +2,109 @@
     "main_entity_type": "value",
     "properties": [
         {
+
+            "minimum": [
+                {
+                    "@id": "creator",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+
+                    "description": "The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.",
+                    "cardinality": "MANY",
+                    "wrong_keyword": "NA"
+                },
+
+
+                {
+                    "@id": "dateCreated",
+                    "expected_type": [
+                        "Date",
+                        "DateTime"
+                    ],
+                    "description": "The date on which the CreativeWork was created or the item was added to a DataFeed.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+
+
+                {
+                    "@id": "input",
+                    "expected_type": "FormalParameter",
+                    "description": "an input required to use the workflow (eg. xl spreadsheet, xml file, …)",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+
+                {
+                    "@id": "license",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The license of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "name",
+                    "expected_type": "Text",
+                    "description": "The name of the item.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "output",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The output of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+
+
+                {
+                    "@id": "programmingLanguage",
+                    "expected_type": "ComputerLanguage",
+                    "description": "The computer programming language",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "sdPublisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "Main workflow description",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "url",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "cardinality": "MANY",
+                    "description": "Main workflow description",
+                    "value": "NA"
+                },
+
+
+                {
+                    "@id": "version",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "Main workflow description",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                }
+            ]
+        },
+
+
+        {
             "recommended": [
                 {
                     "@id": "citation",

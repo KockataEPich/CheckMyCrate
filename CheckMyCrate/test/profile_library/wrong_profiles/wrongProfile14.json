@@ -12,7 +12,8 @@
                     ],
 
                     "description": "The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.",
-                    "cardinality": "ONE"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
 
@@ -23,7 +24,8 @@
                         "DateTime"
                     ],
                     "description": "The date on which the CreativeWork was created or the item was added to a DataFeed.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
 
 
@@ -32,29 +34,33 @@
                     "@id": "input",
                     "expected_type": "FormalParameter",
                     "description": "an input required to use the workflow (eg. xl spreadsheet, xml file, …)",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
 
                 {
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "Main workflow description",
-                    "cardinality": "MANY"
+                    "description": "The license of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "name",
                     "expected_type": "Text",
                     "description": "The name of the item.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "output",
                     "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "Main workflow description",
-                    "cardinality": "MANY"
+                    "description": "The output of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
 
@@ -63,7 +69,8 @@
                     "@id": "programmingLanguage",
                     "expected_type": "ComputerLanguage",
                     "description": "The computer programming language",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
@@ -73,14 +80,16 @@
                         "Person"
                     ],
                     "description": "Main workflow description",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "url",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "cardinality": "MANY",
-                    "description": "Main workflow description"
+                    "description": "Main workflow description",
+                    "value": "NA"
                 },
 
 
@@ -88,10 +97,12 @@
                     "@id": "version",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "Main workflow description",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }
             ]
         },
+
 
         {
             "recommended": [
@@ -102,7 +113,8 @@
                     "expected_type": [
                         "CreativeWork",
                         "Text"
-                    ]
+                    ],
+                    "value": "NA"
                 },
 
                 {
@@ -112,7 +124,8 @@
                         "Person"
                     ],
                     "description": "A secondary contributor to the CreativeWork or Event.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
@@ -122,28 +135,32 @@
                         "Text"
                     ],
                     "description": "The status of a creative work in terms of its stage in a lifecycle. Example terms include Incomplete, Draft, Published, Obsolete. Some organizations define a set of terms for the stages of their publication lifecycle.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "description",
                     "expected_type": "Text",
                     "description": "A description of the item.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "funding",
                     "expected_type": "Grant",
                     "description": "A description of the item.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "hasPart",
                     "expected_type": "CreativeWork",
                     "description": "Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense). Inverse property: isPartOf.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
@@ -154,14 +171,16 @@
                         "URL"
                     ],
                     "description": "A resource from which this work is derived or from which it is a modification or adaption. Supersedes isBasedOnUrl.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "keywords",
                     "expected_type": "Text",
                     "description": "Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
 
                 {
@@ -171,7 +190,8 @@
                         "Person"
                     ],
                     "description": "A maintainer of a Dataset, software package (SoftwareApplication), or other Project. A maintainer is a Person or Organization that manages contributions to, and/or publication of, some (typically complex) artifact. It is common for distributions of software and data to be based on “upstream” sources. When maintainer is applied to a specific version of something e.g. a particular version or packaging of a Dataset, it is always possible that the upstream source has a different maintainer. The isBasedOn property can be used to indicate such relationships between datasets to make the different maintenance roles clear. Similarly in the case of software, a package may have dedicated maintainers working on integration into software distributions such as Ubuntu, as well as upstream maintainers of the underlying work.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
@@ -181,7 +201,8 @@
                         "Person"
                     ],
                     "description": "The person or organization who produced the workflow.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
@@ -191,14 +212,16 @@
                         "Person"
                     ],
                     "description": "The publisher of the creative work.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "runtimePlatform",
                     "expected_type": "Text",
                     "description": "Runtime platform or script interpreter dependencies (Example - Java v1, Python2.3, .Net Framework 3.0). Supersedes runtime.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
@@ -208,14 +231,16 @@
                         "URL"
                     ],
                     "description": "Component dependency requirements for application. This includes runtime environments and shared libraries that are not included in the application distribution package, but required to run the application (Examples: DirectX, Java or .NET runtime). Supersedes requirements.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "targetProduct",
                     "expected_type": "SoftwareApplication",
                     "description": "Target Operating System / Product to which the code applies. If applies to several versions, just the product name can be used.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }
 
 
@@ -229,19 +254,22 @@
                     "@id": "subjectOf",
                     "expected_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
                     "description": "Main workflow description",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
                 {
                     "@id": "alternateName",
                     "expected_type": "Text",
                     "description": "An alias for the item",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
                 {
                     "@id": "conditionsOfAccess",
                     "expected_type": "Text",
                     "description": "Conditions that affect the availability of, or method(s) of access to, an item. Typically used for real world items such as an ArchiveComponent held by an ArchiveOrganization. This property is not suitable for use as a general Web access control mechanism. It is expressed only in natural language.For example “Available by appointment from the Reading Room” or “Accessible only from logged-in accounts “.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
                 {
                     "@id": "dateModified",
@@ -250,13 +278,15 @@
                         "DateTime"
                     ],
                     "description": "The date on which the CreativeWork was most recently modified or when the item’s entry was modified within a DataFeed.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
                 {
                     "@id": "datePublished",
                     "expected_type": "Date",
                     "description": "Date of first broadcast/publication.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 },
 
                 {
@@ -266,7 +296,8 @@
                         "URL"
                     ],
                     "description": "Media type typically expressed using a MIME format (see IANA siteand MDN reference) e.g. application/zip for a SoftwareApplication binary, audio/mpeg for .mp3 etc.).In cases where a CreativeWork has several media type representations, encoding can be used to indicate each MediaObject alongside particular encodingFormat information.Unregistered or niche encoding and file formats can be indicated instead via the most appropriate URL, e.g. defining Web page or a Wikipedia/Wikidata entry. Supersedes fileFormat.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
                 {
                     "@id": "identifier",
@@ -276,14 +307,16 @@
                         "URL"
                     ],
                     "description": "The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links.",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "image",
                     "expected_type": [ "File", "ImageObject" ],
                     "description": "An image of the item. This can be a URL or a fully described ImageObject",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }
             ]
         }

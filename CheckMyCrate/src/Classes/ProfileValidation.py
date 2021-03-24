@@ -12,7 +12,7 @@ def checkProfile(profile_path):
     unique_ids = {}
 
     if len(profileData) != 2:
-        click.echo("The profile must have two entities. They are \"main_entity_type\ and \"properties\"\n")
+        click.echo("The profile must have two entities. They are \"main_entity_type\" and \"properties\"\n")
         return False
 
     if profileData.get("main_entity_type") == None:
@@ -47,8 +47,8 @@ def checkProfile(profile_path):
 def checkItems(array, where, unique_ids):
     for item in array:
 
-        if len(item) != 4:
-            click.echo("All items must have exactly 4 attributes. They are \"@id\", \"expected_type\", \"description\" and \"cardinality\"\n")
+        if len(item) != 5:
+            click.echo("All items must have exactly 5 attributes. They are \"@id\", \"expected_type\", \"description\", \"cardinality\" and \"value\" \n")
             return False
 
         if item.get("@id") == None:
@@ -75,6 +75,14 @@ def checkItems(array, where, unique_ids):
 
         if item.get("cardinality") != "ONE" and item.get("cardinality") != "MANY":
             click.echo("Cardinality of item with @id:\"" + item.get("@id") + "\" can only be either \"ONE\" or \"MANY\"\n")
+            return False
+
+        if item.get("value") == None:
+            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"value\"\n")
+            return False
+
+        if not isinstance(item.get("value"), list) and item.get("value") != "NA":
+            click.echo("Value of item with id:" + item.get("@id") + " in the " + where + " property must be either an array or \"NA\"")
             return False
 
     return True

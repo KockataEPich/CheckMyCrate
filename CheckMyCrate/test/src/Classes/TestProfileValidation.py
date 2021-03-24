@@ -23,25 +23,25 @@ class TestProfileValidation(unittest.TestCase):
     def testWrongMinimalEntity(self):
          self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile5.json"))
 
-    def testWrongOptionalEntity(self):
+    def testWrongRecommendedEntity(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile6.json"))
 
-    def testWrongRecommendedEntity(self):
+    def testWrongOptionalEntity(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile7.json"))
 
-    def testMissingRecommendedEntity(self):
+    def testMissingMinimalEntity(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile8.json"))
 
     def testFourthItemInProperties(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile9.json"))
 
-    def testLessThanFourElementsInItem(self):         
+    def testIncorrectNumberOfElementsInItem(self):         
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile10.json"))
 
     def testMissingIdFieldInItem(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile11.json"))
 
-    def testFifthKeywordInItem(self):
+    def testSixthKeywordInItem(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile12.json"))
 
     def testInvalidCardinalityValue(self):
@@ -64,7 +64,12 @@ class TestProfileValidation(unittest.TestCase):
 
     def testInvalidJsonProfile(self):
         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile19.json"))
+
+    def testWrongValueKeyword(self):
+        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile20.json"))
       
+    def testWrongValueValue(self):
+        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile21.json"))
 
 if __name__ == '__main__':
     unittest.main()

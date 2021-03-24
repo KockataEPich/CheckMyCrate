@@ -19,7 +19,8 @@ class TestCrateValidation(unittest.TestCase):
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "The license of the crate",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                  },
                  {
                     "@id": "sdPublisher",
@@ -28,11 +29,80 @@ class TestCrateValidation(unittest.TestCase):
                         "Person"
                     ],
                     "description": "The publisher",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }
         ]
 
         self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), 1)
+
+    def testCorrectWithValue(self):
+
+        with open("test/sample/different_metadata/ro-crate-metadata.json", 'rb') as json_path:
+            crateData = json.load(json_path)
+
+        crateData = crateData.get("@graph") 
+
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
+        array = [ 
+                 {
+                    "@id": "license",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The license of the crate",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                 },
+                 {
+                    "@id": "sdPublisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "The publisher",
+                    "cardinality": "MANY",
+                    "value": ["orcid"]
+                }
+        ]
+
+        self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), 1)
+   
+    def testCorrectWithMultipleValues(self):
+        with open("test/sample/different_metadata/ro-crate-metadata.json", 'rb') as json_path:
+            crateData = json.load(json_path)
+
+        crateData = crateData.get("@graph") 
+
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
+        array = [ 
+                 {
+                    "@id": "license",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The license of the crate",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                 },
+                 {
+                    "@id": "sdPublisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "The publisher",
+                    "cardinality": "MANY",
+                    "value": ["anotherWebsiteForResearchers", "orcid"]
+                }
+        ]
+
+        self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), 1)
+
 
 
     def testNoFind(self):
@@ -52,7 +122,8 @@ class TestCrateValidation(unittest.TestCase):
                     "@id": "licenseNot",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "The license of the crate",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                  },
                  {
                     "@id": "sdPublisher",
@@ -61,10 +132,11 @@ class TestCrateValidation(unittest.TestCase):
                         "Person"
                     ],
                     "description": "The publisher",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }]
 
-        self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), 0)
+        self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "SHOULD", False), 0)
 
 
     def testNoMatchingTypes(self):
@@ -84,7 +156,8 @@ class TestCrateValidation(unittest.TestCase):
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "The license of the crate",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                  },
                  {
                     "@id": "sdPublisher",
@@ -93,7 +166,8 @@ class TestCrateValidation(unittest.TestCase):
                         "PersonNotPerson"
                     ],
                     "description": "The publisher",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }]
 
         self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), -1)
@@ -115,13 +189,15 @@ class TestCrateValidation(unittest.TestCase):
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "The license of the crate",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                  },
                  {
                     "@id": "hasPart",
                     "expected_type": "CreativeWork",
                     "description": "Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense). Inverse property: isPartOf.",
-                    "cardinality": "ONE"
+                    "cardinality": "ONE",
+                    "value": "NA"
                 }]
 
         self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), -1)
@@ -143,7 +219,8 @@ class TestCrateValidation(unittest.TestCase):
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "The license of the crate",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                  },
                 {
                     "@id": "sdPublisher",
@@ -152,7 +229,8 @@ class TestCrateValidation(unittest.TestCase):
                         "Person"
                     ],
                     "description": "The publisher",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }]
 
         self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), -1)
@@ -175,7 +253,8 @@ class TestCrateValidation(unittest.TestCase):
                     "@id": "license",
                     "expected_type": [ "CreativeWork", "URL" ],
                     "description": "The license of the crate",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                  },
                 {
                     "@id": "sdPublisher",
@@ -184,8 +263,43 @@ class TestCrateValidation(unittest.TestCase):
                         "Person"
                     ],
                     "description": "The publisher",
-                    "cardinality": "MANY"
+                    "cardinality": "MANY",
+                    "value": "NA"
                 }]
+
+        self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), -1)
+
+    def testIncorrectValue(self):
+
+        with open("test/sample/different_metadata/wrong_value_on_person.json", 'rb') as json_path:
+            crateData = json.load(json_path)
+
+        crateData = crateData.get("@graph") 
+
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
+        array = [ 
+                 {
+                    "@id": "license",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The license of the crate",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                 },
+                 {
+                    "@id": "sdPublisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "The publisher",
+                    "cardinality": "MANY",
+                    "value": ["orcid"]
+                }
+        ]
 
         self.assertEquals(CV.compareTheCrate(array,crateGraph,"./","Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga", "MUST", False), -1)
 
