@@ -1,6 +1,8 @@
 import json
 import click 
 
+# Method which checks if the given profile path leads to a valid
+# profile file that follows the requirements
 def checkProfile(profile_path):
     try:
         with open(profile_path, 'rb') as profile_path:
@@ -8,8 +10,6 @@ def checkProfile(profile_path):
     except:
         click.echo("The profile given is not a valid JSON file\n")
         return False
-
-    unique_ids = {}
 
     if len(profileData) != 2:
         click.echo("The profile must have two entities. They are \"main_entity_type\" and \"properties\"\n")
@@ -39,11 +39,20 @@ def checkProfile(profile_path):
         click.echo("The dictionary of the third element must contain a \"optional\" entity\n")
         return False
 
-    return (checkItems(profileData["properties"][0]["minimum"], "minimum", unique_ids)          and
-           checkItems(profileData["properties"][1]["recommended"], "recommended", unique_ids)   and
-           checkItems(profileData["properties"][2]["optional"], "optional", unique_ids))
+    # Dictionary we store the ids of entities so we can check if there are
+    # dublicates and where 
+    unique_ids = {}
 
+    if not (checkItems(profileData["properties"][0]["minimum"], "minimum", unique_ids)          and
+            checkItems(profileData["properties"][1]["recommended"], "recommended", unique_ids)  and
+            checkItems(profileData["properties"][2]["optional"], "optional", unique_ids)):
 
+        return False
+
+    return profileData
+
+# Mehod for checking the items inside an array of entities
+# if they follow the requirements for a profile file
 def checkItems(array, where, unique_ids):
     for item in array:
 

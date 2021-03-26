@@ -8,36 +8,72 @@ class TestCheckCrateType(unittest.TestCase):
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
         expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+        self.assertFalse(isinstance(checkCrateType(crateGraph, expectedType, False), str))
+
+
+
 
     def testMissingMainEntity(self):
         with open("test/sample/different_metadata/missing_main_entity.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
         expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+        self.assertFalse(isinstance(checkCrateType(crateGraph, expectedType, False), str))
+
+
+
+
 
     def testMissingMainEntityId(self):
         with open("test/sample/different_metadata/missing_main_entity_id.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
         expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+        self.assertFalse(isinstance(checkCrateType(crateGraph, expectedType, False), str))
+
+
+
+
 
     def testMissingMainEntityType(self):
         with open("test/sample/different_metadata/main_entity_missing_type.json") as json_path:
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
         expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
 
-        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+        self.assertFalse(isinstance(checkCrateType(crateGraph, expectedType, False), str))
+
+
+
+
 
     def testCorrect(self):
         
@@ -45,9 +81,18 @@ class TestCheckCrateType(unittest.TestCase):
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
         expectedType = "[\"File\", \"SoftwareSourceCode\", \"ComputationalWorkflow\"]"
         
-        self.assertTrue(isinstance(checkCrateType(crateData, expectedType), str))
+        self.assertTrue(isinstance(checkCrateType(crateGraph, expectedType, False), str))
+
+
+
+
 
     def test_Non_Matching_Data(self):
         
@@ -55,9 +100,17 @@ class TestCheckCrateType(unittest.TestCase):
             crateData = json.load(json_path)
 
         crateData = crateData.get("@graph") 
+        crateGraph = {}
+
+        for item in crateData:
+            crateGraph[item.get("@id")] = item
+
         expectedType = "Dataset"
 
-        self.assertFalse(isinstance(checkCrateType(crateData, expectedType), str))
+        self.assertFalse(isinstance(checkCrateType(crateGraph, expectedType, False), str))
+
+
+
 
 
 if __name__ == '__main__':

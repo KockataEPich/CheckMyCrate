@@ -25,15 +25,18 @@ def pc(profile_path):
 @program.command()
 @click.option('-f', 'writeToFile', flag_value=True,
               default=False, help=("This flag determines if the output for the crate should be written in " +
-                                   "in a file or displayed in the terminal. Default:Write to terminal"))
+                                   "in a file or displayed in the terminal. Default: write to terminal"))
+@click.option('-v', 'verbose', flag_value=True,
+              default=False, help=("This flag determines if the output for the crate should include the feedback " +
+                                   "generated from the profile in case the main entity type is not matching. Default: don't include"))
 @click.argument('crate_path', required=True)
 @click.argument('profile_path', required=True)
-def cc(crate_path, profile_path, writeToFile):
+def cc(crate_path, profile_path, writeToFile, verbose):
    """ This command compares the RO-Crate directory against a given profile \n
    The first argument is the path to the crate directory \n
    The second argument is the path to the json profile file"""
 
-   if checkTheCrate(crate_path, profile_path, writeToFile):
+   if checkTheCrate(crate_path, profile_path, writeToFile, verbose):
        click.echo("\nThis crate abides to the given profile!")
    else:
        click.echo("\nThis crate does NOT conform to the given profile!")
