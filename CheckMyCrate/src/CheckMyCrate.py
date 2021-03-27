@@ -37,9 +37,9 @@ def cc(crate_path, profile_path, writeToFile, verbose):
    The second argument is the path to the json profile file"""
 
    if checkTheCrate(crate_path, profile_path, writeToFile, verbose):
-       click.echo("\nThis crate abides to the given profile!")
+       click.echo("This crate abides to the given profile!")
    else:
-       click.echo("\nThis crate does NOT conform to the given profile!")
+       click.echo("This crate does NOT conform to the given profile!")
 
 
 

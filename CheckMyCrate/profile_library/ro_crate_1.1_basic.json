@@ -70,7 +70,7 @@
                     "expected_type": "ComputerLanguage",
                     "description": "The computer programming language",
                     "cardinality": "MANY",
-                    "value": "NA"
+                    "value": ["galaxy", "some_other_workflow"]
                 },
 
                 {

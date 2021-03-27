@@ -25,7 +25,7 @@ def compareTheCrate(array, crateGraph, crateId, mainEntityId, option, whereToWri
                                option + " exist in the crate with expected @type " + 
                                json.dumps(item.get("expected_type")) + " \n" + 
                                "Description: " + item.get("description") + "\n\n")
-            # If we enter this if then there is something missing from the array in the crate
+            # If we enter this if then there is something missing in the crate
             missingSomething = True
 
 
@@ -34,7 +34,7 @@ def compareTheCrate(array, crateGraph, crateId, mainEntityId, option, whereToWri
                 isItOkay = -1
 
         
-        if not searchInId(item, crateGraph, crateId):
+        elif not searchInId(item, crateGraph, crateId):
             isItOkay = -1
         
     if missingSomething and isItOkay == 1:
@@ -48,25 +48,32 @@ def searchInId(item, crateGraph, id):
     if isinstance(crateGraph[id].get(item.get("@id")), dict):
         itemID = crateGraph[id].get(item.get("@id")).get("@id")
 
-        if crateGraph.get(itemID) == None:
-            writeToProperPlace("The entity which references the item ID is present, however the item " +
-                                    "itself MUST also exist in the graph " + item.get("@id") + "\n")
+        if itemID == None:
+            writeToProperPlace("The entity " + item.get("@id") + " is present, however there is no \"@id\" " +
+                                    "property inside it to reference an item \n")
             return False
 
-        if crateGraph.get(itemID).get("@type") == None:
+        referencedItem = crateGraph.get(itemID)
+
+        if referencedItem == None:
+            writeToProperPlace("The entity " + item.get("@id") + " is present, however the item " +
+                                    "which it refers to MUST also exist in the graph \n")
+            return False
+
+        if referencedItem.get("@type") == None:
             writeToProperPlace("@type MUST exist in the item which is referenced by " + 
                                                                    item.get("@id")+ "\n")
             return False
 
 
-        if json.dumps(item.get("expected_type")).find(json.dumps(crateGraph.get(itemID).get("@type"))) == -1:
+        if json.dumps(item.get("expected_type")).find(json.dumps(referencedItem.get("@type"))) == -1:
             writeToProperPlace("Property: " + item.get("@id") + " MUST reference an item of type "
                               + json.dumps(item.get("expected_type")) + "\n\n")
             return False
 
         # TODO assume that by entering a value not being NA, the user expects a contextual data
-        if not checkIdForCorrectValue(itemID, item):
-            return False
+        return checkContextualEntityForCorrectValue(referencedItem, item)
+
             
     # If it is a list we need to check if the cardinality of the entity allows it
     if isinstance(crateGraph[id].get(item.get("@id")), list):
@@ -76,25 +83,59 @@ def searchInId(item, crateGraph, id):
                                " is ONE and thus the value of the key MUST not be a list \n \n")
             return False
 
-    # if it is just a straight up value we need to check if it is appropriate
-    if not checkIdForCorrectValue(crateGraph[id].get(item.get("@id")), item):
-        return False
-        
+        return True
 
-    return True
+    # if it is just a straight up value we need to check if it is appropriate
+
+    return  checkIdForCorrectValue(crateGraph[id].get(item.get("@id")), item)
+
+# Method which confirms if the value inside the contextual data matches the profile requirements
+def checkContextualEntityForCorrectValue(referencedItem, item):
+    
+    # If the value in the profile is NA then we skip this check
+    if not isinstance(item.get("value"), list):
+        return True
+
+    if referencedItem.get("identifier") == None:
+        writeToProperPlace("The entity " + item.get("@id") + " is expected to " +
+                           "be a contextual entity, which means it MUST have " +
+                           "the \"identifier\" keyword \n")
+        return False
+
+    if isinstance(referencedItem.get("identifier"), list):
+        writeToProperPlace("The entity " + item.get("@id") + " MUST NOT have an entity " +
+                           "\"identifier\" with an array as value \n")
+        return False
+
+    if isinstance(referencedItem.get("identifier"), str):
+        return checkIdForCorrectValue(referencedItem.get("identifier"), item)
+
+    
+    if referencedItem.get("identifier").get("@id") == None:
+        writeToProperPlace("In entity " + item.get("@id") +  "\"identifier\" MUST contain " +
+                            " they keyword \"@id\" \n")
+        return False
+
+
+    return checkIdForCorrectValue(referencedItem.get("identifier").get("@id"), item)
+
+
 
 # Method which checks if the value is being followed in the entity
 def checkIdForCorrectValue(valueToCheck, item):
 
+    # If the value in the profile is NA then we skip this check
     if not isinstance(item.get("value"), list):
         return True
+
+    
 
     for value in item.get("value"):
         if json.dumps(valueToCheck).find(value) != -1:
             return True
 
-    writeToProperPlace("Property: " + item.get("@id") + " MUST reference a value which contains one of these: " 
-                       + json.dumps(item.get("value")) + "\n\n")
+    writeToProperPlace("Property: " + item.get("@id") + " MUST reference an identifier " +
+                       "value which contains one of these: " + json.dumps(item.get("value")) + "\n\n")
     return False
 
 

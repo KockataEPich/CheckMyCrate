@@ -84,12 +84,12 @@
     <Folder Include="test\src\Classes\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="output.txt" />
     <Content Include="profile_library\ro_crate_1.1_basic.json" />
     <Content Include="profile_library\template_profile.json" />
     <Content Include="sample\crate_test.txt" />
     <Content Include="sample\ro-crate-metadata.json" />
     <Content Include="sample\ro-crate-preview.html" />
+    <Content Include="src\output.txt" />
     <Content Include="test\profile_library\modified_profiles\smaller_profile3.json" />
     <Content Include="test\profile_library\modified_profiles\smaller_profile2.json" />
     <Content Include="test\profile_library\modified_profiles\smaller_profile.json" />
@@ -117,9 +117,11 @@
     <Content Include="test\profile_library\ro_crate_1.1_basic.json" />
     <Content Include="test\sample\different_metadata\item_missing_in_graph.json" />
     <Content Include="test\sample\different_metadata\main_entity_missing_type.json" />
+    <Content Include="test\sample\different_metadata\missing_id_in_contextual_dict.json" />
     <Content Include="test\sample\different_metadata\missing_main_entity_id.json" />
     <Content Include="test\sample\different_metadata\missing_main_entity.json" />
     <Content Include="test\sample\different_metadata\crate_id_missing.json" />
+    <Content Include="test\sample\different_metadata\missing_identifier.json" />
     <Content Include="test\sample\different_metadata\wrong_value_on_person.json" />
     <Content Include="test\sample\different_metadata\ro-crate-metadata.json" />
     <Content Include="test\sample\ro-crate-metadata.json" />
