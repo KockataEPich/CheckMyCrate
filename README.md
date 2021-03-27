@@ -73,10 +73,460 @@ Each item has 5 keywords:
 - **"cardinality"** - Can only be **ONE** or **MANY**. An item with cardinality of **ONE** cannot have an array as value.
 - **"value"** - Can only be **NA** or an array with strings. These strings are the values we expect the value of this entity to contain inside the crate. This would mean that we can ask the keyword **sdPublisher** to have a value which contains one of those strings ["orcid", "otherWebsiteForContextualData"]. If the value is **NA** then the value is not checked at all. 
 
-#### Crates
+<details>
+  <summary>Profile template</summary>
+  
+  ```
+  {
+    "main_entity_type": "YOUR VALUE HERE",
+    "properties": [
+        {
 
+            "minimum": [
+                {
+                    "@id": "The entity key",
+                    "cardinality": "Cardinality - MANY/ONE",
+                    "description": "Description of the entity",
+                    "expected_type": "The type of the entity if it is referenced in the graph",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "The entity2 key",
+                    "cardinality": "Cardinality - MANY/ONE",
+                    "description": "Description of the entity2",
+                    "expected_type": "The type of the entity2 if it is referenced in the graph",
+                    "value": "NA"
+                }
+
+            ]
+        },
+
+
+        {
+            "recommended": [
+
+                {
+                    "@id": "The entity key",
+                    "cardinality": "Cardinality - MANY/ONE",
+                    "description": "Description of the entity",
+                    "expected_type": "The type of the entity if it is referenced in the graph",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "The entity2 key",
+                    "cardinality": "Cardinality - MANY/ONE",
+                    "description": "Description of the entity2",
+                    "expected_type": "The type of the entity2 if it is referenced in the graph",
+                    "value": "NA"
+                }
+            ]
+        },
+
+        {
+            "optional": [
+                {
+                    "@id": "The entity key",
+                    "cardinality": "Cardinality - MANY/ONE",
+                    "description": "Description of the entity",
+                    "expected_type": "The type of the entity if it is referenced in the graph"
+                },
+
+                {
+                    "@id": "The entity2 key",
+                    "cardinality": "Cardinality - MANY/ONE",
+                    "description": "Description of the entity2",
+                    "expected_type": "The type of the entity2 if it is referenced in the graph"
+                }
+
+            ]
+        }
+
+    ]
+}
+  ```
+  
+</details>
+
+<details>
+  <summary>Representation of the Computational Workflow Bioschema Profile from https://bioschemas.org/profiles/ComputationalWorkflow/0.5-DRAFT-2020_07_21
+</summary>
+  
+  ```
+  {
+    "main_entity_type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
+    "properties": [
+        {
+
+            "minimum": [
+                {
+                    "@id": "creator",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+
+                    "description": "The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+
+                {
+                    "@id": "dateCreated",
+                    "expected_type": [
+                        "Date",
+                        "DateTime"
+                    ],
+                    "description": "The date on which the CreativeWork was created or the item was added to a DataFeed.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+
+
+                {
+                    "@id": "input",
+                    "expected_type": "FormalParameter",
+                    "description": "an input required to use the workflow (eg. xl spreadsheet, xml file, …)",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+
+                {
+                    "@id": "license",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The license of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "name",
+                    "expected_type": "Text",
+                    "description": "The name of the item.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "output",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "The output of the workflow",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+
+
+                {
+                    "@id": "programmingLanguage",
+                    "expected_type": "ComputerLanguage",
+                    "description": "The computer programming language",
+                    "cardinality": "MANY",
+                    "value": ["galaxy", "some_other_workflow"]
+                },
+
+                {
+                    "@id": "sdPublisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "Main workflow description",
+                    "cardinality": "MANY",
+                    "value": [ "orcid" ]
+                },
+
+                {
+                    "@id": "url",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "cardinality": "MANY",
+                    "description": "Main workflow description",
+                    "value": "NA"
+                },
+
+
+                {
+                    "@id": "version",
+                    "expected_type": [ "CreativeWork", "URL" ],
+                    "description": "Main workflow description",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                }
+            ]
+        },
+
+
+        {
+            "recommended": [
+                {
+                    "@id": "citation",
+                    "cardinality": "MANY",
+                    "description": "A citation or reference to another creative work, such as another publication, web page, scholarly article, etc.",
+                    "expected_type": [
+                        "CreativeWork",
+                        "Text"
+                    ],
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "contributor",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "A secondary contributor to the CreativeWork or Event.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "creativeWorkStatus",
+                    "expected_type": [
+                        "DefinedTerm",
+                        "Text"
+                    ],
+                    "description": "The status of a creative work in terms of its stage in a lifecycle. Example terms include Incomplete, Draft, Published, Obsolete. Some organizations define a set of terms for the stages of their publication lifecycle.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "description",
+                    "expected_type": "Text",
+                    "description": "A description of the item.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "funding",
+                    "expected_type": "Grant",
+                    "description": "A description of the item.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "hasPart",
+                    "expected_type": "CreativeWork",
+                    "description": "Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense). Inverse property: isPartOf.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "isBasedOn",
+                    "expected_type": [
+                        "CreativeWork",
+                        "Product",
+                        "URL"
+                    ],
+                    "description": "A resource from which this work is derived or from which it is a modification or adaption. Supersedes isBasedOnUrl.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "keywords",
+                    "expected_type": "Text",
+                    "description": "Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "maintainer",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "A maintainer of a Dataset, software package (SoftwareApplication), or other Project. A maintainer is a Person or Organization that manages contributions to, and/or publication of, some (typically complex) artifact. It is common for distributions of software and data to be based on “upstream” sources. When maintainer is applied to a specific version of something e.g. a particular version or packaging of a Dataset, it is always possible that the upstream source has a different maintainer. The isBasedOn property can be used to indicate such relationships between datasets to make the different maintenance roles clear. Similarly in the case of software, a package may have dedicated maintainers working on integration into software distributions such as Ubuntu, as well as upstream maintainers of the underlying work.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "producer",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "The person or organization who produced the workflow.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "publisher",
+                    "expected_type": [
+                        "Organization",
+                        "Person"
+                    ],
+                    "description": "The publisher of the creative work.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "runtimePlatform",
+                    "expected_type": "Text",
+                    "description": "Runtime platform or script interpreter dependencies (Example - Java v1, Python2.3, .Net Framework 3.0). Supersedes runtime.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "softwareRequirements",
+                    "expected_type": [
+                        "Text",
+                        "URL"
+                    ],
+                    "description": "Component dependency requirements for application. This includes runtime environments and shared libraries that are not included in the application distribution package, but required to run the application (Examples: DirectX, Java or .NET runtime). Supersedes requirements.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "targetProduct",
+                    "expected_type": "SoftwareApplication",
+                    "description": "Target Operating System / Product to which the code applies. If applies to several versions, just the product name can be used.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                }
+
+
+            ]
+        },
+
+
+        {
+            "optional": [
+                {
+                    "@id": "subjectOf",
+                    "expected_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
+                    "description": "Main workflow description",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+                {
+                    "@id": "alternateName",
+                    "expected_type": "Text",
+                    "description": "An alias for the item",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+                {
+                    "@id": "conditionsOfAccess",
+                    "expected_type": "Text",
+                    "description": "Conditions that affect the availability of, or method(s) of access to, an item. Typically used for real world items such as an ArchiveComponent held by an ArchiveOrganization. This property is not suitable for use as a general Web access control mechanism. It is expressed only in natural language.For example “Available by appointment from the Reading Room” or “Accessible only from logged-in accounts “.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+                {
+                    "@id": "dateModified",
+                    "expected_type": [
+                        "Date",
+                        "DateTime"
+                    ],
+                    "description": "The date on which the CreativeWork was most recently modified or when the item’s entry was modified within a DataFeed.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+                {
+                    "@id": "datePublished",
+                    "expected_type": "Date",
+                    "description": "Date of first broadcast/publication.",
+                    "cardinality": "ONE",
+                    "value": "NA"
+                },
+
+                {
+                    "@id": "encodingFormat",
+                    "expected_type": [
+                        "Text",
+                        "URL"
+                    ],
+                    "description": "Media type typically expressed using a MIME format (see IANA siteand MDN reference) e.g. application/zip for a SoftwareApplication binary, audio/mpeg for .mp3 etc.).In cases where a CreativeWork has several media type representations, encoding can be used to indicate each MediaObject alongside particular encodingFormat information.Unregistered or niche encoding and file formats can be indicated instead via the most appropriate URL, e.g. defining Web page or a Wikipedia/Wikidata entry. Supersedes fileFormat.",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                },
+                {
+                    "@id": "identifier",
+                    "expected_type": [
+                        "PropertyValue",
+                        "Text",
+                        "URL"
+                    ],
+                    "description": "The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links.",
+                    "cardinality": "MANY",
+                    "value": ["awpajwpfijapwf" ,"workflowhub.eu" ]
+                },
+
+                {
+                    "@id": "image",
+                    "expected_type": [ "File", "ImageObject" ],
+                    "description": "An image of the item. This can be a URL or a fully described ImageObject",
+                    "cardinality": "MANY",
+                    "value": "NA"
+                }
+            ]
+        }
+
+    ]
+}
+  ```
+  
+</details>
+
+#### Crates
+A crate directory is defined by a **ro-crate-metadata** JSON file inside it. You can learn
+more about Research Object Crates by reading the comprehensive guide on the RO-Crate website: https://www.researchobject.org/ro-crate/
 
 #### Commands
+
+The crate currently two commands.
+
+The first one takes a single argument which is a profile file and checks if it follows the appropriate strucutre.
+This way a profile creator does not need to test it against a specific crate
+
+The way the function is invoked is:
+
+```
+$ cmc pc path/to/profile/file
+```
+
+The ouput is displayed on the terminal.
+
+the second takes two arguments:
+	- crate directory
+	- profile file
+
+This is where the **ro-crate-metadata.json** file is being validated against the profile file 
+The function is:
+
+```
+$ cmc cc path/to/crate/directory path/to/profile/file
+```
+
+**NOTE:** The crate path is the whole directory not the **ro-crate-metadata.json** file.
+
+The cc command has 2 flags:
+	- **-f** - This flag tells the application to write the feedback on a file instead of on the terminal itself. The default state is write on terminal.
+	- **-v** - This flag tells the application to continue giving feedback even if the main entity type is not appropriate. The default state is don't continue.
+
+examples:
+```
+$ cmc cc -f path/to/crate/directory path/to/profile/file
+
+$ cmc cc -v path/to/crate/directory path/to/profile/file
+
+$ cmc cc -fv path/to/crate/directory path/to/profile/file
+```
 
 
 #### Tips
