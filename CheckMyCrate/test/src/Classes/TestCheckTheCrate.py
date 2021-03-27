@@ -6,7 +6,7 @@ class TestCheckTheCrate(unittest.TestCase):
     def testCorrect(self):
         self.assertTrue(CTC.checkTheCrate("test/sample/", "test/profile_library/modified_profiles/smaller_profile.json", False, False))
 
-    def testInCorrect(self):
+    def testIncorrect(self):
         self.assertFalse(CTC.checkTheCrate("test/sample/", "test/profile_library/ro_crate_1.1_basic.json", False, False))
 
     def testIncorrectNonMinimum(self):

@@ -7,6 +7,7 @@ def compareTheCrate(array, crateGraph, crateId, mainEntityId, option, whereToWri
     isItOkay = 1
     missingSomething = False
 
+
     global f;
     global writeOut;
 

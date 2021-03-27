@@ -54,11 +54,15 @@ def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
     if os.path.isfile("output.txt") and writeToFile:
         os.remove("output.txt")
 
+    
     # Check each array. compareTheCrate returns 1 if everything is OK, 0 if there is a missing entity
     # and -1 if the entity is present, but incorrectly used
-    return ( compareTheCrate(minimumArray, crateAndProfileData[0], crateId, mainEntityId, "MUST", writeToFile) == 1 and
-             compareTheCrate(recommendedArray, crateAndProfileData[0], crateId, mainEntityId, "SHOULD", writeToFile) != -1 and
-             compareTheCrate(optionalArray, crateAndProfileData[0], crateId, mainEntityId, "COULD", writeToFile) != -1 )
+    isItOkayMin = compareTheCrate(minimumArray, crateAndProfileData[0], crateId, mainEntityId, "MUST", writeToFile) == 1
+    isItOkayRec = compareTheCrate(recommendedArray, crateAndProfileData[0], crateId, mainEntityId, "SHOULD", writeToFile) != -1
+    isItOkayOpt = compareTheCrate(optionalArray, crateAndProfileData[0], crateId, mainEntityId, "COULD", writeToFile) != -1
+
+    return isItOkayMin and isItOkayRec and isItOkayOpt
+
 
 
 
