@@ -1,0 +1,8 @@
+CheckMyCrate.py
+setup.py
+CheckMyCrate.egg-info/PKG-INFO
+CheckMyCrate.egg-info/SOURCES.txt
+CheckMyCrate.egg-info/dependency_links.txt
+CheckMyCrate.egg-info/entry_points.txt
+CheckMyCrate.egg-info/requires.txt
+CheckMyCrate.egg-info/top_level.txt

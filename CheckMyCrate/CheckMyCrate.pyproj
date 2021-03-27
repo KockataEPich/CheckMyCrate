@@ -44,6 +44,9 @@
     <Compile Include="src\Classes\Viability.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\setup.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="test\src\Classes\TestCrateValidation.py">
       <SubType>Code</SubType>
     </Compile>
