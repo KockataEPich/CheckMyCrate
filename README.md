@@ -9,6 +9,8 @@ A command line application for validating a RO-Crate object against a certain pr
   * [Profiles](#profiles)
   * [Crates](#crates)
   * [Commands](#commands)
+  * [Functionality](#functionality)
+  	* [Profile Validation](#profile validation)
   * [Tips](#tips)
 
 ## Technologies
@@ -527,6 +529,30 @@ $ cmc cc -v path/to/crate/directory path/to/profile/file
 
 $ cmc cc -fv path/to/crate/directory path/to/profile/file
 ```
+All of this information can be found by using the the **--help** option on the respective command
+
+#### Functionality
+There are some intricacies to the way the program validates a crate and a profile which will be specified here.
+
+##### Profile Validation
+The profile needs to have a specific strucutre in order to get accepted. The position of the keywords does not matter, however
+the three marginality arrays need to be in in this exact order:
+
+1. **"marginality"**
+2. **"recommended"**
+3. **"optional"**
+
+Another point of interest is that no entity can be omitted. 
+
+There can be no two **"@id"** inside the profile with the same value
+
+##### Crate Validation
+
+After checking that the crate has the right main entity, the program searches through the 
+crate entity defined by **@id** of **"./"** for the specified keyword in the profile. If it doesn't find it,
+CheckMyCrate scans the main entity defined by the **mainEntity** keyword. If it is not present in eiter,
+no further searches are conducted and the entity is assumed to be missing.
 
 
+# TODO fix the template profile, change the structure so that I can link these subpoints, continue with the procedures of what the program does when it finds a keyword and someform of workflow picutres , check when the meetings was
 #### Tips
