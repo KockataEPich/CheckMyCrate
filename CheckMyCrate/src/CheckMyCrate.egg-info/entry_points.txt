@@ -1,4 +1,4 @@
 
         [console_scripts]
-        CheckMyCrate=CheckMyCrate:program
+        cmc=CheckMyCrate:program
         

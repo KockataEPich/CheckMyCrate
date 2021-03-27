@@ -10,6 +10,6 @@ setup(
         ],
     entry_points='''
         [console_scripts]
-        CheckMyCrate=CheckMyCrate:program
+        cmc=CheckMyCrate:program
         ''',
 )
