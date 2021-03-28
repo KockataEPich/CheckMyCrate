@@ -17,8 +17,8 @@ A command line application for validating a RO-Crate object against a certain pr
 
 ## Technologies
 Project is created with:
-* Python: 3.7
-* Click: 7.00
+* [Python](https://www.python.org/): 3.7
+* [Click](https://click.palletsprojects.com/en/7.x/): 7.00
 	
 ## Setup
 You will need **pip3** and **python3** for this installation.
@@ -510,7 +510,7 @@ more about Research Object Crates by reading the comprehensive guide on the RO-C
 Currently, the crate has two commands.
 
 The first one takes a single argument which is a profile file and checks if it follows the appropriate structure.
-This way a profile creator does not need to test it against a specific crate
+This way a profile creator does not need to test it against a specific crate.
 
 The way the function is invoked is:
 
@@ -566,7 +566,7 @@ the three marginality arrays need to be in in this exact order:
 
 Another point of interest is that no entity can be omitted. 
 
-There can be no two **"@id"** inside the profile with the same value
+There can be no two **"@id"** inside the profile with the same value.
 
 #### Crate Validation
 
@@ -588,7 +588,7 @@ no further searches are conducted and the entity is assumed to be missing.
 3. When validating inside a crate, and the value of a specific keyword is an array inside the crate, the only check that is done is if the cardinality of the item in the profile allows it. As of now there is not functionality to loop through array values and validate the items inside them.
 
 
-4. If the value keyword is not **"NA"** in the profile, then the profile creator assumes that a contextual data with an **"identifier"** keyword is expected inside the specified item.  If the item keyword is found in the crate and the value of that keyword is just plain string, then that string is checked if it contains one of the values specified in the profile. If the value is a dictionary which leads to another item in the graph of the crate, then the program will look for the **"identifier"** keyword and compare the values to that.
+4. If the **"value"** keyword is not **"NA"** in the profile, then the profile creator assumes that a contextual data with an **"identifier"** keyword is expected inside the specified item.  If the item keyword is found in the crate and the value of that keyword is just plain string, then that string is checked if it contains one of the values specified in the profile. If the value is a dictionary which leads to another item in the graph of the crate, then the program will look for the **"identifier"** keyword and compare the values to that.
 
 
 ## License
