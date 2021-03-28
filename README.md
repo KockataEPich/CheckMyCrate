@@ -1,6 +1,7 @@
 # CheckMyCrate
-A command line application for validating a RO-Crate object against a certain profile.
+A command line application for validating a RO-Crate object against a JSON profile.
 
+University of Manchester 2021
 
 ## Table of contents
 * [Technologies](#technologies)
