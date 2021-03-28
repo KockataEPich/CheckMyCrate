@@ -51,14 +51,16 @@
                     "@id": "The entity key",
                     "cardinality": "Cardinality - MANY/ONE",
                     "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph"
+                    "expected_type": "The type of the entity if it is referenced in the graph",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "The entity2 key",
                     "cardinality": "Cardinality - MANY/ONE",
                     "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph"
+                    "expected_type": "The type of the entity2 if it is referenced in the graph",
+                    "value": "NA"
                 }
 
             ]
