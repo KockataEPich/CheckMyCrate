@@ -9,9 +9,10 @@ A command line application for validating a RO-Crate object against a certain pr
   * [Profiles](#profiles)
   * [Crates](#crates)
   * [Commands](#commands)
-  * [Functionality](#functionality)
-  	* [Profile Validation](#profile validation)
   * [Tips](#tips)
+* [Functionality](#functionality)
+  * [Profile Validation](#profile-validation)
+  * [Crate Validation](#crate-validation)
 
 ## Technologies
 Project is created with:
@@ -491,7 +492,7 @@ more about Research Object Crates by reading the comprehensive guide on the RO-C
 
 #### Commands
 
-The crate currently two commands.
+Currently, the crate has two commands.
 
 The first one takes a single argument which is a profile file and checks if it follows the appropriate strucutre.
 This way a profile creator does not need to test it against a specific crate
@@ -531,14 +532,19 @@ $ cmc cc -fv path/to/crate/directory path/to/profile/file
 ```
 All of this information can be found by using the the **--help** option on the respective command
 
-#### Functionality
+
+# TODO fix the template profile, change the structure so that I can link these subpoints, continue with the procedures of what the program does when it finds a keyword and someform of workflow picutres , check when the meetings was
+#### Tips
+
+
+## Functionality
 There are some intricacies to the way the program validates a crate and a profile which will be specified here.
 
-##### Profile Validation
+#### Profile Validation
 The profile needs to have a specific strucutre in order to get accepted. The position of the keywords does not matter, however
 the three marginality arrays need to be in in this exact order:
 
-1. **"marginality"**
+1. **"minimum"**
 2. **"recommended"**
 3. **"optional"**
 
@@ -546,13 +552,18 @@ Another point of interest is that no entity can be omitted.
 
 There can be no two **"@id"** inside the profile with the same value
 
-##### Crate Validation
+#### Crate Validation
 
-After checking that the crate has the right main entity, the program searches through the 
+1. After checking that the crate has the right main entity, the program searches through the 
 crate entity defined by **@id** of **"./"** for the specified keyword in the profile. If it doesn't find it,
 CheckMyCrate scans the main entity defined by the **mainEntity** keyword. If it is not present in eiter,
 no further searches are conducted and the entity is assumed to be missing.
 
+2. When evaluating the marginality arrays against the crate, every item in their corresponding array is assigned the following marginality:
+	1. **"minimum"** - **MUST**
+	2. **"recommended"** - **SHOULD**
+	3. **"optional"** - **COULD**
+In order for the crate to conform to the profile all the **MUST** requirements must be satisfied. In other words if there is a **MUST** keyword in the feedback then it will not conform
 
-# TODO fix the template profile, change the structure so that I can link these subpoints, continue with the procedures of what the program does when it finds a keyword and someform of workflow picutres , check when the meetings was
-#### Tips
+Items from the **"recommended"** and **"optional"** arrays do not impact conformity if they are not present, however if they are they **MUST** follow the structure that is given to them in the profile. Basically if the profile has an item in the **"optional"** array that has an **"image"** id and type **"painting"** then if the **"image"** and does not have the specified type, the output will conclude that the crate does NOT conform even if all te items in the **"minimum"** array are satisfied.
+
