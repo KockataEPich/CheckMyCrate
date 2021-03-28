@@ -521,8 +521,8 @@ $ cmc pc path/to/profile/file
 The output is displayed on the terminal.
 
 the second takes two arguments:
-	- crate directory
-	- profile file
+- crate directory
+- profile file
 
 This is where the **ro-crate-metadata.json** file is being validated against the profile file 
 The function is:
