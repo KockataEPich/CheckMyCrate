@@ -13,6 +13,7 @@ A command line application for validating a RO-Crate object against a certain pr
 * [Functionality](#functionality)
   * [Profile Validation](#profile-validation)
   * [Crate Validation](#crate-validation)
+* [License](#license)
 
 ## Technologies
 Project is created with:
@@ -22,14 +23,20 @@ Project is created with:
 ## Setup
 You will need **pip3** and **python3** for this installation.
 
+Firstly, to get the repository either download the zip or use:
+
+```
+$ git clone https://github.com/KockataEPich/CheckMyCrate.git
+```
+
 In order to install the application, you firstly need to navigate to the
-**src** folder containg the main **CheckMyCrate.py** class and the file called **setup.py**. After that
+**src** folder containing the main **CheckMyCrate.py** class and the file called **setup.py**. After that
 you need to execute:
 
 ```
 $ pip3 install --editable .
 ```
-After that is finished and considering no errors have popped up you can use the main command:
+After that is finished you can use the main command:
 
 ```
 $ cmc 
@@ -50,11 +57,11 @@ Commands:
 ```
 
 **NOTE:** So far this installation process has been tested and it works with python3 and pip3. As of now I cannot guarantee 
-that it will work with just python or pip even though it might
+that it will work with just python or pip even though it might.
 
 
-Alternatively, you can start the applicating using the conventional python3 script if all the libraries needed for the project are imported.
-If that is the case then the class that needs to be started is CheckMyCrate.py. 
+Alternatively, you can start the application using the conventional python3 script if all the libraries needed for the project are imported.
+If that is the case then the class that needs to be started is **CheckMyCrate.py**. 
 
 ## Guide
 The functionality of the application is achieved through the use of two main components:
@@ -68,7 +75,7 @@ A profile is a JSON file which contains the information which the crate will be 
 The profile contains 2 main keys:
 
 - **"main_entity_type"** - The value of this keyword is the expected type of the main entity inside the crate object.
-- **"properties"** - Has an array of 3 items which contain 3 disctinct arrays:
+- **"properties"** - Has an array of 3 items which contain 3 distinct arrays:
 	- **"minimum"**
 	- **"recommended"**
 	- **"optional"**	
@@ -78,7 +85,7 @@ Each of these arrays contains items which match their respective marginality.
 Each item has 5 keywords:
 - **"@id"** - The id of the entity we are looking for inside the crate.
 - **"expected_type"** - The type we expect the entity with the specified id to have.
-- **"descrption"** - The description of the entity. This is only used for feedback purposes in case it is missing in the crate.
+- **"description"** - The description of the entity. This is only used for feedback purposes in case it is missing in the crate.
 - **"cardinality"** - Can only be **ONE** or **MANY**. An item with cardinality of **ONE** cannot have an array as value.
 - **"value"** - Can only be **NA** or an array with strings. These strings are the values we expect the value of this entity to contain inside the crate. This would mean that we can ask the keyword **sdPublisher** to have a value which contains one of those strings ["orcid", "otherWebsiteForContextualData"]. If the value is **NA** then the value is not checked at all. 
 
@@ -502,7 +509,7 @@ more about Research Object Crates by reading the comprehensive guide on the RO-C
 
 Currently, the crate has two commands.
 
-The first one takes a single argument which is a profile file and checks if it follows the appropriate strucutre.
+The first one takes a single argument which is a profile file and checks if it follows the appropriate structure.
 This way a profile creator does not need to test it against a specific crate
 
 The way the function is invoked is:
@@ -511,7 +518,7 @@ The way the function is invoked is:
 $ cmc pc path/to/profile/file
 ```
 
-The ouput is displayed on the terminal.
+The output is displayed on the terminal.
 
 the second takes two arguments:
 	- crate directory
@@ -550,7 +557,7 @@ problematic
 There are some intricacies to the way the program validates a crate and a profile which will be specified here.
 
 #### Profile Validation
-The profile needs to have a specific strucutre in order to get accepted. The position of the keywords does not matter, however
+The profile needs to have a specific structure in order to get accepted. The position of the keywords does not matter, however
 the three marginality arrays need to be in in this exact order:
 
 1. **"minimum"**
@@ -565,16 +572,17 @@ There can be no two **"@id"** inside the profile with the same value
 
 1. After checking that the crate has the right main entity, the program searches through the 
 crate entity defined by **@id** of **"./"** for the specified keyword in the profile. If it doesn't find it,
-CheckMyCrate scans the main entity defined by the **mainEntity** keyword. If it is not present in eiter,
+CheckMyCrate scans the main entity defined by the **mainEntity** keyword. If it is not present in either,
 no further searches are conducted and the entity is assumed to be missing.
 
 2. When evaluating the marginality arrays against the crate, every item in their corresponding array is assigned the following marginality:
-	1. **"minimum"** - **MUST**
-	2. **"recommended"** - **SHOULD**
-	3. **"optional"** - **COULD**
-In order for the crate to conform to the profile all the **MUST** requirements must be satisfied. In other words if there is a **MUST** keyword in the feedback then it will not conform
+	- **"minimum"** - **MUST**
+	- **"recommended"** - **SHOULD**
+	- **"optional"** - **COULD**
+	
+	In order for the crate to conform to the profile all the **MUST** requirements must be satisfied. In other words, if there is a **MUST** keyword in the feedback then it will not conform.
 
-Items from the **"recommended"** and **"optional"** arrays do not impact conformity if they are not present, however if they are they **MUST** follow given requirements in the profile. Basically if the profile has an item in the **"optional"** array that has an **"image"** id and type **"painting"** then if the **"image"** keyword is indeed present in the crate but does not have the specified type, the output will produce a **MUST** problem and conclude that the crate does **NOT** conform even if all te items in the **"minimum"** array are satisfied. If the keyword **image** was not present then it will not produce a **MUST** problem and it will not impact comformity.
+	Items from the **"recommended"** and **"optional"** arrays do not impact conformity if they are not present, however if they are they **MUST** follow given requirements in the profile. Basically, if the profile has an item in the **"optional"** array that has an **"image"** id and type **"painting"** then if the **"image"** keyword is indeed present in the crate but does not have the specified type, the output will produce a **MUST** problem and conclude that the crate does **NOT** conform even if all the items in the **"minimum"** array are satisfied. If the keyword **image** was not present then it will not produce a **MUST** problem and it will not impact conformity.
 
 
 3. When validating inside a crate, and the value of a specific keyword is an array inside the crate, the only check that is done is if the cardinality of the item in the profile allows it. As of now there is not functionality to loop through array values and validate the items inside them.
@@ -582,3 +590,6 @@ Items from the **"recommended"** and **"optional"** arrays do not impact conform
 
 4. If the value keyword is not **"NA"** in the profile, then the profile creator assumes that a contextual data with an **"identifier"** keyword is expected inside the specified item.  If the item keyword is found in the crate and the value of that keyword is just plain string, then that string is checked if it contains one of the values specified in the profile. If the value is a dictionary which leads to another item in the graph of the crate, then the program will look for the **"identifier"** keyword and compare the values to that.
 
+
+## License
+Apache License
