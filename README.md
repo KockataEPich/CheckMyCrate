@@ -20,6 +20,8 @@ Project is created with:
 * Click: 7.00
 	
 ## Setup
+You will need **pip3** and **python3** for this installation.
+
 In order to install the application, you firstly need to navigate to the
 **src** folder containg the main **CheckMyCrate.py** class and the file called **setup.py**. After that
 you need to execute:
@@ -50,6 +52,10 @@ Commands:
 **NOTE:** So far this installation process has been tested and it works with python3 and pip3. As of now I cannot guarantee 
 that it will work with just python or pip even though it might
 
+
+Alternatively, you can start the applicating using the conventional python3 script if all the libraries needed for the project are imported.
+If that is the case then the class that needs to be started is CheckMyCrate.py. 
+
 ## Guide
 The functionality of the application is achieved through the use of two main components:
 - Profiles
@@ -63,7 +69,7 @@ The profile contains 2 main keys:
 
 - **"main_entity_type"** - The value of this keyword is the expected type of the main entity inside the crate object.
 - **"properties"** - Has an array of 3 items which contain 3 disctinct arrays:
-	- **"minimal"**
+	- **"minimum"**
 	- **"recommended"**
 	- **"optional"**	
 
@@ -133,14 +139,16 @@ Each item has 5 keywords:
                     "@id": "The entity key",
                     "cardinality": "Cardinality - MANY/ONE",
                     "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph"
+                    "expected_type": "The type of the entity if it is referenced in the graph",
+                    "value": "NA"
                 },
 
                 {
                     "@id": "The entity2 key",
                     "cardinality": "Cardinality - MANY/ONE",
                     "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph"
+                    "expected_type": "The type of the entity2 if it is referenced in the graph",
+                    "value": "NA"
                 }
 
             ]
@@ -519,8 +527,8 @@ $ cmc cc path/to/crate/directory path/to/profile/file
 **NOTE:** The crate path is the whole directory not the **ro-crate-metadata.json** file.
 
 The cc command has 2 flags:
-	- **-f** - This flag tells the application to write the feedback on a file instead of on the terminal itself. The default state is write on terminal.
-	- **-v** - This flag tells the application to continue giving feedback even if the main entity type is not appropriate. The default state is don't continue.
+- **-f** - This flag tells the application to write the feedback on a file **output.txt** instead of on the terminal itself. The default state is write on terminal.
+- **-v** - This flag tells the application to continue giving feedback even if the main entity type is not appropriate. The default state is don't continue.
 
 examples:
 ```
@@ -532,9 +540,10 @@ $ cmc cc -fv path/to/crate/directory path/to/profile/file
 ```
 All of this information can be found by using the the **--help** option on the respective command
 
-
-# TODO fix the template profile, change the structure so that I can link these subpoints, continue with the procedures of what the program does when it finds a keyword and someform of workflow picutres , check when the meetings was
 #### Tips
+1. A good way to follow through the feedback is to write it on a file and then use a text editor 
+to search for the word **MUST**. In this way you will be able to see all the constraints that are
+problematic
 
 
 ## Functionality
@@ -565,5 +574,11 @@ no further searches are conducted and the entity is assumed to be missing.
 	3. **"optional"** - **COULD**
 In order for the crate to conform to the profile all the **MUST** requirements must be satisfied. In other words if there is a **MUST** keyword in the feedback then it will not conform
 
-Items from the **"recommended"** and **"optional"** arrays do not impact conformity if they are not present, however if they are they **MUST** follow the structure that is given to them in the profile. Basically if the profile has an item in the **"optional"** array that has an **"image"** id and type **"painting"** then if the **"image"** and does not have the specified type, the output will conclude that the crate does NOT conform even if all te items in the **"minimum"** array are satisfied.
+Items from the **"recommended"** and **"optional"** arrays do not impact conformity if they are not present, however if they are they **MUST** follow given requirements in the profile. Basically if the profile has an item in the **"optional"** array that has an **"image"** id and type **"painting"** then if the **"image"** keyword is indeed present in the crate but does not have the specified type, the output will produce a **MUST** problem and conclude that the crate does **NOT** conform even if all te items in the **"minimum"** array are satisfied. If the keyword **image** was not present then it will not produce a **MUST** problem and it will not impact comformity.
+
+
+3. When validating inside a crate, and the value of a specific keyword is an array inside the crate, the only check that is done is if the cardinality of the item in the profile allows it. As of now there is not functionality to loop through array values and validate the items inside them.
+
+
+4. If the value keyword is not **"NA"** in the profile, then the profile creator assumes that a contextual data with an **"identifier"** keyword is expected inside the specified item.  If the item keyword is found in the crate and the value of that keyword is just plain string, then that string is checked if it contains one of the values specified in the profile. If the value is a dictionary which leads to another item in the graph of the crate, then the program will look for the **"identifier"** keyword and compare the values to that.
 
