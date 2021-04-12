@@ -169,7 +169,7 @@ Each item has 5 keywords:
 </details>
 
 <details>
-  <summary>Representation of the Computational Workflow Bioschema Profile from https://bioschemas.org/profiles/ComputationalWorkflow/0.5-DRAFT-2020_07_21
+  <summary>Representation of the Computational Workflow Bioschema Profile from https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/
 </summary>
   
   ```
