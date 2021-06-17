@@ -3,95 +3,103 @@ import click
 
 # Method which checks if the given profile path leads to a valid
 # profile file that follows the requirements
+
 def checkProfile(profile_path):
+    try:
+        profileData = extractDataFromJsonProfile(profile_path)
+        validateProfileData(profileData)
+
+        return profileData
+    except ValueError as e:
+        click.echo(e)
+        return False
+
+def extractDataFromJsonProfile(profile_path):
     try:
         with open(profile_path, 'rb') as profile_path:
             profileData = json.loads(profile_path.read().decode("utf-8","ignore"))
-    except:
-        click.echo("The profile given is not a valid JSON file\n")
-        return False
 
-    if len(profileData) != 2:
-        click.echo("The profile must have two entities. They are \"main_entity_type\" and \"properties\"\n")
-        return False
+        return profileData
+    except ValueError as e:
+        raise ValueError(str(e) + "\n" + "The profile given is not a valid JSON file \n")
 
-    if profileData.get("main_entity_type") == None:
-        click.echo("The profile must contain a \"main_entity_type\" entity\n")
-        return False
-    
-    if profileData.get("properties") == None:
-        click.echo("The profile must contain a \"properties\" entity\n")
-        return False
+def validateProfileData(profileData):
+    try:
+        validateRoot(profileData)
 
-    if len(profileData.get("properties")) != 3:
-        click.echo("The properties array needs to contain 3 separate dictionaries\n") 
-        return False
+        for property in profileData.get("property_list"):
+            validateIndividualSubEntities(property, "root")
+    except ValueError as e:
+        raise ValueError(str(e))
 
-    if profileData.get("properties")[0].get("minimum") == None:
-        click.echo("The dictionary of the first element must contain a \"minimum\" entity\n")
-        return False
+def validateRoot(profileData):
+    if len(profileData) != 1 and len(profileData) != 0:
+        raise ValueError("Root entity MUST have only the \"property_list\" entity")
 
-    if profileData.get("properties")[1].get("recommended") == None:
-        click.echo("The dictionary of the second element must contain a \"recommended\" entity\n")
-        return False
+    if profileData.get("property_list") == None:
+        raise ValueError("Root entity MUST have only the \"property_list\" entity")
 
-    if profileData.get("properties")[2].get("optional") == None:
-        click.echo("The dictionary of the third element must contain a \"optional\" entity\n")
-        return False
+def validateIndividualSubEntities(profileData, parentPropertyName):
+    try:
+        ensureTheEntityContainsOnlyTheRightAttributes(profileData)
+        ensurePropertyKeywordExistanceAndProperUse(profileData, parentPropertyName)
+        ensureMarginalityKeywordExistanceAndProperUse(profileData)
+        ensureProperUseOfUsageKeyword(profileData)
+        ensureProperUseOfCardinalityKeyword(profileData)
+        ensurePorperUseOfMatch_PatternKeyword(profileData)
+        checkForProperty_ListExistanceAndContinueRecursively(profileData)
+    except ValueError as e:
+        raise ValueError(str(e))
 
-    # Dictionary we store the ids of entities so we can check if there are
-    # dublicates and where 
-    unique_ids = {}
+def ensureTheEntityContainsOnlyTheRightAttributes(profileData):
+    acceptedKeywords = { 
+        "property"       : True,
+        "cardinality"    : True, 
+        "description"    : True,
+        "marginality"    : True,
+        "usage"          : True,
+        "property_list"  : True,
+        "match_pattern"  : True,
+        "expected_value" : True
+    }
 
-    if not (checkItems(profileData["properties"][0]["minimum"], "minimum", unique_ids)          and
-            checkItems(profileData["properties"][1]["recommended"], "recommended", unique_ids)  and
-            checkItems(profileData["properties"][2]["optional"], "optional", unique_ids)):
+    for key in profileData.keys():
+        if acceptedKeywords.get(key) == None:
+            raise ValueError("Item " + key + " is not allowed to exist")
 
-        return False
+def ensurePropertyKeywordExistanceAndProperUse(profileData, parentPropertyName):
+    if profileData.get("property") == None:
+        raise ValueError("Item with parent property " + parentPropertyName +
+                            " does not contain the mandatory \"property\" attribute")
 
-    return profileData
+    if not isinstance(profileData.get("property"), str):
+        raise ValueError("Item with property " + profileData.get("property") + " MUST have a string type as a value")
 
-# Mehod for checking the items inside an array of entities
-# if they follow the requirements for a profile file
-def checkItems(array, where, unique_ids):
-    for item in array:
+def ensureMarginalityKeywordExistanceAndProperUse(profileData):
+    if profileData.get("marginality") == None:
+        raise ValueError("Attribute \"marginality\" is missing in property " + profileData.get("property"))
 
-        if len(item) != 5:
-            click.echo("All items must have exactly 5 attributes. They are \"@id\", \"expected_type\", \"description\", \"cardinality\" and \"value\" \n")
-            return False
+    if profileData.get("marginality") != "MUST" and profileData.get("marginality") != "SHOULD" and profileData.get("marginality") != "COULD":
+        raise ValueError("Attribute \"marginality\" in property " + profileData.get("property") + " can only have either MUST/SHOULD/COULD as a value")
 
-        if item.get("@id") == None:
-            click.echo("One of the items in the " + where + " property does not have necessary entity \"@id\"\n")
-            return False
+def ensureProperUseOfUsageKeyword(profileData):
+    if profileData.get("usage") != None:
+        if profileData.get("usage") != "list" and profileData.get("usage") != "listLinker" and profileData.get("usage") != "linker":
+            raise ValueError("Attribute \"marginality\" in property " + profileData.get("property") + " can only have list/linker/linstLinker as a value")
 
-        if(unique_ids.get(item.get("@id"))) != None:
-            click.echo("Item with id:" + item.get("@id") + " in the \"" + where + "\" property has already been declared inside the \"" + unique_ids.get(item.get("@id")) + "\" property\n")
-            return False
+def ensureProperUseOfCardinalityKeyword(profileData):
+     if profileData.get("cardinality") != None and profileData.get("cardinality") != "ONE" and profile.get("cardinality") != "MANY":
+        raise ValueError("Attribute \"cardinality\" in property " + profileData.get("property") + " can only have ONE or MANY as a value")
 
-        unique_ids[item.get("@id")] = where
+def ensurePorperUseOfMatch_PatternKeyword(profileData):
+    if (profileData.get("usage") == None or profileData.get("usage") == "linker" ) and profileData.get("match_pattern") != None:
+        raise ValueError("Attribute \"match_pattern\" in property " + profileData.get("property") + " is not appropriate since attribute" +
+                         " \"usage\" has not been set correctly with either list or listLinker")
 
-        if item.get("expected_type") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"expected_type\"\n")
-            return False
+    if profileData.get("match_pattern") != None and profileData.get("match_pattern") != "for_one" and profile.get("match_pattern") != "for_all":
+        raise ValueError("Attribute \"match_pattern\" in property " + profileData.get("property") + " can only have for_one or for_all as a value")
 
-        if item.get("description") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"description\"\n")
-            return False
-
-        if item.get("cardinality") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"cardinality\"\n")
-            return False
-
-        if item.get("cardinality") != "ONE" and item.get("cardinality") != "MANY":
-            click.echo("Cardinality of item with @id:\"" + item.get("@id") + "\" can only be either \"ONE\" or \"MANY\"\n")
-            return False
-
-        if item.get("value") == None:
-            click.echo("Item with id:" + item.get("@id") + " in the " + where + " property does not have necessary entity \"value\"\n")
-            return False
-
-        if not isinstance(item.get("value"), list) and item.get("value") != "NA":
-            click.echo("Value of item with id:" + item.get("@id") + " in the " + where + " property must be either an array or \"NA\"")
-            return False
-
-    return True
+def checkForProperty_ListExistanceAndContinueRecursively(profileData):
+    if profileData.get("property_list") != None:
+        for property in profileData.get("property_list"):
+            validateIndividualSubEntities(property, profileData.get("property"))

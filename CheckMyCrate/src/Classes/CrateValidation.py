@@ -43,7 +43,6 @@ def compareTheCrate(array, crateGraph, crateId, mainEntityId, option, whereToWri
 
     return isItOkay
 
-# Method which checks
 def searchInId(item, crateGraph, id):
 
     if isinstance(crateGraph[id].get(item.get("@id")), dict):

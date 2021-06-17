@@ -87,6 +87,7 @@
     <Folder Include="test\src\Classes\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="profile_library\new_profile.json" />
     <Content Include="profile_library\ro_crate_1.1_basic.json" />
     <Content Include="profile_library\template_profile.json" />
     <Content Include="sample\crate_test.txt" />

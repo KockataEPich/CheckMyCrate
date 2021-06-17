@@ -1,0 +1,27 @@
+{
+    "property_list": [
+        {
+            "marginality": "MUST",
+            "property": "mainEntity",
+            "description": "feaf",
+            "property_list": [
+                {
+                    "marginality": "MUST",
+                    "property": "@id",
+                    "usage": "linker",
+                    "property_list": [
+                        {
+                            "property": "type",
+                            "marginality": "MUST"
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "property": "mainEntity",
+            "marginality": "SHOULD"
+        }
+    ]
+}

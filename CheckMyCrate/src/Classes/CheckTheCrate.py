@@ -16,6 +16,10 @@ def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
     # Checking if the the two paths are viable crate and profile paths
     # isItViable returns a list where the first item is the prepared
     # crate data while the second one is the prepared profile data
+   # try:
+    #    crateAndProfileData = isItViable(crate_path, profile_path)
+    #except:
+
     crateAndProfileData = isItViable(crate_path, profile_path)
     
     # isItViable returns a bool False if there is a problem. Otherwise it returns the crateData
@@ -37,9 +41,6 @@ def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
 
     click.echo("Crate has valid main entity!\n")
 
-
-
-   
 
     click.echo("Validating the profile specification against the crate...")
     
