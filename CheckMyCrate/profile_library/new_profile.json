@@ -8,11 +8,12 @@
                 {
                     "marginality": "MUST",
                     "property": "@id",
-                    "usage": "linker",
                     "property_list": [
                         {
                             "property": "type",
-                            "marginality": "MUST"
+                            "marginality": "MUST",
+                            "match_pattern": "for_one",
+                            "expected_value": "faw"
                         }
                     ]
                 }

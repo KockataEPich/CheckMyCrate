@@ -32,16 +32,13 @@
     <Compile Include="src\Classes\CheckTheCrate.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Classes\CheckCrateType.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Classes\CrateValidation.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Classes\ProfileValidation.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Classes\Viability.py">
+    <Compile Include="src\Classes\CratePathAndFileValidation.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\setup.py">

@@ -2,13 +2,18 @@
 import sys
 sys.path.append('../')
 from src.Classes.CheckTheCrate import checkTheCrate
-from src.Classes.ProfileValidation import checkProfile
+from   src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
 import click
 
 
 @click.group()
 def program():
     click.echo('Welcome to CheckMyCrate! \n')
+
+
+
+
+
 
 @program.command()
 @click.argument('profile_path', required=True)
@@ -17,10 +22,16 @@ def pc(profile_path):
     The first and only argument is the path to the json profile file"""
     click.echo("Checking the profile....")
 
-    if checkProfile(profile_path):
+    try:
+        ValidateProfileJSONFileAndReturnTheDataObject(profile_path)
         click.echo("Profile is OK")
-    else:
+    except Exception as e:
+        click.echo(str(e))
         click.echo("Profile is NOT OK")
+
+
+
+
             
 @program.command()
 @click.option('-f', 'writeToFile', flag_value=True,
@@ -32,16 +43,16 @@ def pc(profile_path):
 @click.argument('crate_path', required=True)
 @click.argument('profile_path', required=True)
 def cc(crate_path, profile_path, writeToFile, verbose):
-   """ This command compares the RO-Crate directory against a given profile \n
-   The first argument is the path to the crate directory \n
-   The second argument is the path to the json profile file"""
+    """ This command compares the RO-Crate directory against a given profile \n
+    The first argument is the path to the crate directory \n
+    The second argument is the path to the json profile file"""
 
-   if checkTheCrate(crate_path, profile_path, writeToFile, verbose):
-       click.echo("This crate abides to the given profile!")
-   else:
-       click.echo("This crate does NOT conform to the given profile!")
-
-
+    try:
+        checkTheCrate(crate_path, profile_path, writeToFile, verbose)
+        click.echo("This crate abides to the given profile!")
+    except Exception as e:
+        click.echo(str(e))
+        click.echo("This crate does NOT conform to the given profile!")
 
 if __name__ == '__main__':
     program()
