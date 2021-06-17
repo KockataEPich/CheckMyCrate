@@ -11,9 +11,13 @@ def ValidateProfileJSONFileAndReturnTheDataObject(profile_path):
     except ValueError as e:
         raise ValueError(str(e))
 
+
+
 def checkIfProfilePathLeadsToAFile(profile_path):
    if not path.isfile(profile_path):
        raise ValueError("Invalid profile path")
+
+
 
 def extractDataFromJsonProfile(profile_path):
     try:
@@ -24,39 +28,69 @@ def extractDataFromJsonProfile(profile_path):
     except ValueError as e:
         raise ValueError(str(e) + "\n" + "The profile given is not a valid JSON file \n")
 
+
+
 def validateProfileData(profileData):
     try:
         validateRoot(profileData)
-
-        for property in profileData.get("property_list"):
-            validateIndividualSubEntities(property, "root")
+        checkForProperty_ListExistanceAndContinueRecursively(profileData)
     except ValueError as e:
         raise ValueError(str(e))
+
+
 
 def validateRoot(profileData):
     if len(profileData) != 1 and len(profileData) != 0:
         raise ValueError("Root entity MUST have only the \"property_list\" entity")
 
     if profileData.get("property_list") == None:
-        raise ValueError("Root entity MUST have only the \"property_list\" entity")
+        raise ValueError("Root entity MUST have only the \"property_list\" entity")  
 
-# TODO No Same Properties on the same depth
-def validateIndividualSubEntities(profileData, parentPropertyName):
+
+
+def checkForProperty_ListExistanceAndContinueRecursively(propertyData):
+    seenPropertiesOnThisEntity = {}
+
+    if propertyData.get("property_list") != None:
+        for property in propertyData.get("property_list"):
+            try:
+                validateIndividualSubEntities(property, propertyData.get("Property"))
+                ensurePropertyIsUniqueInThisEntityAndAddItToDictionaryIfItIs(property, propertyData.get("Property"), seenPropertiesOnThisEntity)
+            except ValueError as e:
+                raise ValueError(str(e))
+
+
+
+def validateIndividualSubEntities(property, parentPropertyName):
     try:
-        ensureTheEntityContainsOnlyTheRightAttributes(profileData)
-        ensurePropertyKeywordExistanceAndProperUse(profileData, parentPropertyName)
-        ensureMarginalityKeywordExistanceAndProperUse(profileData)
-        #ensureProperUseOfUsageKeyword(profileData)
-        ensureProperUseOfCardinalityKeyword(profileData)
-        ensureProperUseOfMatch_PatternKeyword(profileData)
-        checkForProperty_ListExistanceAndContinueRecursively(profileData)
-        ensureProperUseOfDescriptionKeyword(profileData)
-        ensureProperUseOfExpected_ValueKeyowrd(profileData)
-        
-    except ValueError as e:
-        raise ValueError(str(e))
+        ensureTheEntityContainsOnlyTheRightAttributes(property)
+        ensurePropertyKeywordExistanceAndProperUse(property, parentPropertyName)
+        ensureMarginalityKeywordExistanceAndProperUse(property)
+        #ensureProperUseOfUsageKeyword(property)
+        ensureProperUseOfCardinalityKeyword(property)
+        ensureProperUseOfMatch_PatternKeyword(property)
+        ensureProperUseOfDescriptionKeyword(property)
+        ensureProperUseOfExpected_ValueKeyword(property)
+        checkForProperty_ListExistanceAndContinueRecursively(property)
 
-def ensureTheEntityContainsOnlyTheRightAttributes(profileData):
+    except ValueError as e:
+        raise ValueError(str(e))            
+              
+    
+
+def ensurePropertyIsUniqueInThisEntityAndAddItToDictionaryIfItIs(property, parentPropertyName, seenPropertiesOnThisEntity):
+    if seenPropertiesOnThisEntity.get(property.get("property")) != None:
+       if parentPropertyName == None:
+           parentPropertyName = "root \"./\"";
+
+       raise ValueError("Property \"" + parentPropertyName + "\" has two properties with the same \"property\" keyword with value \"" + property.get("property") + "\"")
+    
+    
+    seenPropertiesOnThisEntity[property.get("property")] = True
+
+
+
+def ensureTheEntityContainsOnlyTheRightAttributes(property):
     acceptedKeywords = { 
         "property"       : True,
         "cardinality"    : True, 
@@ -68,58 +102,68 @@ def ensureTheEntityContainsOnlyTheRightAttributes(profileData):
         "expected_value" : True
     }
 
-    for key in profileData.keys():
+    for key in property.keys():
         if acceptedKeywords.get(key) == None:
             raise ValueError("Item " + key + " is not allowed to exist")
 
-def ensurePropertyKeywordExistanceAndProperUse(profileData, parentPropertyName):
-    if profileData.get("property") == None:
+
+#TODO property_list value needs to be checked that it is a list and the entities inside neede to be checked that there are dictionaries
+def ensurePropertyKeywordExistanceAndProperUse(propertyData, parentPropertyName):
+    if propertyData.get("property") == None:
         raise ValueError("Item with parent property \"" + parentPropertyName + "\" does not contain the mandatory \"property\" attribute")
 
-    if not isinstance(profileData.get("property"), str):
-        raise ValueError("Item with property \"" + profileData.get("property") + "\" MUST have a string type as a value")
+    if not isinstance(propertyData.get("property"), str):
+        raise ValueError("Item with property \"" + propertyData.get("property") + "\" MUST have a string type as a value")
 
-def ensureMarginalityKeywordExistanceAndProperUse(profileData):
-    if profileData.get("marginality") == None:
-        raise ValueError("Attribute \"marginality\" is missing in property " + profileData.get("property"))
 
-    if profileData.get("marginality") != "MUST" and profileData.get("marginality") != "SHOULD" and profileData.get("marginality") != "COULD":
-        raise ValueError("Attribute \"marginality\" in property \"" + profileData.get("property") + "\" can only have either MUST/SHOULD/COULD as a value")
 
-#def ensureProperUseOfUsageKeyword(profileData):
-#    if profileData.get("usage") != None:
-#        if profileData.get("usage") != "list" and profileData.get("usage") != "list_of_linkers" and profileData.get("usage") != "linker":
-#            raise ValueError("Attribute \"marginality\" in property " + profileData.get("property") + " can only have list/linker/linstLinker as a value")
+def ensureMarginalityKeywordExistanceAndProperUse(propertyData):
+    if propertyData.get("marginality") == None:
+        raise ValueError("Attribute \"marginality\" is missing in property " + propertyData.get("property"))
 
-def ensureProperUseOfCardinalityKeyword(profileData):
-     if profileData.get("cardinality") != None and profileData.get("cardinality") != "ONE" and profile.get("cardinality") != "MANY":
-        raise ValueError("Attribute \"cardinality\" in property \"" + profileData.get("property") + "\" can only have ONE or MANY as a value")
+    if propertyData.get("marginality") != "MUST" and propertyData.get("marginality") != "SHOULD" and propertyData.get("marginality") != "COULD":
+        raise ValueError("Attribute \"marginality\" in property \"" + propertyData.get("property") + "\" can only have either MUST/SHOULD/COULD as a value")
 
-def ensureProperUseOfMatch_PatternKeyword(profileData):
-    if  profileData.get("expected_value") == None and profileData.get("match_pattern") != None:
-        raise ValueError("Attribute \"match_pattern\" in property \"" + profileData.get("property") + "\" is not appropriate since attribute" +
+#def ensureProperUseOfUsageKeyword(propertyData):
+#    if propertyData.get("usage") != None:
+#        if propertyData.get("usage") != "list" and propertyData.get("usage") != "list_of_linkers" and propertyData.get("usage") != "linker":
+#            raise ValueError("Attribute \"marginality\" in property " + propertyData.get("property") + " can only have list/linker/linstLinker as a value")
+
+
+
+def ensureProperUseOfCardinalityKeyword(propertyData):
+     if propertyData.get("cardinality") != None and propertyData.get("cardinality") != "ONE" and propertyData.get("cardinality") != "MANY":
+        raise ValueError("Attribute \"cardinality\" in property \"" + propertyData.get("property") + "\" can only have ONE or MANY as a value")
+
+
+
+def ensureProperUseOfMatch_PatternKeyword(propertyData):
+    if  propertyData.get("expected_value") == None and propertyData.get("match_pattern") != None:
+        raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" is not appropriate since attribute" +
                          " \"expected_value\" has not been set correctly")
 
-    if profileData.get("match_pattern") != None and profileData.get("match_pattern") != "for_one" and profileData.get("match_pattern") != "for_all":
-        raise ValueError("Attribute \"match_pattern\" in property \"" + profileData.get("property") + "\" can only have for_one or for_all as a value")
+    if propertyData.get("match_pattern") != None and propertyData.get("match_pattern") != "for_one" and propertyData.get("match_pattern") != "for_all":
+        raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" can only have for_one or for_all as a value")
 
-def checkForProperty_ListExistanceAndContinueRecursively(profileData):
-    if profileData.get("property_list") != None:
-        for property in profileData.get("property_list"):
-            validateIndividualSubEntities(property, profileData.get("property"))
 
-def ensureProperUseOfDescriptionKeyword(profileData):
-    if profileData.get("description") != None and not isinstance(profileData.get("description"), str):
-        raise ValueError("Attribute \"description\" in property \"" + profileData.get("property") + "\" MUST have a string as a value")
 
-def ensureProperUseOfExpected_ValueKeyowrd(profileData):
+def ensureProperUseOfDescriptionKeyword(propertyData):
+    if propertyData.get("description") != None and not isinstance(propertyData.get("description"), str):
+        raise ValueError("Attribute \"description\" in property \"" + propertyData.get("property") + "\" MUST have a string as a value")
+
+
+
+def ensureProperUseOfExpected_ValueKeyword(propertyData):
    
-    if profileData.get("expected_value") == None:
+    if propertyData.get("expected_value") == None:
         return
 
-    if profileData.get("property_list") != None:
-        raiseValueError("Attribute \"expected_value\" in property \"" + profileData.get("property") + "\" is not appropriate as the \"property_list\" keyword " + 
+    if propertyData.get("property_list") != None:
+        raiseValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" is not appropriate as the \"property_list\" keyword " + 
                                                                                "inside the entity implies that the value of the property is expected to be a dictionary")
 
-    if isinstance(profileData.get("expected_value"), dict) or isinstance(profileData.get("expected_value"), list):
-        raise ValueError("Attribute \"expected_value\" in property \"" + profileData.get("property") + "\" has inappropriate value. It cannot be a list or a dictionary")
+    if isinstance(propertyData.get("expected_value"), dict) or isinstance(propertyData.get("expected_value"), list):
+        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" has inappropriate value. It cannot be a list or a dictionary")
+
+
+    

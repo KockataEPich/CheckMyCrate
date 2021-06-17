@@ -16,12 +16,17 @@
                             "expected_value": "faw"
                         }
                     ]
+                },
+                "flwa",
+                {
+                    "property": "@id",
+                    "marginality" : "COULD"
                 }
             ]
         },
 
         {
-            "property": "mainEntity",
+            "property": "dqw",
             "marginality": "SHOULD"
         }
     ]

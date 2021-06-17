@@ -5,15 +5,18 @@ import click
 
 def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
     try:
-        click.echo("Validating profile and crate file's integrity...")
 
+        click.echo("Validating crate integrity...")
         crateData = ValidateCrateJSONFileAndReturnTheDataObject(crate_path)
-        profileData = ValidateProfileJSONFileAndReturnTheDataObject(profile_path)
+        click.echo("Crate is OK \n")
 
-        click.echo("Profile and crate are viable files!\n")
+        click.echo("Validating profile integrity...")
+        profileData = ValidateProfileJSONFileAndReturnTheDataObject(profile_path)
+        click.echo("Profile is OK \n")
+
         click.echo("Validating the profile specification against the crate...")
 
-        validateTheCrateDataAgainstTheProfile(crateData, profileData, writeToFile)
+        #validateTheCrateDataAgainstTheProfile(crateData, profileData, writeToFile)
 
     except ValueError as e:
         raise ValueError(str(e))
@@ -40,8 +43,9 @@ def validateEnttiy(currentEntity, property):
         #checkIfValuePointsToSomethingInArray()
         raise ValueError("Property " + property.get("property") + " is expected to be either a list or a dictionary")
 
+    for property in property("property_list"):
+        validateEnttiy(currentEntity.get(property.get("property")), property)
 
-       
     #crateId = "./"
 
     ## JSON arrays with their respective cardinalities
