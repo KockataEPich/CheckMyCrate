@@ -3,31 +3,59 @@
         {
             "marginality": "MUST",
             "property": "mainEntity",
-            "description": "feaf",
+            "description": "the main entity",
             "property_list": [
                 {
                     "marginality": "MUST",
                     "property": "@id",
                     "property_list": [
                         {
-                            "property": "type",
+                            "property": "@type",
                             "marginality": "MUST",
                             "match_pattern": "for_one",
-                            "expected_value": "faw"
+                            "expected_value": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ]
+                        },
+
+                        {
+                            "property": "programmingLanguage",
+                            "marginality": "MUST",
+                            "property_list": [
+                                {
+                                    "marginality": "MUST",
+                                    "property": "@id",
+                                    "property_list": [
+                                        {
+                                            "property": "@type",
+                                            "marginality": "MUST"
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
-                },
-                "flwa",
-                {
-                    "property": "@id",
-                    "marginality" : "COULD"
                 }
             ]
         },
 
         {
-            "property": "dqw",
-            "marginality": "SHOULD"
+            "property": "sdPublisher",
+            "marginality": "MUST",
+            "property_list": [
+                {
+                    "property": "@id",
+                    "marginality": "MUST",
+                    "property_list": [
+                        {
+                            "property": "@type",
+                            "marginality" : "MUST",
+                            "expected_value": [
+                                "Organization",
+                                "Person"
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

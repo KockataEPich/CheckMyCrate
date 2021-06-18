@@ -4,9 +4,10 @@ import json
 
 def ValidateCrateJSONFileAndReturnTheDataObject(crate_path):
     try:
+        
         checkIfCratePathLeadsToADirectoryContainingJSONFile(crate_path)
         crateData = validateCrateJSONFileAndReturnTheDataObject(crate_path)
-        cradeData = turnTheCrateDataIntoAGraphWithIdsAsKeys(crateData)
+        crateData = turnTheCrateDataIntoAGraphWithIdsAsKeys(crateData)
         return crateData
     except ValueError as e:
         raise ValueError(str(e))

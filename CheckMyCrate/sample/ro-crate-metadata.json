@@ -19,7 +19,7 @@
       }
     },
     {
-      "@id": "./"
+      "@id": "./",
       "@type": "Dataset",
       "mainEntity": {
         "@id": "Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga"

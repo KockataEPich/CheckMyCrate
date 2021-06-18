@@ -49,24 +49,32 @@ def validateRoot(profileData):
 
 
 def checkForProperty_ListExistanceAndContinueRecursively(propertyData):
+    
+    if propertyData.get("property_list") == None:
+        return
+
     seenPropertiesOnThisEntity = {}
 
-    if propertyData.get("property_list") != None:
-        for property in propertyData.get("property_list"):
-            try:
-                validateIndividualSubEntities(property, propertyData.get("Property"))
-                ensurePropertyIsUniqueInThisEntityAndAddItToDictionaryIfItIs(property, propertyData.get("Property"), seenPropertiesOnThisEntity)
-            except ValueError as e:
-                raise ValueError(str(e))
+    if not isinstance(propertyData.get("property_list"), list):
+        raise ValueError("All \"property_list\" properties MUST be a list")
 
+    parentPropertyName = getTheCorrectParrentPropertyName(propertyData)
 
+    for property in propertyData.get("property_list"):
+        try:
+            validateIndividualSubEntities(property, parentPropertyName)
+            ensurePropertyIsUniqueInThisEntityAndAddItToDictionaryIfItIs(property, parentPropertyName, seenPropertiesOnThisEntity)
+        except ValueError as e:
+            raise ValueError(str(e))
+
+def getTheCorrectParrentPropertyName(propertyData):
+    return propertyData.get("property") if propertyData.get("property") != None  else "root"
 
 def validateIndividualSubEntities(property, parentPropertyName):
     try:
         ensureTheEntityContainsOnlyTheRightAttributes(property)
         ensurePropertyKeywordExistanceAndProperUse(property, parentPropertyName)
         ensureMarginalityKeywordExistanceAndProperUse(property)
-        #ensureProperUseOfUsageKeyword(property)
         ensureProperUseOfCardinalityKeyword(property)
         ensureProperUseOfMatch_PatternKeyword(property)
         ensureProperUseOfDescriptionKeyword(property)
@@ -80,23 +88,21 @@ def validateIndividualSubEntities(property, parentPropertyName):
 
 def ensurePropertyIsUniqueInThisEntityAndAddItToDictionaryIfItIs(property, parentPropertyName, seenPropertiesOnThisEntity):
     if seenPropertiesOnThisEntity.get(property.get("property")) != None:
-       if parentPropertyName == None:
-           parentPropertyName = "root \"./\"";
-
        raise ValueError("Property \"" + parentPropertyName + "\" has two properties with the same \"property\" keyword with value \"" + property.get("property") + "\"")
-    
     
     seenPropertiesOnThisEntity[property.get("property")] = True
 
 
 
 def ensureTheEntityContainsOnlyTheRightAttributes(property):
+    if not isinstance(property, dict):
+        raise ValueError("All properties must be a dictionary")
+    
     acceptedKeywords = { 
         "property"       : True,
         "cardinality"    : True, 
         "description"    : True,
         "marginality"    : True,
-        #"usage"          : True,
         "property_list"  : True,
         "match_pattern"  : True,
         "expected_value" : True
@@ -104,10 +110,9 @@ def ensureTheEntityContainsOnlyTheRightAttributes(property):
 
     for key in property.keys():
         if acceptedKeywords.get(key) == None:
-            raise ValueError("Item " + key + " is not allowed to exist")
+            raise ValueError("Item " + key + " is not recognised to exist")
 
 
-#TODO property_list value needs to be checked that it is a list and the entities inside neede to be checked that there are dictionaries
 def ensurePropertyKeywordExistanceAndProperUse(propertyData, parentPropertyName):
     if propertyData.get("property") == None:
         raise ValueError("Item with parent property \"" + parentPropertyName + "\" does not contain the mandatory \"property\" attribute")
@@ -122,28 +127,22 @@ def ensureMarginalityKeywordExistanceAndProperUse(propertyData):
         raise ValueError("Attribute \"marginality\" is missing in property " + propertyData.get("property"))
 
     if propertyData.get("marginality") != "MUST" and propertyData.get("marginality") != "SHOULD" and propertyData.get("marginality") != "COULD":
-        raise ValueError("Attribute \"marginality\" in property \"" + propertyData.get("property") + "\" can only have either MUST/SHOULD/COULD as a value")
-
-#def ensureProperUseOfUsageKeyword(propertyData):
-#    if propertyData.get("usage") != None:
-#        if propertyData.get("usage") != "list" and propertyData.get("usage") != "list_of_linkers" and propertyData.get("usage") != "linker":
-#            raise ValueError("Attribute \"marginality\" in property " + propertyData.get("property") + " can only have list/linker/linstLinker as a value")
-
+        raise ValueError("Attribute \"marginality\" in property \"" + propertyData.get("property") + "\" can only have either \"MUST\"/\"SHOULD\"/\"COULD\" as a value")
 
 
 def ensureProperUseOfCardinalityKeyword(propertyData):
      if propertyData.get("cardinality") != None and propertyData.get("cardinality") != "ONE" and propertyData.get("cardinality") != "MANY":
-        raise ValueError("Attribute \"cardinality\" in property \"" + propertyData.get("property") + "\" can only have ONE or MANY as a value")
+        raise ValueError("Attribute \"cardinality\" in property \"" + propertyData.get("property") + "\" can only have \"ONE\" or \"MANY\" as a value")
 
 
 
 def ensureProperUseOfMatch_PatternKeyword(propertyData):
     if  propertyData.get("expected_value") == None and propertyData.get("match_pattern") != None:
         raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" is not appropriate since attribute" +
-                         " \"expected_value\" has not been set correctly")
+                         " \"expected_value\" is missing")
 
     if propertyData.get("match_pattern") != None and propertyData.get("match_pattern") != "for_one" and propertyData.get("match_pattern") != "for_all":
-        raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" can only have for_one or for_all as a value")
+        raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" can only have \"for_one\" or \"for_all\" as a value")
 
 
 
@@ -159,11 +158,11 @@ def ensureProperUseOfExpected_ValueKeyword(propertyData):
         return
 
     if propertyData.get("property_list") != None:
-        raiseValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" is not appropriate as the \"property_list\" keyword " + 
+        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" is not appropriate as the \"property_list\" keyword " + 
                                                                                "inside the entity implies that the value of the property is expected to be a dictionary")
 
-    if isinstance(propertyData.get("expected_value"), dict) or isinstance(propertyData.get("expected_value"), list):
-        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" has inappropriate value. It cannot be a list or a dictionary")
+    if isinstance(propertyData.get("expected_value"), dict):
+        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" has inappropriate value. It cannot be a dictionary")
 
 
     
