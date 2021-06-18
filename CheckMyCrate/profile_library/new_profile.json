@@ -12,7 +12,7 @@
                         {
                             "property": "@type",
                             "marginality": "MUST",
-                            "match_pattern": "for_one",
+                            "match_pattern": "at_least_all",
                             "expected_value": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ]
                         },
 
@@ -26,31 +26,11 @@
                                     "property_list": [
                                         {
                                             "property": "@type",
-                                            "marginality": "MUST"
+                                            "marginality": "MUST",
+                                            "expected_value": "ComputerLanguage"
                                         }
                                     ]
                                 }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-
-        {
-            "property": "sdPublisher",
-            "marginality": "MUST",
-            "property_list": [
-                {
-                    "property": "@id",
-                    "marginality": "MUST",
-                    "property_list": [
-                        {
-                            "property": "@type",
-                            "marginality" : "MUST",
-                            "expected_value": [
-                                "Organization",
-                                "Person"
                             ]
                         }
                     ]

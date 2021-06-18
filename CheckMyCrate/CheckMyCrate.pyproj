@@ -12,7 +12,7 @@
     <Name>CheckMyCrate</Name>
     <RootNamespace>CheckMyCrate</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>cc ./sample ./profile_library/ro_crate_1.1_basic.json</CommandLineArguments>
+    <CommandLineArguments>cc ./sample ./profile_library/new_profile.json</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <TestFramework>unittest</TestFramework>
     <UnitTestPattern>Test*.py</UnitTestPattern>
@@ -32,13 +32,10 @@
     <Compile Include="src\Classes\CheckTheCrate.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Classes\CrateValidation.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="src\Classes\ProfileValidation.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Classes\CratePathAndFileValidation.py">
+    <Compile Include="src\Classes\CrateValidation.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\setup.py">

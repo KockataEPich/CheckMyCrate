@@ -141,8 +141,8 @@ def ensureProperUseOfMatch_PatternKeyword(propertyData):
         raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" is not appropriate since attribute" +
                          " \"expected_value\" is missing")
 
-    if propertyData.get("match_pattern") != None and propertyData.get("match_pattern") != "for_one" and propertyData.get("match_pattern") != "for_all":
-        raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" can only have \"for_one\" or \"for_all\" as a value")
+    if propertyData.get("match_pattern") != None and propertyData.get("match_pattern") != "at_least_one" and propertyData.get("match_pattern") != "as_literal" and propertyData.get("match_pattern") != "at_least_all":
+        raise ValueError("Attribute \"match_pattern\" in property \"" + propertyData.get("property") + "\" can only have \"at_least_one\" or \"as_literal\" or \"at_least_all\" as a value")
 
 
 
@@ -158,11 +158,17 @@ def ensureProperUseOfExpected_ValueKeyword(propertyData):
         return
 
     if propertyData.get("property_list") != None:
-        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" is not appropriate as the \"property_list\" keyword " + 
-                                                                               "inside the entity implies that the value of the property is expected to be a dictionary")
-
+        raise ValueError("Attribute \"expected_value\" in property \"" +
+                        propertyData.get("property") + "\" is not appropriate as the \"property_list\" keyword inside the "
+                                                     + "entity implies that the value of the property is expected to bе "
+                                                     + "a dictionary")
+    
     if isinstance(propertyData.get("expected_value"), dict):
-        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + "\" has inappropriate value. It cannot be a dictionary")
+        raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + 
+                         "\" has inappropriate value. It cannot be a dictionary")
 
+    if isinstance(propertyData.get("expected_value"), list) and propertyData.get("match_pattern") == None:
+         raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + 
+                         "\" MUST have attribute \"match_pattern\" set if it is a list")
 
     

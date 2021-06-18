@@ -1,12 +1,15 @@
 from   src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
-from   src.Classes.CratePathAndFileValidation import ValidateCrateJSONFileAndReturnTheDataObject
-from   src.Classes.CrateValidation import compareTheCrate
+from   src.Classes.CrateValidation import ValidateCrateJSONFileAndReturnTheDataObject
+import traceback
 import click
+import json
 
 # TODO program when it fact it should coninue. Description needs to be added
 # TODO value soma
+# TODO cardinality
 def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
-    global crateData, profileData
+    global crateData, profileData, shouldWrite
+    shouldWrite = writeToFile
     try:
         click.echo("Validating crate integrity...")
         crateData = ValidateCrateJSONFileAndReturnTheDataObject(crate_path)
@@ -18,54 +21,112 @@ def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
 
         click.echo("Validating the profile specification against the crate...")
 
-        validateTheCrateDataAgainstTheProfile(writeToFile)
-
-    except ValueError as e:
-        raise ValueError(str(e))
-
-
-
-
-
-
-
-
-
-def validateTheCrateDataAgainstTheProfile(writeToFile):
-    
-    if profileData.get("property_list") == None:
-        return
-    try:
         validateEntityLoop(crateData.get("./"), profileData)
+
     except ValueError as e:
-        raise ValueError(str(e))
+        traceback.print_exc()
+        raise ValueError(e)
+
+
+
+def validateEntityLoop(entity, property):
+    if property.get("property_list") == None:
+        return
+
+    for currentProperty in property.get("property_list"):
+        validateEntity(entity, currentProperty)
+
 
 
 def validateEntity(currentEntity, property):
     
-    #checkIfPropertyExistsInEntity(currentEntity, property)
-    propertyName = property.get("property")
+    ensurePropertyExistsInEntity(currentEntity, property)
+    ensureValueIsCorrectIfApplicable(currentEntity, property)
+    ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
+    checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property)
 
-    #print(propertyName)
-    if currentEntity.get(propertyName) == None:
-        raise ValueError("Property " + propertyName + " " + property.get("marginality") + 
+  
+
+def ensurePropertyExistsInEntity(currentEntity, property):
+    if currentEntity.get(property.get("property")) == None:
+        raise ValueError("Property " + property.get("property") + " " + property.get("marginality") + 
                          " exist in " + currentEntity.get("@id"))
-   
-    #print(currentEntity) 
+
+
+
+def ensureValueIsCorrectIfApplicable(currentEntity, property):
+    if property.get("expected_value") == None:
+        return
+
+    propertyName = property.get("property")
+    actualValue = currentEntity.get(property.get("property"))
+    expectedValue = property.get("expected_value")
+    
+    if isinstance(actualValue, dict):
+        raise ValueError("Value of property " + propertyName + " is NOT expected to be a dictionary")
+
+    if property.get("match_pattern") != None and not isinstance(actualValue, list):
+        raise ValueError("Value of property " + propertyName + " is expected to be a list")
+
+    if property.get("match_pattern") != None:
+        doMatch_PatternValueCheck(currentEntity, property)
+    else:
+        doNormalValueCheck(expectedValue, actualValue, propertyName)
+
+    
+def checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property):
     
     if property.get("property_list") == None:
-         return 
+        return 
 
-    if not isinstance(currentEntity.get(propertyName), dict):
-        if crateData.get(currentEntity.get(propertyName)) == None:
-            raise ValueError("Property " + propertyName + " is expected to be either a list or a dictionary")
+    if isinstance(currentEntity.get(property.get("property")), dict):
+        validateEntityLoop(currentEntity.get(property.get("property")), property)
+        return
+
+    if isinstance(currentEntity.get(property.get("property")), list):
+        raise ValueError("Value of property " + property.get("property") + " cannot be a list")
+        
+    newEntity = crateData.get(currentEntity.get(property.get("property")))
+
+    if newEntity == None:
+        raise ValueError("If Value of property " + property.get("property") + " is not a dictionary, then it MUST" +
+                         " point to an entity in the array")
+
+    validateEntityLoop(newEntity, property)
+
+
+
+        
+
+
+def doNormalValueCheck(expected_value, actual_value, propertyName):
+    expectedValue = json.dumps(expected_value)
+    actualValue = json.dumps(actual_value)
+    
+    if expectedValue.find(actualValue) == -1:
+        raise ValueError("Value of property \"" + propertyName + "\" is " + actualValue + " but MUST be " + expectedValue)
+
+
+def doMatch_PatternValueCheck(currentEntity, property):
+    match_pattern = property.get("match_pattern")
+    valueArray = currentEntity.get(property.get("property"))
+    expectedValueArray = property.get("expected_value")
+
+    if match_pattern == "at_least_one":
+        for item in expectedValueArray:
+            if item in valueArray:
+                return
         else:
-            validateEntityLoop(crateData.get(currentEntity.get(propertyName)), property)
-    else:
-        validateEntityLoop(currentEntity.get(propertyName), property)
+             raise ValueError("Value of property \"" + property.get("property") + 
+                              "\" is " + json.dumps(valueArray) + " but it MUST contain at least one of "
+                              + json.dumps(expectedValueArray))
 
+    if match_pattern == "as_literal" :
+        doNormalValueCheck(expectedValueArray, valueArray, property.get("property"))
+        return
 
-def validateEntityLoop(entity, property):
-   for currentProperty in property.get("property_list"):
-        validateEntity(entity, currentProperty)
-
+    if match_pattern == "at_least_all":
+        for item in expectedValueArray:
+            if item not in valueArray:
+                 raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(valueArray) + 
+                                  " but it MUST have all the entities in " + json.dumps(expectedValueArray))
