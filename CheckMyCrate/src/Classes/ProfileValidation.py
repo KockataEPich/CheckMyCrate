@@ -163,12 +163,12 @@ def ensureProperUseOfExpected_ValueKeyword(propertyData):
                                                      + "entity implies that the value of the property is expected to bе "
                                                      + "a dictionary")
     
-    if isinstance(propertyData.get("expected_value"), dict):
+    if not isinstance(propertyData.get("expected_value"), list):
         raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + 
-                         "\" has inappropriate value. It cannot be a dictionary")
+                         "\" has inappropriate value. It MUST be a list")
 
-    if isinstance(propertyData.get("expected_value"), list) and propertyData.get("match_pattern") == None:
+    if propertyData.get("expected_value") != None and propertyData.get("match_pattern") == None:
          raise ValueError("Attribute \"expected_value\" in property \"" + propertyData.get("property") + 
-                         "\" MUST have attribute \"match_pattern\" set if it is a list")
+                         "\" MUST have attribute \"match_pattern\" set correctly")
 
     

@@ -39,7 +39,6 @@ def validateEntityLoop(entity, property):
 
 
 def validateEntity(currentEntity, property):
-    
     ensurePropertyExistsInEntity(currentEntity, property)
     ensureValueIsCorrectIfApplicable(currentEntity, property)
     ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
@@ -57,25 +56,25 @@ def ensurePropertyExistsInEntity(currentEntity, property):
 def ensureValueIsCorrectIfApplicable(currentEntity, property):
     if property.get("expected_value") == None:
         return
-
-    propertyName = property.get("property")
-    actualValue = currentEntity.get(property.get("property"))
-    expectedValue = property.get("expected_value")
     
-    if isinstance(actualValue, dict):
-        raise ValueError("Value of property " + propertyName + " is NOT expected to be a dictionary")
+    if isinstance(currentEntity.get(property.get("property")), dict):
+        raise ValueError("Value of property " + property.get("property") + " is NOT expected to be a dictionary")
 
-    if property.get("match_pattern") != None and not isinstance(actualValue, list):
-        raise ValueError("Value of property " + propertyName + " is expected to be a list")
+    doMatch_PatternValueCheck(currentEntity, property)
 
-    if property.get("match_pattern") != None:
-        doMatch_PatternValueCheck(currentEntity, property)
-    else:
-        doNormalValueCheck(expectedValue, actualValue, propertyName)
 
+
+def ensureCardinalitIsCorrectIfApplicable(currentEntity, property):
+    if property.get("cardinality") == None:
+        return
+
+    if property.get("cardinality") == "ONE" and isinstance(currentEntity.get(property.get("property")), list):
+        raise ValueError("Value of property " + property.get("property") + " cannot be a list since the cardinality " + 
+                         "in the profile file is \"ONE\"")
     
+
+
 def checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property):
-    
     if property.get("property_list") == None:
         return 
 
@@ -100,6 +99,7 @@ def checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property):
 
 
 def doNormalValueCheck(expected_value, actual_value, propertyName):
+    
     expectedValue = json.dumps(expected_value)
     actualValue = json.dumps(actual_value)
     
@@ -109,24 +109,24 @@ def doNormalValueCheck(expected_value, actual_value, propertyName):
 
 def doMatch_PatternValueCheck(currentEntity, property):
     match_pattern = property.get("match_pattern")
-    valueArray = currentEntity.get(property.get("property"))
-    expectedValueArray = property.get("expected_value")
+    actualValue = currentEntity.get(property.get("property"))
+    expectedValue = property.get("expected_value")
 
     if match_pattern == "at_least_one":
-        for item in expectedValueArray:
-            if item in valueArray:
+        for item in expectedValue:
+            if item in actualValue:
                 return
         else:
              raise ValueError("Value of property \"" + property.get("property") + 
-                              "\" is " + json.dumps(valueArray) + " but it MUST contain at least one of "
-                              + json.dumps(expectedValueArray))
+                              "\" is " + json.dumps(actualValue) + " but it MUST contain at least one of "
+                              + json.dumps(expectedValue))
 
     if match_pattern == "as_literal" :
-        doNormalValueCheck(expectedValueArray, valueArray, property.get("property"))
+        doNormalValueCheck(expectedValue, actualValue, property.get("property"))
         return
 
     if match_pattern == "at_least_all":
-        for item in expectedValueArray:
-            if item not in valueArray:
-                 raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(valueArray) + 
-                                  " but it MUST have all the entities in " + json.dumps(expectedValueArray))
+        for item in expectedValue:
+            if item not in actualValue:
+                 raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(actualValue) + 
+                                  " but it MUST have all the entities in " + json.dumps(expectedValue))

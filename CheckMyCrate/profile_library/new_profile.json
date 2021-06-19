@@ -27,11 +27,30 @@
                                         {
                                             "property": "@type",
                                             "marginality": "MUST",
-                                            "expected_value": "ComputerLanguage"
+                                            "expected_value": [ "ComputerLanguage" ],
+                                            "match_pattern": "as_literal"
                                         }
                                     ]
                                 }
                             ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "property": "sdPublisher",
+            "marginality": "MUST",
+            "property_list": [
+                {
+                    "property": "@id",
+                    "marginality": "MUST",
+                    "property_list": [
+                        {
+                            "property": "identifier",
+                            "marginality": "MUST",
+                            "expected_value": [ "orcid" ],
+                            "match_pattern": "at_least_one"
                         }
                     ]
                 }
