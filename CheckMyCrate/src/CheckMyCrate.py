@@ -12,9 +12,6 @@ def program():
 
 
 
-
-
-
 @program.command()
 @click.argument('profile_path', required=True)
 def pc(profile_path):
@@ -30,9 +27,7 @@ def pc(profile_path):
         click.echo("Profile is NOT OK")
 
 
-
-
-            
+   
 @program.command()
 @click.option('-f', 'writeToFile', flag_value=True,
               default=False, help=("This flag determines if the output for the crate should be written in " +

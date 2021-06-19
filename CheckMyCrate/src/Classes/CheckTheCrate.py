@@ -3,13 +3,14 @@ from   src.Classes.CrateValidation import ValidateCrateJSONFileAndReturnTheDataO
 import traceback
 import click
 import json
+import os
 
-# TODO program when it fact it should coninue. Description needs to be added
-# TODO value soma
-# TODO cardinality
+
+
 def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
-    global crateData, profileData, shouldWrite
-    shouldWrite = writeToFile
+    global crateData
+    initializeFileIfNeeded(writeToFile)
+
     try:
         click.echo("Validating crate integrity...")
         crateData = ValidateCrateJSONFileAndReturnTheDataObject(crate_path)
@@ -27,7 +28,20 @@ def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
         traceback.print_exc()
         raise ValueError(e)
 
+def initializeFileIfNeeded(writeToFile):
+    global writeOutToFile, f
 
+    writeOutToFile = False
+    if not writeToFile:
+        return
+    
+    if os.path.isfile("output.txt") and writeToFile:
+        os.remove("output.txt")
+
+   
+    writeOutToFile = True
+    print(writeOutToFile)
+    f = open("output.txt", "a")
 
 def validateEntityLoop(entity, property):
     if property.get("property_list") == None:
@@ -39,17 +53,22 @@ def validateEntityLoop(entity, property):
 
 
 def validateEntity(currentEntity, property):
-    ensurePropertyExistsInEntity(currentEntity, property)
-    ensureValueIsCorrectIfApplicable(currentEntity, property)
-    ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
-    checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property)
+    try:
+        ensurePropertyExistsInEntity(currentEntity, property)
+        ensureValueIsCorrectIfApplicable(currentEntity, property)
+        ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
+        checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property)
+    except ValueError as vE:
+        writeToProperLocation(str(vE))
+    except AttributeError as aE:
+        writeToProperLocationIfDescription(str(aE), property)
 
   
 
 def ensurePropertyExistsInEntity(currentEntity, property):
     if currentEntity.get(property.get("property")) == None:
-        raise ValueError("Property " + property.get("property") + " " + property.get("marginality") + 
-                         " exist in " + currentEntity.get("@id"))
+        raise AttributeError("Property \"" + property.get("property") + "\" " + property.get("marginality") + 
+                                             " exist in \"" + currentEntity.get("@id") + "\"")
 
 
 
@@ -58,7 +77,7 @@ def ensureValueIsCorrectIfApplicable(currentEntity, property):
         return
     
     if isinstance(currentEntity.get(property.get("property")), dict):
-        raise ValueError("Value of property " + property.get("property") + " is NOT expected to be a dictionary")
+        raise ValueError("Value of property " + property.get("property") + " MUST NOT expected to be a dictionary")
 
     doMatch_PatternValueCheck(currentEntity, property)
 
@@ -69,7 +88,7 @@ def ensureCardinalitIsCorrectIfApplicable(currentEntity, property):
         return
 
     if property.get("cardinality") == "ONE" and isinstance(currentEntity.get(property.get("property")), list):
-        raise ValueError("Value of property " + property.get("property") + " cannot be a list since the cardinality " + 
+        raise ValueError("Value of property " + property.get("property") + " MUST not be a list since the cardinality " + 
                          "in the profile file is \"ONE\"")
     
 
@@ -83,7 +102,7 @@ def checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property):
         return
 
     if isinstance(currentEntity.get(property.get("property")), list):
-        raise ValueError("Value of property " + property.get("property") + " cannot be a list")
+        raise ValueError("Value of property " + property.get("property") + " MUST not be a list")
         
     newEntity = crateData.get(currentEntity.get(property.get("property")))
 
@@ -130,3 +149,20 @@ def doMatch_PatternValueCheck(currentEntity, property):
             if item not in actualValue:
                  raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(actualValue) + 
                                   " but it MUST have all the entities in " + json.dumps(expectedValue))
+
+
+def writeToProperLocation(message):
+    if writeOutToFile:
+        f.write("\n")
+        f.write(message)
+        f.write("\n")
+    else:
+        click.echo()
+        click.echo(message)
+        click.echo()
+
+def writeToProperLocationIfDescription(errorMessage, property):
+    if property.get("description") == None:
+        writeToProperLocation(errorMessage + "\n" + "Description: No description provided in profile for this property")
+    else:
+        writeToProperLocation(errorMessage + "\n" + "Description: " + property.get("description"))

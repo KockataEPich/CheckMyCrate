@@ -7,7 +7,7 @@
             "property_list": [
                 {
                     "marginality": "MUST",
-                    "property": "@id",
+                    "property": "@ids",
                     "property_list": [
                         {
                             "property": "@type",
@@ -39,7 +39,7 @@
             ]
         },
         {
-            "property": "sdPublisher",
+            "property": "sdPudblisher",
             "marginality": "MUST",
             "property_list": [
                 {
@@ -56,5 +56,7 @@
                 }
             ]
         }
+
+
     ]
 }
