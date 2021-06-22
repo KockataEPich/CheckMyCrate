@@ -39,8 +39,8 @@
             ]
         },
         {
-            "property": "sdPudblisher",
-            "marginality": "MUST",
+            "property": "sdPusblisher",
+            "marginality": "COULD",
             "property_list": [
                 {
                     "property": "@id",

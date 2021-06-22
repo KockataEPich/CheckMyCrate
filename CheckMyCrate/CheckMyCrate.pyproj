@@ -29,7 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\CheckMyCrate.py" />
-    <Compile Include="src\Classes\CheckTheCrate.py">
+    <Compile Include="src\Classes\CrateAgainstProfileValidation.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\Classes\ProfileValidation.py">

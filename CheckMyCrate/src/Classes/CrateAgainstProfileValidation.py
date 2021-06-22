@@ -7,7 +7,7 @@ import os
 
 
 
-def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
+def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile, verbose):
     global crateData
     initializeFileIfNeeded(writeToFile)
 
@@ -19,14 +19,20 @@ def checkTheCrate(crate_path, profile_path, writeToFile, verbose):
         click.echo("Validating profile integrity...")
         profileData = ValidateProfileJSONFileAndReturnTheDataObject(profile_path)
         click.echo("Profile is OK \n")
-
-        click.echo("Validating the profile specification against the crate...")
-
-        validateEntityLoop(crateData.get("./"), profileData)
-
     except ValueError as e:
-        traceback.print_exc()
         raise ValueError(e)
+
+    global isCrateValid
+    isCrateValid = True
+
+    click.echo("Validating the profile specification against the crate...")
+    validateEntityLoop(crateData.get("./"), profileData)
+    
+    if not isCrateValid:
+        raise AttributeError()
+    
+
+
 
 def initializeFileIfNeeded(writeToFile):
     global writeOutToFile, f
@@ -43,6 +49,8 @@ def initializeFileIfNeeded(writeToFile):
     print(writeOutToFile)
     f = open("output.txt", "a")
 
+
+
 def validateEntityLoop(entity, property):
     if property.get("property_list") == None:
         return
@@ -53,14 +61,18 @@ def validateEntityLoop(entity, property):
 
 
 def validateEntity(currentEntity, property):
+    global isCrateValid
     try:
         ensurePropertyExistsInEntity(currentEntity, property)
         ensureValueIsCorrectIfApplicable(currentEntity, property)
         ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
         checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property)
     except ValueError as vE:
+        isCrateValid = False
         writeToProperLocation(str(vE))
     except AttributeError as aE:
+        if property.get("marginality") == "MUST":
+            isCrateValid = False
         writeToProperLocationIfDescription(str(aE), property)
 
   

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import sys
 sys.path.append('../')
-from src.Classes.CheckTheCrate import checkTheCrate
-from   src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
+from src.Classes.CrateAgainstProfileValidation import compareCrateToProfileSpecification
+from src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
 import click
 
 
@@ -43,10 +43,11 @@ def cc(crate_path, profile_path, writeToFile, verbose):
     The second argument is the path to the json profile file"""
 
     try:
-        checkTheCrate(crate_path, profile_path, writeToFile, verbose)
+        compareCrateToProfileSpecification(crate_path, profile_path, writeToFile, verbose)
         click.echo("This crate abides to the given profile!")
-    except Exception as e:
-        click.echo(str(e))
+    except ValueError as vE:
+        click.echo(str(vE))
+    except AttributeError as aE:
         click.echo("This crate does NOT conform to the given profile!")
 
 if __name__ == '__main__':
