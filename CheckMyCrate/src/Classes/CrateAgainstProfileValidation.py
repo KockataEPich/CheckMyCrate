@@ -30,7 +30,6 @@ def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile, ve
     
     if not isCrateValid:
         raise AttributeError()
-    
 
 
 
@@ -56,14 +55,22 @@ def validateEntityLoop(entity, property):
         return
 
     for currentProperty in property.get("property_list"):
-        validateEntity(entity, currentProperty)
+        validateEntity(entity, currentProperty, getCorrectParentPropertyName(entity, property))
 
+def getCorrectParentPropertyName(entity, property):
+    
+    if property.get("property") == None:
+        return "root"
 
+    if property.get("property") == "@id":
+        return entity.get("@id")
 
-def validateEntity(currentEntity, property):
+    return property.get("property")
+
+def validateEntity(currentEntity, property, parentProperty):
     global isCrateValid
     try:
-        ensurePropertyExistsInEntity(currentEntity, property)
+        ensurePropertyExistsInEntity(currentEntity, property, parentProperty)
         ensureValueIsCorrectIfApplicable(currentEntity, property)
         ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
         checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property)
@@ -77,10 +84,10 @@ def validateEntity(currentEntity, property):
 
   
 
-def ensurePropertyExistsInEntity(currentEntity, property):
+def ensurePropertyExistsInEntity(currentEntity, property, parentProperty):
     if currentEntity.get(property.get("property")) == None:
         raise AttributeError("Property \"" + property.get("property") + "\" " + property.get("marginality") + 
-                                             " exist in \"" + currentEntity.get("@id") + "\"")
+                                             " exist in \"" + parentProperty + "\"")
 
 
 
