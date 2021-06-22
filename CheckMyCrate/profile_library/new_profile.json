@@ -10,7 +10,7 @@
                     "property": "@id",
                     "property_list": [
                         {
-                            "property": "@typse",
+                            "property": "@type",
                             "marginality": "MUST",
                             "match_pattern": "at_least_all",
                             "expected_value": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ]

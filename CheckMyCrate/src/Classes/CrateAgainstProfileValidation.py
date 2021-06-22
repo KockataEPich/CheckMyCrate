@@ -7,7 +7,7 @@ import os
 
 
 
-def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile, verbose):
+def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile):
     global crateData
     initializeFileIfNeeded(writeToFile)
 
@@ -74,13 +74,13 @@ def validateEntity(currentEntity, property, parentProperty):
         ensureValueIsCorrectIfApplicable(currentEntity, property)
         ensureCardinalitIsCorrectIfApplicable(currentEntity, property)
         checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property)
-    except ValueError as vE:
+    except ValueError as propertyNotUsedCorrectlyError:
         isCrateValid = False
-        writeToProperLocation(str(vE))
-    except AttributeError as aE:
+        writeToProperLocation(str(propertyNotUsedCorrectlyError))
+    except AttributeError as propertyNotFoundError:
         if property.get("marginality") == "MUST":
             isCrateValid = False
-        writeToProperLocationIfDescription(str(aE), property)
+        writeToProperLocationIfDescription(str(propertyNotFoundError), property)
 
   
 

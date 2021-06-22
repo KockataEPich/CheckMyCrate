@@ -1,6 +1,3 @@
 
-Property "mainEnstity" MUST exist in "./"
-Description: the main entity
-
-Property "sdPudblisher" MUST exist in "./"
+Property "sdPusblisher" COULD exist in "root"
 Description: No description provided in profile for this property
