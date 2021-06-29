@@ -4,13 +4,15 @@ import json
 
 def ValidateCrateJSONFileAndReturnTheDataObject(crate_path):
     try:
-        
         checkIfCratePathLeadsToADirectoryContainingJSONFile(crate_path)
-        crateData = validateCrateJSONFileAndReturnTheDataObject(crate_path)
-        crateData = turnTheCrateDataIntoAGraphWithIdsAsKeys(crateData)
-        return crateData
+        json_path = getTheCorrectJsonPath(crate_path)
+        crateData = extractDataFromCrateJSONFile(json_path)
+        crateGraph = turnTheCrateDataIntoAGraphWithIdsAsKeys(crateData)
+        return crateGraph
     except ValueError as e:
         raise ValueError(str(e))
+
+
 
 def checkIfCratePathLeadsToADirectoryContainingJSONFile(crate_path):
     if not path.isdir(crate_path):
@@ -19,19 +21,15 @@ def checkIfCratePathLeadsToADirectoryContainingJSONFile(crate_path):
     if not path.isfile(crate_path + "/ro-crate-metadata.json") and not path.isfile(crate_path + "/ro-crate-metadata.jsonld"):
         raise ValueError("The directory does not contain the essential \"ro-crate-metadata.json/jsonld\" which means it is not a valid RO-Crate directory")
 
-def validateCrateJSONFileAndReturnTheDataObject(crate_path):
-   # Get the actual path to the json
-   try:
-       json_path = getTheCorrectJsonPath(crate_path)
-       return extractDataFromCrateJSONFile(json_path)
-   except ValueError as e:
-       raise ValueError(str(e))
+
 
 def getTheCorrectJsonPath(crate_path):
    if path.isfile(crate_path + "/ro-crate-metadata.json"):
         return crate_path + "/ro-crate-metadata.json"
    else:
         return crate_path + "/ro-crate-metadata.jsonld"
+
+
 
 def extractDataFromCrateJSONFile(json_path):
     try:
@@ -40,10 +38,15 @@ def extractDataFromCrateJSONFile(json_path):
     except Exception as e:
         raise ValueError(str(e))
 
+
+
 def turnTheCrateDataIntoAGraphWithIdsAsKeys(crateData):
     crateData = crateData.get("@graph")
     crateGraph = {}
     for item in crateData:
         crateGraph[item.get("@id")] = item
+
+    if crateGraph.get("./") == None:
+        raise ValueError("The crate MUST contain the mandatory entity  \"@id\": \"./\" ")
 
     return crateGraph

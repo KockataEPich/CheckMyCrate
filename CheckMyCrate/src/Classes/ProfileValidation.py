@@ -9,7 +9,7 @@ def ValidateProfileJSONFileAndReturnTheDataObject(profile_path):
         validateProfileData(profileData)
         return profileData
     except ValueError as e:
-        raise ValueError(str(e))
+        raise ValueError(e)
 
 
 
@@ -20,27 +20,21 @@ def checkIfProfilePathLeadsToAFile(profile_path):
 
 
 def extractDataFromJsonProfile(profile_path):
-    try:
-        with open(profile_path, 'rb') as profile_path:
-            profileData = json.loads(profile_path.read().decode("utf-8","ignore"))
+    with open(profile_path, 'rb') as profile_path:
+         profileData = json.loads(profile_path.read().decode("utf-8","ignore"))
 
-        return profileData
-    except ValueError as e:
-        raise ValueError(str(e) + "\n" + "The profile given is not a valid JSON file \n")
+    return profileData
 
 
 
 def validateProfileData(profileData):
-    try:
-        validateRoot(profileData)
-        checkForProperty_ListExistanceAndContinueRecursively(profileData)
-    except ValueError as e:
-        raise ValueError(str(e))
+    validateRoot(profileData)
+    checkForProperty_ListExistanceAndContinueRecursively(profileData)
 
 
 
 def validateRoot(profileData):
-    if len(profileData) != 1 and len(profileData) != 0:
+    if len(profileData) != 1:
         raise ValueError("Root entity MUST have only the \"property_list\" entity")
 
     if profileData.get("property_list") == None:
@@ -65,24 +59,25 @@ def checkForProperty_ListExistanceAndContinueRecursively(propertyData):
             validateIndividualSubEntities(property, parentPropertyName)
             ensurePropertyIsUniqueInThisEntityAndAddItToDictionaryIfItIs(property, parentPropertyName, seenPropertiesOnThisEntity)
         except ValueError as e:
-            raise ValueError(str(e))
+            raise ValueError(e)
+
+
 
 def getTheCorrectParrentPropertyName(propertyData):
     return propertyData.get("property") if propertyData.get("property") != None  else "root"
 
-def validateIndividualSubEntities(property, parentPropertyName):
-    try:
-        ensureTheEntityContainsOnlyTheRightAttributes(property)
-        ensurePropertyKeywordExistanceAndProperUse(property, parentPropertyName)
-        ensureMarginalityKeywordExistanceAndProperUse(property)
-        ensureProperUseOfCardinalityKeyword(property)
-        ensureProperUseOfMatch_PatternKeyword(property)
-        ensureProperUseOfDescriptionKeyword(property)
-        ensureProperUseOfExpected_ValueKeyword(property)
-        checkForProperty_ListExistanceAndContinueRecursively(property)
 
-    except ValueError as e:
-        raise ValueError(str(e))            
+
+def validateIndividualSubEntities(property, parentPropertyName):
+    ensureTheEntityContainsOnlyTheRightAttributes(property)
+    ensurePropertyKeywordExistanceAndProperUse(property, parentPropertyName)
+    ensureMarginalityKeywordExistanceAndProperUse(property)
+    ensureProperUseOfCardinalityKeyword(property)
+    ensureProperUseOfMatch_PatternKeyword(property)
+    ensureProperUseOfDescriptionKeyword(property)
+    ensureProperUseOfExpected_ValueKeyword(property)
+    checkForProperty_ListExistanceAndContinueRecursively(property)
+           
               
     
 
@@ -110,7 +105,7 @@ def ensureTheEntityContainsOnlyTheRightAttributes(property):
 
     for key in property.keys():
         if acceptedKeywords.get(key) == None:
-            raise ValueError("Item " + key + " is not recognised to exist")
+            raise ValueError("Attribute " + key + " is not recognised")
 
 
 def ensurePropertyKeywordExistanceAndProperUse(propertyData, parentPropertyName):

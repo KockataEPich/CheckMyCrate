@@ -8,12 +8,12 @@ import os
 
 
 def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile):
-    global crateData
+    global crateGraph
     initializeFileIfNeeded(writeToFile)
 
     try:
         click.echo("Validating crate integrity...")
-        crateData = ValidateCrateJSONFileAndReturnTheDataObject(crate_path)
+        crateGraph = ValidateCrateJSONFileAndReturnTheDataObject(crate_path)
         click.echo("Crate is OK \n")
 
         click.echo("Validating profile integrity...")
@@ -26,7 +26,7 @@ def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile):
     isCrateValid = True
 
     click.echo("Validating the profile specification against the crate...")
-    validateEntityLoop(crateData.get("./"), profileData)
+    validateEntityLoop(crateGraph.get("./"), profileData)
     
     if not isCrateValid:
         raise AttributeError()
@@ -56,6 +56,8 @@ def validateEntityLoop(entity, property):
 
     for currentProperty in property.get("property_list"):
         validateEntity(entity, currentProperty, getCorrectParentPropertyName(entity, property))
+
+
 
 def getCorrectParentPropertyName(entity, property):
     
@@ -116,14 +118,16 @@ def checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property):
     if property.get("property_list") == None:
         return 
 
-    if isinstance(currentEntity.get(property.get("property")), dict):
-        validateEntityLoop(currentEntity.get(property.get("property")), property)
+    valueOfEntity = currentEntity.get(property.get("property"))
+
+    if isinstance(valueOfEntity, dict):
+        validateEntityLoop(valueOfEntity, property)
         return
 
-    if isinstance(currentEntity.get(property.get("property")), list):
-        raise ValueError("Value of property " + property.get("property") + " MUST not be a list")
+    if isinstance(valueOfEntity, list):
+        raise ValueError("The property " + property.get("property") + " MUST not have a list as value")  
         
-    newEntity = crateData.get(currentEntity.get(property.get("property")))
+    newEntity = crateGraph.get(valueOfEntity)
 
     if newEntity == None:
         raise ValueError("If Value of property " + property.get("property") + " is not a dictionary, then it MUST" +
@@ -133,10 +137,30 @@ def checkIfPropertyHasSubPropertiesAndLoopIfItDoes(currentEntity, property):
 
 
 
-        
+def doMatch_PatternValueCheck(currentEntity, property):
+    match_pattern = property.get("match_pattern")
+    expectedValue = property.get("expected_value")
+    actualValue = currentEntity.get(property.get("property"))
+    
+    if match_pattern == "at_least_one":
+        handleAtLeastOne(expectedValue, actualValue)
+    elif match_pattern == "as_literal":
+        handleAsLiteral(expectedValue, actualValue, property.get("property"))
+    elif match_pattern == "at_least_all":
+        handleAtLeastAll(expectedValue, actualValue)
 
 
-def doNormalValueCheck(expected_value, actual_value, propertyName):
+def handleAtLeastOne(expectedValue, actualValue):
+    for item in expectedValue:
+        if item in actualValue:
+            return
+    else:
+        raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(actualValue) + 
+                                                        " but it MUST contain at least one of " + json.dumps(expectedValue))
+
+
+
+def handleAsLiteral(expected_value, actual_value, propertyName):
     
     expectedValue = json.dumps(expected_value)
     actualValue = json.dumps(actual_value)
@@ -145,29 +169,13 @@ def doNormalValueCheck(expected_value, actual_value, propertyName):
         raise ValueError("Value of property \"" + propertyName + "\" is " + actualValue + " but MUST be " + expectedValue)
 
 
-def doMatch_PatternValueCheck(currentEntity, property):
-    match_pattern = property.get("match_pattern")
-    actualValue = currentEntity.get(property.get("property"))
-    expectedValue = property.get("expected_value")
 
-    if match_pattern == "at_least_one":
-        for item in expectedValue:
-            if item in actualValue:
-                return
-        else:
-             raise ValueError("Value of property \"" + property.get("property") + 
-                              "\" is " + json.dumps(actualValue) + " but it MUST contain at least one of "
-                              + json.dumps(expectedValue))
+def handleAtLeastAll(expectedValue, actualValue):
+    for item in expectedValue:
+        if item not in actualValue:
+                raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(actualValue) + 
+                                " but it MUST have all the entities in " + json.dumps(expectedValue))
 
-    if match_pattern == "as_literal" :
-        doNormalValueCheck(expectedValue, actualValue, property.get("property"))
-        return
-
-    if match_pattern == "at_least_all":
-        for item in expectedValue:
-            if item not in actualValue:
-                 raise ValueError("Value of property \"" + property.get("property") + "\" is " + json.dumps(actualValue) + 
-                                  " but it MUST have all the entities in " + json.dumps(expectedValue))
 
 
 def writeToProperLocation(message):
@@ -179,6 +187,8 @@ def writeToProperLocation(message):
         click.echo()
         click.echo(message)
         click.echo()
+
+
 
 def writeToProperLocationIfDescription(errorMessage, property):
     if property.get("description") == None:

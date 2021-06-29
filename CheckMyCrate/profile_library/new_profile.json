@@ -27,8 +27,8 @@
                                         {
                                             "property": "@type",
                                             "marginality": "MUST",
-                                            "expected_value": [ "ComputerLanguage" ],
-                                            "match_pattern": "as_literal"
+                                            "expected_value": [ "ComputerLanguage", "Text" ],
+                                            "match_pattern": "at_least_one"
                                         }
                                     ]
                                 }
@@ -39,24 +39,68 @@
             ]
         },
         {
-            "property": "sdPusblisher",
-            "marginality": "COULD",
+            "property": "sdPublisher",
+            "marginality": "MUST",
+            "cardinality": "ONE",
             "property_list": [
                 {
                     "property": "@id",
                     "marginality": "MUST",
                     "property_list": [
                         {
-                            "property": "identifier",
+                            "property": "@type",
                             "marginality": "MUST",
-                            "expected_value": [ "orcid" ],
+                            "expected_value": [
+                                "Organization",
+                                "Person"
+                            ],
                             "match_pattern": "at_least_one"
                         }
                     ]
                 }
             ]
+        },
+        {
+            "property": "license",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "dateCreated",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "name",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "url",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "version",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "output",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "input",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "creator",
+            "marginality": "MUST"
         }
-
-
     ]
 }
