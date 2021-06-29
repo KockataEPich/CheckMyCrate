@@ -1,70 +1,106 @@
 {
-    "main_entity_type": "YOUR VALUE HERE",
-    "properties": [
+    "property_list": [
         {
-
-            "minimum": [
+            "marginality": "MUST",
+            "property": "mainEntity",
+            "description": "the main entity",
+            "property_list": [
                 {
-                    "@id": "The entity key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph",
-                    "value": "NA"
-                },
+                    "marginality": "MUST",
+                    "property": "@id",
+                    "property_list": [
+                        {
+                            "property": "@type",
+                            "marginality": "MUST",
+                            "match_pattern": "at_least_all",
+                            "expected_value": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ]
+                        },
 
-                {
-                    "@id": "The entity2 key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph",
-                    "value": "NA"
-                }
-
-            ]
-        },
-
-
-        {
-            "recommended": [
-
-                {
-                    "@id": "The entity key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "The entity2 key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph",
-                    "value": "NA"
+                        {
+                            "property": "programmingLanguage",
+                            "marginality": "MUST",
+                            "property_list": [
+                                {
+                                    "marginality": "MUST",
+                                    "property": "@id",
+                                    "property_list": [
+                                        {
+                                            "property": "@type",
+                                            "marginality": "MUST",
+                                            "expected_value": [ "ComputerLanguage", "Text" ],
+                                            "match_pattern": "at_least_one"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
+        {
+            "property": "sdPublisher",
+            "marginality": "MUST",
+            "cardinality": "ONE",
+            "property_list": [
+                {
+                    "property": "@id",
+                    "marginality": "MUST",
+                    "property_list": [
+                        {
+                            "property": "@type",
+                            "marginality": "MUST",
+                            "expected_value": [
+                                "Organization",
+                                "Person"
+                            ],
+                            "match_pattern": "at_least_one"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "property": "license",
+            "marginality": "MUST"
+        },
 
         {
-            "optional": [
-                {
-                    "@id": "The entity key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph",
-                    "value": "NA"
-                },
+            "property": "dateCreated",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
 
-                {
-                    "@id": "The entity2 key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph",
-                    "value": "NA"
-                }
+        {
+            "property": "name",
+            "marginality": "MUST"
+        },
 
-            ]
+        {
+            "property": "url",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "version",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "output",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "input",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "creator",
+            "marginality": "MUST"
         }
-
     ]
 }

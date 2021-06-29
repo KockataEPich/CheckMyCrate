@@ -1,0 +1,9 @@
+{
+    "property_list": [
+        {
+            "unknown": "keyword",
+            "marginality": "MUST",
+            "property": "mainEntity"
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "property_list": [
+        {
+            "marginality": "MUST",
+            "property": "mainEntity",
+            "description": "the main entity",
+            "match_pattern": "incorrect_match_pattern",
+            "expected_value": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ]
+        }
+    ]
+}

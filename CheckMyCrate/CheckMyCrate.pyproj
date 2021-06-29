@@ -47,13 +47,7 @@
     <Compile Include="test\src\Classes\TestCheckTheCrate.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test\src\Classes\TestCheckCrateType.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="test\src\Classes\TestProfileValidation.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="test\src\Classes\TestViability.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test\src\Classes\__init__.py" />
@@ -81,8 +75,6 @@
     <Folder Include="test\src\Classes\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="profile_library\new_profile.json" />
-    <Content Include="profile_library\ro_crate_1.1_basic.json" />
     <Content Include="profile_library\template_profile.json" />
     <Content Include="sample\crate_test.txt" />
     <Content Include="sample\ro-crate-metadata.json" />
@@ -91,28 +83,23 @@
     <Content Include="test\profile_library\modified_profiles\smaller_profile3.json" />
     <Content Include="test\profile_library\modified_profiles\smaller_profile2.json" />
     <Content Include="test\profile_library\modified_profiles\smaller_profile.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile21.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile15.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile20.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile19.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile18.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile17.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile16.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile14.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile9.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile10.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile11.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile12.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile13.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile8.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile7.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile6.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile5.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile4.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile3.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile2.json" />
-    <Content Include="test\profile_library\wrong_profiles\wrongProfile1.json" />
-    <Content Include="test\profile_library\ro_crate_1.1_basic.json" />
+    <Content Include="test\profile_library\template_profile.json" />
+    <Content Include="test\profile_library\wrong_profiles\NoItems.json" />
+    <Content Include="test\profile_library\wrong_profiles\NotCorrectJSON.json" />
+    <Content Include="test\profile_library\wrong_profiles\PropertyListNotAList.json" />
+    <Content Include="test\profile_library\wrong_profiles\PropertyListNotContainingDictionaries.json" />
+    <Content Include="test\profile_library\wrong_profiles\PropertyNotExisting.json" />
+    <Content Include="test\profile_library\wrong_profiles\MarginalityNotExisting.json" />
+    <Content Include="test\profile_library\wrong_profiles\SameNamePropertiesWithSameParent.json" />
+    <Content Include="test\profile_library\wrong_profiles\ValueWithoutMatchPattern.json" />
+    <Content Include="test\profile_library\wrong_profiles\MatchPatternWithoutValue.json" />
+    <Content Include="test\profile_library\wrong_profiles\WrongMatchPatternType.json" />
+    <Content Include="test\profile_library\wrong_profiles\WrongValueType.json" />
+    <Content Include="test\profile_library\wrong_profiles\ValueWhenExpectingProperties.json" />
+    <Content Include="test\profile_library\wrong_profiles\WrongMarginality.json" />
+    <Content Include="test\profile_library\wrong_profiles\UnrecognisedKeyword.json" />
+    <Content Include="test\profile_library\wrong_profiles\WrongSingleRootAttribute.json" />
+    <Content Include="test\profile_library\wrong_profiles\WrongNumberOfRootAttributes.json" />
     <Content Include="test\sample\different_metadata\item_missing_in_graph.json" />
     <Content Include="test\sample\different_metadata\main_entity_missing_type.json" />
     <Content Include="test\sample\different_metadata\missing_id_in_contextual_dict.json" />

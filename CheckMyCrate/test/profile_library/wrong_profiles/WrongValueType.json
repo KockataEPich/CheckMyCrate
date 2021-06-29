@@ -1,0 +1,12 @@
+{
+    "property_list": [
+        {
+            "marginality": "MUST",
+            "property": "mainEntity",
+            "description": "the main entity",
+            "match_pattern": "at_least_all",
+            "expected_value": "not a list"
+
+        }
+    ]
+}

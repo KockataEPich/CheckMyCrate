@@ -1,75 +1,78 @@
 import unittest
-from src.Classes.ProfileValidation import checkProfile
+from src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
 
 class TestProfileValidation(unittest.TestCase):
     def testCorrectProfile(self):
-        self.assertTrue(checkProfile("test/profile_library/ro_crate_1.1_basic.json"))
+        ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/template_profile.json")
 
     def testNonExistentProfile(self):
-        self.assertFalse(checkProfile("non_existent_file"))
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("non_existent_file")
 
-    def testMissingExpectedType(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile3.json"))
+    def testMarginalityNotExisting(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/MarginalityNotExisting.json")
 
-    def testWrongExpectedTypeInProfile(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile1.json"))
+    def testMatchPatternWithoutValue(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/MatchPatternWithoutValue.json")
 
-    def testMissingPropertiesEntity(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile2.json"))
+    def testNoItems(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/NoItems.json")
 
-    def testWrongPropertiesEntity(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile4.json"))
+    def testNotCorrectJSON(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/NotCorrectJSON.json")
 
-    def testWrongMinimalEntity(self):
-         self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile5.json"))
+    def testPropertyListNotAList(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/PropertyListNotAList.json")
 
-    def testWrongRecommendedEntity(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile6.json"))
+    def testPropertyListNotContainingDictionaries(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/PropertyListNotContainingDictionaries.json")
 
-    def testWrongOptionalEntity(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile7.json"))
+    def testPropertyNotExisting(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/PropertyNotExisting.json")
 
-    def testMissingMinimalEntity(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile8.json"))
+    def testSameNamePropertiesWithSameParent(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/SameNamePropertiesWithSameParent.json")
 
-    def testFourthItemInProperties(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile9.json"))
+    def testUnrecognisedKeyword(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/UnrecognisedKeyword.json")
 
-    def testIncorrectNumberOfElementsInItem(self):         
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile10.json"))
+    def testValueWhenExpectingProperties(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/ValueWhenExpectingProperties.json")
 
-    def testMissingIdFieldInItem(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile11.json"))
+    def testValueWithoutMatchPattern(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/ValueWithoutMatchPattern.json")
 
-    def testSixthKeywordInItem(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile12.json"))
+    def testWrongMarginality(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/WrongMarginality.json")
 
-    def testInvalidCardinalityValue(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile13.json"))
+    def testWrongMatchPatternType(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/WrongMatchPatternType.json")
 
-    def testThirdGlobalEntity(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile14.json"))
+    def testWrongNumberOfRootAttributes(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/WrongNumberOfRootAttributes.json")
 
-    def testWrongTypeKeyword(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile15.json"))
+    def testWrongSingleRootAttribute(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/WrongSingleRootAttribute.json")
 
-    def testWrongDescriptionKeyword(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile16.json"))
+    def testWrongValueType(self):
+        with self.assertRaises(ValueError):
+            ValidateProfileJSONFileAndReturnTheDataObject("test/profile_library/wrong_profiles/WrongValueType.json")
 
-    def testWrongCardinalityKeyword(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile17.json"))
-
-    def testNonUniqueId(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile18.json"))
-
-    def testInvalidJsonProfile(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile19.json"))
-
-    def testWrongValueKeyword(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile20.json"))
-      
-    def testWrongValueValue(self):
-        self.assertFalse(checkProfile("test/profile_library/wrong_profiles/wrongProfile21.json"))
 
 if __name__ == '__main__':
     unittest.main()

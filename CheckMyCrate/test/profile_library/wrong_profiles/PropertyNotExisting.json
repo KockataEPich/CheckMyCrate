@@ -1,0 +1,8 @@
+{
+    "property_list": [
+        {
+            "marginality": "MUST",
+            "description": "the main entity"
+        }
+    ]
+}

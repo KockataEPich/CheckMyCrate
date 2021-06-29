@@ -1,0 +1,12 @@
+{
+    "property_list": [
+        {
+            "marginality": "MUST",
+            "property": "mainEntity"
+        },
+        {
+            "property": "mainEntity",
+            "marginality": "SHOULD"
+        }
+    ]
+}
