@@ -3,6 +3,8 @@ A command line application for validating a RO-Crate object against a JSON profi
 
 University of Manchester 2021
 
+Check out branch Version_0.2 for the newest version!
+
 ## Table of contents
 * [Technologies](#technologies)
 * [Setup](#setup)
