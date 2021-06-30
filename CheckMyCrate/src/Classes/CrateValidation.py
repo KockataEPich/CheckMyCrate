@@ -1,8 +1,7 @@
-from src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
 from os import path
 import json
 
-def ValidateCrateJSONFileAndReturnTheDataObject(crate_path):
+def validateCrateJSONFileAndReturnTheDataObject(crate_path):
     try:
         checkIfCratePathLeadsToADirectoryContainingJSONFile(crate_path)
         json_path = getTheCorrectJsonPath(crate_path)
@@ -42,6 +41,13 @@ def extractDataFromCrateJSONFile(json_path):
 
 def turnTheCrateDataIntoAGraphWithIdsAsKeys(crateData):
     crateData = crateData.get("@graph")
+    
+    if crateData == None:
+        raise ValueError("The crate MUST contain the mandatory \"@graph\" entity")
+
+    if not isinstance(crateData, list):
+        raise ValueError("The \"@graph\" entity MUST be a list")
+
     crateGraph = {}
     for item in crateData:
         crateGraph[item.get("@id")] = item

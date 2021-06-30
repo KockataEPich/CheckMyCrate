@@ -1,3 +1,18 @@
 
-Property "sdPusblisher" COULD exist in "root"
+Property "dateCreated" MUST exist in "root"
+Description: No description provided in profile for this property
+
+Property "name" MUST exist in "root"
+Description: No description provided in profile for this property
+
+Property "version" MUST exist in "root"
+Description: No description provided in profile for this property
+
+Property "output" MUST exist in "root"
+Description: No description provided in profile for this property
+
+Property "input" MUST exist in "root"
+Description: No description provided in profile for this property
+
+Property "creator" MUST exist in "root"
 Description: No description provided in profile for this property

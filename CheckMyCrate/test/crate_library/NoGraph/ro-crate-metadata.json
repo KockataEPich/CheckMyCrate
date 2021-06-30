@@ -1,6 +1,6 @@
 {
   "@context": "https://w3id.org/ro/crate/1.1/context",
-  "@graph": [
+  "@asd": [
     {
       "@id": "ro-crate-metadata.json",
       "@type": "CreativeWork",
@@ -45,7 +45,7 @@
       "url": "https://workflowhub.eu/workflows/68/ro_crate?version=1",
       "isBasedOn": "https://raw.githubusercontent.com/matteo14c/Galaxy_wfs/main/Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga",
       "sdPublisher": {
-        "@id": "https://wrongurl.org/0000-0003-3983-4961"
+        "@id": "https://orcid.org/0000-0003-3983-4961"
       },
       "sdDatePublished": "2020-11-05 06:30:11 +0000",
       "creativeWorkStatus": "Work-in-progress"
@@ -99,10 +99,10 @@
       "identifier": "https://workflowhub.eu/projects/25"
     },
     {
-        "@id": "https://wrongurl.org/0000-0003-3983-4961",
-        "@type": "Person",
-        "name": "Matteo Chiara",
-        "identifier": "https://wrongurl.org/0000-0003-3983-4961"
+      "@id": "https://orcid.org/0000-0003-3983-4961",
+      "@type": "Person",
+      "name": "Matteo Chiara",
+      "identifier": "https://orcid.org/0000-0003-3983-4961"
     }
   ]
 }

@@ -2,7 +2,7 @@
 import sys
 sys.path.append('../')
 from src.Classes.CrateAgainstProfileValidation import compareCrateToProfileSpecification
-from src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
+from src.Classes.ProfileValidation import validateProfileJSONFileAndReturnTheDataObject
 import click
 
 
@@ -20,7 +20,7 @@ def pc(profile_path):
     click.echo("Checking the profile....")
 
     try:
-        ValidateProfileJSONFileAndReturnTheDataObject(profile_path)
+        validateProfileJSONFileAndReturnTheDataObject(profile_path)
         click.echo("Profile is OK")
     except Exception as e:
         click.echo(str(e))

@@ -2,7 +2,7 @@ import json
 import click
 from os import path
 
-def ValidateProfileJSONFileAndReturnTheDataObject(profile_path):
+def validateProfileJSONFileAndReturnTheDataObject(profile_path):
     try:
         checkIfProfilePathLeadsToAFile(profile_path)
         profileData = extractDataFromJsonProfile(profile_path)

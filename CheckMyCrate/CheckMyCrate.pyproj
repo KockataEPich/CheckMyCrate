@@ -44,7 +44,7 @@
     <Compile Include="test\src\Classes\TestCrateValidation.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test\src\Classes\TestCheckTheCrate.py">
+    <Compile Include="test\src\Classes\TestCrateAgainstProfileValidation.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test\src\Classes\TestProfileValidation.py">
@@ -65,13 +65,17 @@
     <Folder Include="src\" />
     <Folder Include="src\Classes\" />
     <Folder Include="test\" />
+    <Folder Include="test\crate_library\Correct\" />
+    <Folder Include="test\crate_library\GraphNotAList\" />
+    <Folder Include="test\crate_library\IncorrectCrateIdValue\" />
+    <Folder Include="test\crate_library\NoCrateId\" />
     <Folder Include="test\profile_library\modified_profiles\" />
     <Folder Include="test\profile_library\wrong_profiles\" />
-    <Folder Include="test\sample\different_metadata\" />
-    <Folder Include="test\sample\wrong_metadata\" />
+    <Folder Include="test\crate_library\NoGraph\" />
+    <Folder Include="test\crate_library\WrongJSON\" />
     <Folder Include="test\src\" />
     <Folder Include="test\profile_library\" />
-    <Folder Include="test\sample\" />
+    <Folder Include="test\crate_library\" />
     <Folder Include="test\src\Classes\" />
   </ItemGroup>
   <ItemGroup>
@@ -80,9 +84,16 @@
     <Content Include="sample\ro-crate-metadata.json" />
     <Content Include="sample\ro-crate-preview.html" />
     <Content Include="src\output.txt" />
-    <Content Include="test\profile_library\modified_profiles\smaller_profile3.json" />
-    <Content Include="test\profile_library\modified_profiles\smaller_profile2.json" />
-    <Content Include="test\profile_library\modified_profiles\smaller_profile.json" />
+    <Content Include="test\crate_library\Correct\ro-crate-metadata.json" />
+    <Content Include="test\crate_library\GraphNotAList\ro-crate-metadata.json" />
+    <Content Include="test\crate_library\IncorrectCrateIdValue\ro-crate-metadata.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_seven.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_six.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_four.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_two.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_one.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_three.json" />
+    <Content Include="test\profile_library\modified_profiles\variation_five.json" />
     <Content Include="test\profile_library\template_profile.json" />
     <Content Include="test\profile_library\wrong_profiles\NoItems.json" />
     <Content Include="test\profile_library\wrong_profiles\NotCorrectJSON.json" />
@@ -100,18 +111,9 @@
     <Content Include="test\profile_library\wrong_profiles\UnrecognisedKeyword.json" />
     <Content Include="test\profile_library\wrong_profiles\WrongSingleRootAttribute.json" />
     <Content Include="test\profile_library\wrong_profiles\WrongNumberOfRootAttributes.json" />
-    <Content Include="test\sample\different_metadata\item_missing_in_graph.json" />
-    <Content Include="test\sample\different_metadata\main_entity_missing_type.json" />
-    <Content Include="test\sample\different_metadata\missing_id_in_contextual_dict.json" />
-    <Content Include="test\sample\different_metadata\missing_main_entity_id.json" />
-    <Content Include="test\sample\different_metadata\missing_main_entity.json" />
-    <Content Include="test\sample\different_metadata\crate_id_missing.json" />
-    <Content Include="test\sample\different_metadata\missing_identifier.json" />
-    <Content Include="test\sample\different_metadata\wrong_value_on_person.json" />
-    <Content Include="test\sample\different_metadata\ro-crate-metadata.json" />
-    <Content Include="test\sample\ro-crate-metadata.json" />
-    <Content Include="test\sample\ro-crate-preview.html" />
-    <Content Include="test\sample\wrong_metadata\ro-crate-metadata.json" />
+    <Content Include="test\crate_library\NoGraph\ro-crate-metadata.json" />
+    <Content Include="test\crate_library\NoCrateId\ro-crate-metadata.json" />
+    <Content Include="test\crate_library\WrongJSON\ro-crate-metadata.json" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

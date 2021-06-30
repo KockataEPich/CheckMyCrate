@@ -42,23 +42,11 @@
             "property": "sdPublisher",
             "marginality": "MUST",
             "cardinality": "ONE",
-            "property_list": [
-                {
-                    "property": "@id",
-                    "marginality": "MUST",
-                    "property_list": [
-                        {
-                            "property": "@type",
-                            "marginality": "MUST",
-                            "expected_value": [
-                                "Organization",
-                                "Person"
-                            ],
-                            "match_pattern": "at_least_one"
-                        }
-                    ]
-                }
-            ]
+            "expected_value": [
+                "Organization",
+                "Person"
+            ],
+            "match_pattern": "at_least_one"
         },
         {
             "property": "license",

@@ -1,6 +1,7 @@
 {
-  "@context": "https://w3id.org/ro/crate/1.1/context",
-  "@graph": [
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph" : "not a list",
+  "@not_theGraph": [
     {
       "@id": "ro-crate-metadata.json",
       "@type": "CreativeWork",
@@ -21,6 +22,9 @@
     {
       "@id": "./",
       "@type": "Dataset",
+      "mainEntity": {
+        "@id": "Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga"
+      },
       "hasPart": [
         {
           "@id": "Galaxy-Workflow-MC_COVID19like_Assembly_Reads.ga"

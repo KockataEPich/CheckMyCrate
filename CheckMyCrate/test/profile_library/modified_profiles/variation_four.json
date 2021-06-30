@@ -51,8 +51,8 @@
                             "property": "@type",
                             "marginality": "MUST",
                             "expected_value": [
-                                "Organization",
-                                "Person"
+                                "Orgkanization",
+                                "Perkson"
                             ],
                             "match_pattern": "at_least_one"
                         }

@@ -1,5 +1,5 @@
-from   src.Classes.ProfileValidation import ValidateProfileJSONFileAndReturnTheDataObject
-from   src.Classes.CrateValidation import ValidateCrateJSONFileAndReturnTheDataObject
+from   src.Classes.ProfileValidation import validateProfileJSONFileAndReturnTheDataObject
+from   src.Classes.CrateValidation import validateCrateJSONFileAndReturnTheDataObject
 import traceback
 import click
 import json
@@ -13,11 +13,11 @@ def compareCrateToProfileSpecification(crate_path, profile_path, writeToFile):
 
     try:
         click.echo("Validating crate integrity...")
-        crateGraph = ValidateCrateJSONFileAndReturnTheDataObject(crate_path)
+        crateGraph = validateCrateJSONFileAndReturnTheDataObject(crate_path)
         click.echo("Crate is OK \n")
 
         click.echo("Validating profile integrity...")
-        profileData = ValidateProfileJSONFileAndReturnTheDataObject(profile_path)
+        profileData = validateProfileJSONFileAndReturnTheDataObject(profile_path)
         click.echo("Profile is OK \n")
     except ValueError as e:
         raise ValueError(e)

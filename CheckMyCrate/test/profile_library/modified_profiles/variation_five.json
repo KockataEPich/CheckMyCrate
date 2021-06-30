@@ -28,7 +28,7 @@
                                             "property": "@type",
                                             "marginality": "MUST",
                                             "expected_value": [ "ComputerLanguage", "Text" ],
-                                            "match_pattern": "at_least_one"
+                                            "match_pattern": "as_literal"
                                         }
                                     ]
                                 }
