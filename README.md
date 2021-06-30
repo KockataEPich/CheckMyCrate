@@ -30,6 +30,8 @@ Firstly, to get the repository either download the zip or use:
 $ git clone https://github.com/KockataEPich/CheckMyCrate.git
 ```
 
+After that you would neet to switch on this branch for this version.
+
 In order to install the application, you firstly need to navigate to the
 **src** folder containing the main **CheckMyCrate.py** class and the file called **setup.py**. After that
 you need to execute:
@@ -73,429 +75,130 @@ The functionality of the application is achieved through the use of two main com
 
 A profile is a JSON file which contains the information which the crate will be verified on.
 
-The profile contains 2 main keys:
+The structure resembles a tree in which the root entity has sub properties and each property can have its own sub properties.
 
-- **"main_entity_type"** - The value of this keyword is the expected type of the main entity inside the crate object.
-- **"properties"** - Has an array of 3 items which contain 3 distinct arrays:
-	- **"minimum"**
-	- **"recommended"**
-	- **"optional"**	
-
-Each of these arrays contains items which match their respective marginality.
-
-Each item has 5 keywords:
-- **"@id"** - The id of the entity we are looking for inside the crate.
-- **"expected_type"** - The type we expect the entity with the specified id to have.
+A property can have the following attributes:
+- **"property"** - The keyword itself that the program would be looking for.
+- **"marginality"** - How important it is for the property to be present. Can only be **MUST**/**SHOULD**/**COULD**
 - **"description"** - The description of the entity. This is only used for feedback purposes in case it is missing in the crate.
-- **"cardinality"** - Can only be **ONE** or **MANY**. An item with cardinality of **ONE** cannot have an array as value.
-- **"value"** - Can only be **NA** or an array with strings. These strings are the values we expect the value of this entity to contain inside the crate. This would mean that we can ask the keyword **sdPublisher** to have a value which contains one of those strings ["orcid", "otherWebsiteForContextualData"]. If the value is **NA** then the value is not checked at all. 
+- **"cardinality"** - Can only be **ONE** or **MANY**. An item with cardinality of **ONE** cannot have a list or dictionary as a value.
+- **"expected_value"** - Can only be a list which contains values that we might be looking for in that particular entity. it is combined with **"match_pattern"** to verify values.
+- **"match_pattern"** - Can only be **at_least_one**/**at_least_all**/**as_literal**. It gives the instruction on how the values in list pointed by **"expected_value"** keyword can be used to determine a match: 
+	 - **at_least_one** - In order for the value to pass it needs to contain at least one of the elements inside.
+	 - **at_least_all** - All of the elements inside the **"expected_value"** list need to be contained in the value
+	 - **as_literal** - The whole of **"expected_value"** list is taken and transfored into a string. It is then compared to the actual value as a string (including characters such as "\[" and "," )
+- **"property_list"** - Can only be a list containing dictionaries. This is the continuation of the cycle. Every property inside the property_list repeats the same process as outlined above. 
 
 <details>
-  <summary>Profile template</summary>
-  
-  ```
-  {
-    "main_entity_type": "YOUR VALUE HERE",
-    "properties": [
-        {
-
-            "minimum": [
-                {
-                    "@id": "The entity key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "The entity2 key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph",
-                    "value": "NA"
-                }
-
-            ]
-        },
-
-
-        {
-            "recommended": [
-
-                {
-                    "@id": "The entity key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "The entity2 key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph",
-                    "value": "NA"
-                }
-            ]
-        },
-
-        {
-            "optional": [
-                {
-                    "@id": "The entity key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity",
-                    "expected_type": "The type of the entity if it is referenced in the graph",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "The entity2 key",
-                    "cardinality": "Cardinality - MANY/ONE",
-                    "description": "Description of the entity2",
-                    "expected_type": "The type of the entity2 if it is referenced in the graph",
-                    "value": "NA"
-                }
-
-            ]
-        }
-
-    ]
-}
-  ```
-  
-</details>
-
-<details>
-  <summary>Representation of the Computational Workflow Bioschema Profile from https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/
+  <summary>Representation of the Computational Workflow Bioschema Profile from https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/ with only
+	  the MUST marginality entities being included
 </summary>
   
   ```
   {
-    "main_entity_type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
-    "properties": [
+    "property_list": [
         {
-
-            "minimum": [
+            "marginality": "MUST",
+            "property": "mainEntity",
+            "description": "the main entity",
+            "property_list": [
                 {
-                    "@id": "creator",
-                    "expected_type": [
-                        "Organization",
-                        "Person"
-                    ],
+                    "marginality": "MUST",
+                    "property": "@id",
+                    "property_list": [
+                        {
+                            "property": "@type",
+                            "marginality": "MUST",
+                            "match_pattern": "at_least_all",
+                            "expected_value": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ]
+                        },
 
-                    "description": "The creator/author of this CreativeWork. This is the same as the Author property for CreativeWork.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-
-                {
-                    "@id": "dateCreated",
-                    "expected_type": [
-                        "Date",
-                        "DateTime"
-                    ],
-                    "description": "The date on which the CreativeWork was created or the item was added to a DataFeed.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-
-
-
-                {
-                    "@id": "input",
-                    "expected_type": "FormalParameter",
-                    "description": "an input required to use the workflow (eg. xl spreadsheet, xml file, …)",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-
-                {
-                    "@id": "license",
-                    "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "The license of the workflow",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "name",
-                    "expected_type": "Text",
-                    "description": "The name of the item.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "output",
-                    "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "The output of the workflow",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-
-
-                {
-                    "@id": "programmingLanguage",
-                    "expected_type": "ComputerLanguage",
-                    "description": "The computer programming language",
-                    "cardinality": "MANY",
-                    "value": ["galaxy", "some_other_workflow"]
-                },
-
-                {
-                    "@id": "sdPublisher",
-                    "expected_type": [
-                        "Organization",
-                        "Person"
-                    ],
-                    "description": "Main workflow description",
-                    "cardinality": "MANY",
-                    "value": [ "orcid" ]
-                },
-
-                {
-                    "@id": "url",
-                    "expected_type": [ "CreativeWork", "URL" ],
-                    "cardinality": "MANY",
-                    "description": "Main workflow description",
-                    "value": "NA"
-                },
-
-
-                {
-                    "@id": "version",
-                    "expected_type": [ "CreativeWork", "URL" ],
-                    "description": "Main workflow description",
-                    "cardinality": "MANY",
-                    "value": "NA"
+                        {
+                            "property": "programmingLanguage",
+                            "marginality": "MUST",
+                            "property_list": [
+                                {
+                                    "marginality": "MUST",
+                                    "property": "@id",
+                                    "property_list": [
+                                        {
+                                            "property": "@type",
+                                            "marginality": "MUST",
+                                            "expected_value": [ "ComputerLanguage", "Text" ],
+                                            "match_pattern": "at_least_one"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
-
-
         {
-            "recommended": [
+            "property": "sdPublisher",
+            "marginality": "MUST",
+            "cardinality": "ONE",
+            "property_list": [
                 {
-                    "@id": "citation",
-                    "cardinality": "MANY",
-                    "description": "A citation or reference to another creative work, such as another publication, web page, scholarly article, etc.",
-                    "expected_type": [
-                        "CreativeWork",
-                        "Text"
-                    ],
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "contributor",
-                    "expected_type": [
-                        "Organization",
-                        "Person"
-                    ],
-                    "description": "A secondary contributor to the CreativeWork or Event.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "creativeWorkStatus",
-                    "expected_type": [
-                        "DefinedTerm",
-                        "Text"
-                    ],
-                    "description": "The status of a creative work in terms of its stage in a lifecycle. Example terms include Incomplete, Draft, Published, Obsolete. Some organizations define a set of terms for the stages of their publication lifecycle.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "description",
-                    "expected_type": "Text",
-                    "description": "A description of the item.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "funding",
-                    "expected_type": "Grant",
-                    "description": "A description of the item.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "hasPart",
-                    "expected_type": "CreativeWork",
-                    "description": "Indicates an item or CreativeWork that is part of this item, or CreativeWork (in some sense). Inverse property: isPartOf.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "isBasedOn",
-                    "expected_type": [
-                        "CreativeWork",
-                        "Product",
-                        "URL"
-                    ],
-                    "description": "A resource from which this work is derived or from which it is a modification or adaption. Supersedes isBasedOnUrl.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "keywords",
-                    "expected_type": "Text",
-                    "description": "Keywords or tags used to describe this content. Multiple entries in a keywords list are typically delimited by commas.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "maintainer",
-                    "expected_type": [
-                        "Organization",
-                        "Person"
-                    ],
-                    "description": "A maintainer of a Dataset, software package (SoftwareApplication), or other Project. A maintainer is a Person or Organization that manages contributions to, and/or publication of, some (typically complex) artifact. It is common for distributions of software and data to be based on “upstream” sources. When maintainer is applied to a specific version of something e.g. a particular version or packaging of a Dataset, it is always possible that the upstream source has a different maintainer. The isBasedOn property can be used to indicate such relationships between datasets to make the different maintenance roles clear. Similarly in the case of software, a package may have dedicated maintainers working on integration into software distributions such as Ubuntu, as well as upstream maintainers of the underlying work.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "producer",
-                    "expected_type": [
-                        "Organization",
-                        "Person"
-                    ],
-                    "description": "The person or organization who produced the workflow.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "publisher",
-                    "expected_type": [
-                        "Organization",
-                        "Person"
-                    ],
-                    "description": "The publisher of the creative work.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "runtimePlatform",
-                    "expected_type": "Text",
-                    "description": "Runtime platform or script interpreter dependencies (Example - Java v1, Python2.3, .Net Framework 3.0). Supersedes runtime.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "softwareRequirements",
-                    "expected_type": [
-                        "Text",
-                        "URL"
-                    ],
-                    "description": "Component dependency requirements for application. This includes runtime environments and shared libraries that are not included in the application distribution package, but required to run the application (Examples: DirectX, Java or .NET runtime). Supersedes requirements.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-
-                {
-                    "@id": "targetProduct",
-                    "expected_type": "SoftwareApplication",
-                    "description": "Target Operating System / Product to which the code applies. If applies to several versions, just the product name can be used.",
-                    "cardinality": "MANY",
-                    "value": "NA"
+                    "property": "@id",
+                    "marginality": "MUST",
+                    "property_list": [
+                        {
+                            "property": "@type",
+                            "marginality": "MUST",
+                            "expected_value": [
+                                "Organization",
+                                "Person"
+                            ],
+                            "match_pattern": "at_least_one"
+                        }
+                    ]
                 }
-
-
             ]
         },
-
+        {
+            "property": "license",
+            "marginality": "MUST"
+        },
 
         {
-            "optional": [
-                {
-                    "@id": "subjectOf",
-                    "expected_type": [ "File", "SoftwareSourceCode", "ComputationalWorkflow" ],
-                    "description": "Main workflow description",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-                {
-                    "@id": "alternateName",
-                    "expected_type": "Text",
-                    "description": "An alias for the item",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-                {
-                    "@id": "conditionsOfAccess",
-                    "expected_type": "Text",
-                    "description": "Conditions that affect the availability of, or method(s) of access to, an item. Typically used for real world items such as an ArchiveComponent held by an ArchiveOrganization. This property is not suitable for use as a general Web access control mechanism. It is expressed only in natural language.For example “Available by appointment from the Reading Room” or “Accessible only from logged-in accounts “.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-                {
-                    "@id": "dateModified",
-                    "expected_type": [
-                        "Date",
-                        "DateTime"
-                    ],
-                    "description": "The date on which the CreativeWork was most recently modified or when the item’s entry was modified within a DataFeed.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
-                {
-                    "@id": "datePublished",
-                    "expected_type": "Date",
-                    "description": "Date of first broadcast/publication.",
-                    "cardinality": "ONE",
-                    "value": "NA"
-                },
+            "property": "dateCreated",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
 
-                {
-                    "@id": "encodingFormat",
-                    "expected_type": [
-                        "Text",
-                        "URL"
-                    ],
-                    "description": "Media type typically expressed using a MIME format (see IANA siteand MDN reference) e.g. application/zip for a SoftwareApplication binary, audio/mpeg for .mp3 etc.).In cases where a CreativeWork has several media type representations, encoding can be used to indicate each MediaObject alongside particular encodingFormat information.Unregistered or niche encoding and file formats can be indicated instead via the most appropriate URL, e.g. defining Web page or a Wikipedia/Wikidata entry. Supersedes fileFormat.",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                },
-                {
-                    "@id": "identifier",
-                    "expected_type": [
-                        "PropertyValue",
-                        "Text",
-                        "URL"
-                    ],
-                    "description": "The identifier property represents any kind of identifier for any kind of Thing, such as ISBNs, GTIN codes, UUIDs etc. Schema.org provides dedicated properties for representing many of these, either as textual strings or as URL (URI) links.",
-                    "cardinality": "MANY",
-                    "value": ["awpajwpfijapwf" ,"workflowhub.eu" ]
-                },
+        {
+            "property": "name",
+            "marginality": "MUST"
+        },
 
-                {
-                    "@id": "image",
-                    "expected_type": [ "File", "ImageObject" ],
-                    "description": "An image of the item. This can be a URL or a fully described ImageObject",
-                    "cardinality": "MANY",
-                    "value": "NA"
-                }
-            ]
+        {
+            "property": "url",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "version",
+            "marginality": "MUST",
+            "cardinality": "ONE"
+        },
+
+        {
+            "property": "output",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "input",
+            "marginality": "MUST"
+        },
+
+        {
+            "property": "creator",
+            "marginality": "MUST"
         }
-
     ]
 }
   ```
@@ -534,17 +237,13 @@ $ cmc cc path/to/crate/directory path/to/profile/file
 
 **NOTE:** The crate path is the whole directory not the **ro-crate-metadata.json** file.
 
-The cc command has 2 flags:
+The cc command has a single flag:
 - **-f** - This flag tells the application to write the feedback on a file **output.txt** instead of on the terminal itself. The default state is write on terminal.
-- **-v** - This flag tells the application to continue giving feedback even if the main entity type is not appropriate. The default state is don't continue.
 
 examples:
 ```
 $ cmc cc -f path/to/crate/directory path/to/profile/file
 
-$ cmc cc -v path/to/crate/directory path/to/profile/file
-
-$ cmc cc -fv path/to/crate/directory path/to/profile/file
 ```
 All of this information can be found by using the the **--help** option on the respective command
 
@@ -558,38 +257,23 @@ problematic
 There are some intricacies to the way the program validates a crate and a profile which will be specified here.
 
 #### Profile Validation
-The profile needs to have a specific structure in order to get accepted. The position of the keywords does not matter, however
-the three marginality arrays need to be in in this exact order:
+The profile needs to have a specific structure in order to get accepted:
+- **"match_pattern"** and **"expected_value"** MUST exist together. One cannot be written without the other
+- **"property_list"** and the **"match_pattern"** and **"expected_value"** due are mutualy exclusive. A value cannot be verified when **"property_list"** expects from the 
+entity to be a dictionary.
+- **"property"** and **"marginality"** are the only mandatory attributes a property dictionary MUST contain. Everything else can be ommited.
+- The starting root profile entity can only contain the **"property_list"** and nothing else. The starting point of this is represented as the **"./"** entity inside the crate which serves as the starting point of all checks. From there on the tree cycle explained above begins.
+- Two entities with the same parent cannot have the same value of the **"property"** keyword.
 
-1. **"minimum"**
-2. **"recommended"**
-3. **"optional"**
-
-Another point of interest is that no entity can be omitted. 
-
-There can be no two **"@id"** inside the profile with the same value.
 
 #### Crate Validation
+- If a property in the profile contains the attribute **"property_list"** and in the crate it is a string, then it will be checked if this value refers to something inside the crate. An example for this is the **"sdPublisher"** which has the "**@id**" property. Then it can be written directly as if the "**@id**" is a dictionary even though it justs has a string value because it would be expected that it points to a dictionary inside the crate.
+- The program simply traverses the crate with the pathing given in the profile and at each dead end of a branch gives feedback if something is missing/incorrect. Since there are two mains things to check, which are existance and value of a certain
+keyword.
 
-1. After checking that the crate has the right main entity, the program searches through the 
-crate entity defined by **@id** of **"./"** for the specified keyword in the profile. If it doesn't find it,
-CheckMyCrate scans the main entity defined by the **mainEntity** keyword. If it is not present in either,
-no further searches are conducted and the entity is assumed to be missing.
+- In order for the crate to conform to the profile all the **MUST** requirements must be satisfied. In other words, if there is a **MUST** keyword in the feedback then it will not conform.
 
-2. When evaluating the marginality arrays against the crate, every item in their corresponding array is assigned the following marginality:
-	- **"minimum"** - **MUST**
-	- **"recommended"** - **SHOULD**
-	- **"optional"** - **COULD**
-	
-	In order for the crate to conform to the profile all the **MUST** requirements must be satisfied. In other words, if there is a **MUST** keyword in the feedback then it will not conform.
-
-	Items from the **"recommended"** and **"optional"** arrays do not impact conformity if they are not present, however if they are they **MUST** follow given requirements in the profile. Basically, if the profile has an item in the **"optional"** array that has an **"image"** id and type **"painting"** then if the **"image"** keyword is indeed present in the crate but does not have the specified type, the output will produce a **MUST** problem and conclude that the crate does **NOT** conform even if all the items in the **"minimum"** array are satisfied. If the keyword **image** was not present then it will not produce a **MUST** problem and it will not impact conformity.
-
-
-3. When validating inside a crate, and the value of a specific keyword is an array inside the crate, the only check that is done is if the cardinality of the item in the profile allows it. As of now there is not functionality to loop through array values and validate the items inside them.
-
-
-4. If the **"value"** keyword is not **"NA"** in the profile, then the profile creator assumes that a contextual data with an **"identifier"** keyword is expected inside the specified item.  If the item keyword is found in the crate and the value of that keyword is just plain string, then that string is checked if it contains one of the values specified in the profile. If the value is a dictionary which leads to another item in the graph of the crate, then the program will look for the **"identifier"** keyword and compare the values to that.
+- Currently, lists cannot be traversed. They can only be evaluated with the **"expected_value"** keyword for specific values.
 
 
 ## License
